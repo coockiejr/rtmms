@@ -1,1 +1,1 @@
-Work in progress for simple team record management
+RTMMS WIP

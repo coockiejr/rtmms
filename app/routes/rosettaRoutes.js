@@ -17,11 +17,47 @@ module.exports = function(app, qs, passport, async) {
         var limit = req.query.limit;
         var skip = req.query.skip;
 
-        var query = Rosetta.aggregate();
-        query.group({
-            _id: "$refid",
-            tags: { "$addToSet": "$tags"}
-        })
+        var query = Rosetta.aggregate([
+            {
+                $group: {
+                    _id: "$refid",
+                    tags: {
+                        "$addToSet": "$tags"
+                    },
+                    groups: {
+                        "$addToSet": "$groups"
+                    }
+                }
+            },
+            {
+                $unwind: "$tags"
+            }, {
+                $unwind: "$tags"
+            }, {
+                $unwind: "$groups"
+            }, {
+                $unwind: "$groups"
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    tags: {
+                        "$addToSet": "$tags"
+                    },
+                    groups: {
+                        "$addToSet": "$groups"
+                    }
+                }
+            }
+
+        ]);
+
+        // query.group({
+        //     _id: "$refid",
+        //     tags: {
+        //         "$addToSet": "$tags"
+        //     }
+        // })
 
         query.match({
             _id: {
@@ -42,8 +78,8 @@ module.exports = function(app, qs, passport, async) {
             if (err) {
                 res.send(err)
             }
-      
 
+            console.log(hrosettas.length);
 
 
 

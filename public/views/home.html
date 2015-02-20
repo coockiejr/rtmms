@@ -1,0 +1,64 @@
+<div class="jumbotron ">
+
+  
+
+    <p class="text-center">Last 30 days results:<i class="hoverhand fa fa-plus-square" style="color:#03C03C;" ng-show="user.role == 'admin'" ng-click="showAddResultModal()" title="Add a result"></i>
+    </p>
+
+    <div id="member-list" class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item text-left resultlistheader" ng-show="resultsList.length >0">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <span class="listheader" title="Race's name">Racer</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="listheader" title="Event and date">Event</span>
+                        </div>
+                        <div ng-class="user.role == 'admin' ?'col-sm-2' :'col-sm-3'">
+                            <span class="listheader" title="Net Time">Net Time</span>
+                        </div>
+                        <div class="col-sm-2">
+                            <span class="listheader" title="Pace">Pace</span>
+                        </div>
+                        <div class="col-sm-1" ng-show="user.role == 'admin'">
+                            <span class="listheader" title="Edit">Edit</span>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item text-left resultlistrow" dir-paginate="result in resultsList | itemsPerPage: 10">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <!-- <span memberInfo >{{result.member | membersNamesFilter | cut:false:25:' ...'}}</span> -->
+                            <result-members-names></result-members-names>
+                        </div>
+                        <div class="col-sm-4">
+                            {{ result.racename }} <i class="fa fa-comment-o hoverhand" tooltip-trigger="mouseenter" ng-show="result.comments !== undefined && result.comments !== ''" tooltip-html-unsafe="{{result.comments}}"></i>
+                            <br>
+                            <small>{{ result.racedate | date:'MM/dd/yyyy' }}</small>
+                        </div>
+                        <div ng-class="user.role == 'admin' ?'col-sm-2' :'col-sm-3'">
+                            <span>{{result.time | secondsToTimeString}}</span> <a ng-show="result.resultlink !== undefined" ng-href="{{result.resultlink}}" target="_blank"><i class="fa fa-link" ng-show="result.resultlink !== ''" title="view result"></i></a>
+                        </div>
+                        <div class="col-sm-2">
+                            <span>{{result | resultToPace}}</span>
+                        </div>
+                        <div class="col-sm-1" ng-show="user.role == 'admin'">
+                            <span class="pull-right"><i class="hoverhand fa fa-pencil-square-o" ng-show="user.role == 'admin'" ng-click="retrieveResultForEdit(result)" title="edit result" ></i><i class="hoverhand fa fa-times" ng-show="user.role == 'admin'" ng-click="removeResult(result)" title="remove result" ></i> </span >
+                        </div>
+                    </div>
+                 
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-md-12">
+            <dir-pagination-controls></dir-pagination-controls>
+        </div>
+    </div>
+
+
+</div>

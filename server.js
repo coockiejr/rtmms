@@ -17,6 +17,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var bson = require('bson');
+var _ = require('underscore');
 
 var async = require('async');
 
@@ -56,7 +57,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
-require('./app/routes/rosettaRoutes.js')(app, qs, async); // load our routes and pass in our app and fully configured passport
+require('./app/routes/rosettaRoutes.js')(app, qs, async, _); // load our routes and pass in our app and fully configured passport
 require('./app/routes/routes.js')(app, qs, passport, async); // load our routes and pass in our app and fully configured passport
 
 // launch ======================================================================

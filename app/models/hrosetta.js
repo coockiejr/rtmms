@@ -3,14 +3,14 @@ var bcrypt = require('bcrypt-nodejs');
 
 // define the schema for our rosetta model
 var hRosettaSchema = mongoose.Schema({
-    _id: Number,
+    _id: String,
     refid: String,
     code10: Number,
     cfCode10: Number,
     partition: Number,
     groups: [String],
-    vendorUom: String,
-    displayName: String,
+    vendorUom: [String],
+    displayName: [String],
     unitGroups: [{
         _id: Number,
         groupName: String,

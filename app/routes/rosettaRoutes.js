@@ -1,5 +1,4 @@
-module.exports = function(app, qs, passport, async) {
-
+module.exports = function(app, qs, async, _) {
 
 
     var Rosetta = require('./../models/rosetta');
@@ -17,47 +16,11 @@ module.exports = function(app, qs, passport, async) {
         var limit = req.query.limit;
         var skip = req.query.skip;
 
-        var query = Rosetta.aggregate([
-            {
-                $group: {
-                    _id: "$refid",
-                    tags: {
-                        "$addToSet": "$tags"
-                    },
-                    groups: {
-                        "$addToSet": "$groups"
-                    }
-                }
-            },
-            {
-                $unwind: "$tags"
-            }, {
-                $unwind: "$tags"
-            }, {
-                $unwind: "$groups"
-            }, {
-                $unwind: "$groups"
-            },
-            {
-                $group: {
-                    _id: "$_id",
-                    tags: {
-                        "$addToSet": "$tags"
-                    },
-                    groups: {
-                        "$addToSet": "$groups"
-                    }
-                }
+        var query = Rosetta.aggregate([{
+            $group: {
+                _id: "$refid"
             }
-
-        ]);
-
-        // query.group({
-        //     _id: "$refid",
-        //     tags: {
-        //         "$addToSet": "$tags"
-        //     }
-        // })
+        }]);
 
         query.match({
             _id: {
@@ -66,307 +29,185 @@ module.exports = function(app, qs, passport, async) {
             }
         });
 
-
-
-        if (filters) {
-
-        }
-
+        var calls = [];
         var results = [];
         var refids = [];
+        var findRes = {};
         query.exec(function(err, hrosettas) {
             if (err) {
                 res.send(err)
             }
 
-            console.log(hrosettas.length);
+
+
+            for (i = 0; i < hrosettas.length; i++) {
+                refids.push(hrosettas[i]._id);
+            }
+
+            fetchRosettas = function(refid, callback) {
+                query = Rosetta.find();
+                query = query.where('refid').equals(refid);
+                query.exec(function(err, rosettas) {
+                    if (err) {
+                        callback(err);
+                    }
+                    findRes[refid] = rosettas;
+
+                    callback(null);
+                });
+
+            }
+
+
+            updateHrosetta = function(rosettas, callback) {
+
+            }
 
 
 
-            res.json(hrosettas); // return all members in JSON format
+            async.map(refids, fetchRosettas, function(err) {
+                if (err)
+                    return res.send(err);
+
+                // console.log(findRes);
+                fullreport = [];
+
+
+                async.each(hrosettas, function(r, callback) {
+                        // for (i = 0; i < hrosettas.length; i++) {
+                        var refid = r._id;
+
+
+                        var hros = {};
+                        hros._id = refid;
+                        hros.refid = refid;
+                        if (findRes[refid][0].code10 !== undefined) {
+                            hros.code10 = findRes[refid][0].code10
+                        };
+                        if (findRes[refid][0].cfCode10 !== undefined) {
+                            hros.cfCode10 = findRes[refid][0].cfCode10
+                        };
+                        if (findRes[refid][0].partition !== undefined) {
+                            hros.partition = findRes[refid][0].partition
+                        };
+
+
+
+                        var groups = [];
+                        var vendorUom = [];
+                        var displayName = [];
+                        var unitGroups = [];
+                        var units = [];
+                        var enumGroups = [];
+                        var enums = [];
+                        var tags = [];
+
+                        findRes[refid].forEach(function(r) {
+                            if (r.groups !== 'N/A') {
+                                r.groups.forEach(function(g) {
+                                    groups.push(g);
+                                });
+                            }
+                            if (r.vendorUom !== undefined) {
+                                vendorUom.push(r.vendorUom);
+                            }
+
+                            if (r.displayName !== undefined) {
+                                displayName.push(r.displayName);
+                            }
+
+                            if (r.unitGroups !== 'N/A') {
+                                r.unitGroups.forEach(function(ug) {
+                                    unitGroups.push(ug);
+                                });
+                            }
+
+                            if (r.units !== 'N/A') {
+                                r.units.forEach(function(u) {
+                                    units.push(u);
+                                });
+                            }
+                            if (r.enumGroups !== 'N/A') {
+                                r.enumGroups.forEach(function(eg) {
+                                    enumGroups.push(eg);
+                                });
+                            }
+                            if (r.enums !== 'N/A') {
+                                r.enums.forEach(function(e) {
+                                    enums.push(e);
+                                });
+                            }
+
+                            if (r.tags !== 'N/A') {
+                                r.tags.forEach(function(e) {
+                                    tags.push(e);
+                                });
+                            }
+
+                        });
+                        groups = _.union(groups);
+                        vendorUom = _.union(vendorUom);
+                        displayName = _.union(displayName);
+                        unitGroups = _.union(unitGroups);
+                        units = _.union(units);
+                        enumGroups = _.union(enumGroups);
+                        enums = _.union(enums);
+                        tags = _.union(tags);
+
+
+                        if (groups.length > 0) {
+                            hros.groups = groups;
+                        };
+                        if (vendorUom.length > 0) {
+                            hros.vendorUom = vendorUom;
+                        };
+                        if (displayName.length > 0) {
+                            hros.displayName = displayName;
+                        };
+                        if (unitGroups.length > 0) {
+                            hros.unitGroups = unitGroups;
+                        };
+                        if (units.length > 0) {
+                            hros.units = units;
+                        };
+                        if (enumGroups.length > 0) {
+                            hros.enumGroups = enumGroups;
+                        };
+                        if (enums.length > 0) {
+                            hros.enums = enums;
+                        };
+                        if (tags.length > 0) {
+                            hros.tags = tags;
+                        }
+
+                        var hr = HRosetta.update({
+                            _id: refid
+                        }, 
+                            hros
+                        , {
+                            upsert: true
+                        }, function(err, r) {
+                            if (err) {
+                                callback(err);
+                            }
+                            callback(null);
+                        });
+
+
+                    },
+                    function(err) {
+                        // if any of the file processing produced an error, err would equal that error
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            HRosetta.find({}, function(err, finalHRosettas) {
+                                console.log(finalHRosettas.length);
+                                res.json(finalHRosettas)
+                            });
+                        }
+                    });
+            });
         });
-
-
-
-
-        // var group1 = {
-        //     "$group": {
-        //         _id: "$refid",
-        //         code10: {
-        //             $addToSet: "$code10"
-        //         },
-        //         cfCode10: {
-        //             $addToSet: "$cfCode10"
-        //         },
-        //         partition: {
-        //             $addToSet: "$partition"
-        //         },
-        //         groups: {
-        //             $push: "$groups"
-        //         },
-        //         displayName: {
-        //             $addToSet: "$displayName"
-        //         },
-        //         vendorVmd: {
-        //             $addToSet: "$vendorVmd"
-        //         },
-        //         unitGroups: {
-        //             $push: "$unitGroups"
-        //         },
-        //         units: {
-        //             $push: "$units"
-        //         },
-        //         enumGroups: {
-        //             $push: "$enumGroups"
-        //         },
-        //         enums: {
-        //             $push: "$enums"
-        //         },
-        //         systematicName: {
-        //             $addToSet: "$systematicName"
-        //         },
-        //         commonTerm: {
-        //             $addToSet: "$commonTerm"
-        //         },
-        //         acronym: {
-        //             $addToSet: "$acronym"
-        //         },
-        //         termDescription: {
-        //             $addToSet: "$termDescription"
-        //         },
-        //         comments: {
-        //             $addToSet: "$comments"
-        //         },
-        //         tags: {
-        //             $push: "$tags"
-        //         }
-        //     }
-        // };
-
-        // var project1 = {
-        //     "$project": {
-        //         "groups": {
-        //             "$cond": [{
-        //                     "$eq": ["$groups", [
-        //                         []
-        //                     ]]
-        //                 },
-        //                 [
-        //                     [null]
-        //                 ],
-        //                 "$groups"
-        //             ]
-        //         },
-        //         "units": {
-        //             "$cond": [{
-        //                     "$eq": ["$units", [
-        //                         []
-        //                     ]]
-        //                 },
-        //                 [
-        //                     [null]
-        //                 ],
-        //                 "$units"
-        //             ]
-        //         },
-        //         "unitGroups": {
-        //             "$cond": [{
-        //                     "$eq": ["$unitGroups", [
-        //                         []
-        //                     ]]
-        //                 },
-        //                 [
-        //                     [null]
-        //                 ],
-        //                 "$unitGroups"
-        //             ]
-        //         },
-        //         "enums": {
-        //             "$cond": [{
-        //                     "$eq": ["$enums", [
-        //                         []
-        //                     ]]
-        //                 },
-        //                 [
-        //                     [null]
-        //                 ],
-        //                 "$enums"
-        //             ]
-        //         },
-        //         "enumGroups": {
-        //             "$cond": [{
-        //                     "$eq": ["$enumGroups", [
-        //                         []
-        //                     ]]
-        //                 },
-        //                 [
-        //                     [null]
-        //                 ],
-        //                 "$enumGroups"
-        //             ]
-        //         },
-        //         "tags": {
-        //             "$cond": [{
-        //                     "$eq": ["$tags", [
-        //                         []
-        //                     ]]
-        //                 },
-        //                 [
-        //                     [null]
-        //                 ],
-        //                 "$tags"
-        //             ]
-        //         }
-        //     }
-        // };
-
-
-        // var unwind = {
-        //     "$unwind": "$groups",
-        //     "$unwind": "$units",
-        //     "$unwind": "$unitGroups",
-        //     "$unwind": "$enums",
-        //     "$unwind": "$enumGroups",
-        //     "$unwind": "$tags"
-        // };
-
-
-        // var group2 = {
-        //     "$group": {
-        //         "_id": "$_id",
-        //         "tags": {
-        //             "$addToSet": "$tags"
-        //         },
-        //         "groups": {
-        //             "$addToSet": "$groups"
-        //         },
-        //         "units": {
-        //             "$addToSet": "$units"
-        //         },
-        //         "unitGroups": {
-        //             "$addToSet": "$unitGroups"
-        //         },
-        //         "enums": {
-        //             "$addToSet": "$enums"
-        //         },
-        //         "enumGroups": {
-        //             "$addToSet": "$enumGroups"
-        //         }
-        //     }
-        // };
-
-        // var project2 = {
-        //     "$project": {
-        //         "refid": "$_id",
-        //         "groups": {
-        //             "$cond": [{
-        //                     "$eq": [
-        //                         "$groups", [null]
-        //                     ]
-        //                 },
-        //                 [],
-        //                 "$groups"
-        //             ]
-        //         },
-        //         "units": {
-        //             "$cond": [{
-        //                     "$eq": [
-        //                         "$units", [null]
-        //                     ]
-        //                 },
-        //                 [],
-        //                 "$units"
-        //             ]
-        //         },
-        //         "unitGroups": {
-        //             "$cond": [{
-        //                     "$eq": [
-        //                         "$unitGroups", [null]
-        //                     ]
-        //                 },
-        //                 [],
-        //                 "$unitGroups"
-        //             ]
-        //         },
-        //         "enums": {
-        //             "$cond": [{
-        //                     "$eq": [
-        //                         "$enums", [null]
-        //                     ]
-        //                 },
-        //                 [],
-        //                 "$enums"
-        //             ]
-        //         },
-        //         "enumGroups": {
-        //             "$cond": [{
-        //                     "$eq": [
-        //                         "$enumGroups", [null]
-        //                     ]
-        //                 },
-        //                 [],
-        //                 "$enumGroups"
-        //             ]
-        //         },
-        //         "tags": {
-        //             "$cond": [{
-        //                     "$eq": [
-        //                         "$tags", [null]
-        //                     ]
-        //                 },
-        //                 [],
-        //                 "$tags"
-        //             ]
-        //         }
-        //     }
-
-        // };
-
-        //var query = Rosetta.aggregate(group1, project1, unwind, unwind, group2, project2);
-
-        // query.match({
-        //     refid: {
-        //         $regex: '^(?!MDCX_).*$',
-        //         $options: 'i'
-        //     }
-        // });
-
-        // not mdcx_
-        // query.project({
-        //     tags: {
-        //         $addToSet: "$unitGroups"
-        //     }
-
-        // });
-
-        // if (filters) {
-
-        // }
-
-        // if (sort) {
-        //     query = query.sort(sort);
-        // }
-        // if (limit) {
-        //     query = query.limit(req.query.limit);
-        // }
-
-        // if (skip) {
-        //     query = query.skip(req.query.skip);
-        // }
-
-
-        // query.exec(function(err, hrosettas) {
-        //     // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-        //     if (err) {
-        //         res.send(err)
-        //     }
-        //     // generateHrosetta
-
-        //     console.log(hrosettas.length);
-
-
-        //     res.json(hrosettas); // return all members in JSON format
-        // });
     });
 
 

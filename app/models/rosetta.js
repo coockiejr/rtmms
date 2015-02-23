@@ -10,6 +10,7 @@ var rosettaSchema = mongoose.Schema({
     partition: Number,
     groups: [String],
     vendorUom: String,
+    vendorDescription: String,
     displayName: String,
     vendorVmd :String,
     unitGroups: [{
@@ -177,6 +178,8 @@ var rosettaSchema = mongoose.Schema({
         text: String,
         date: Date
     }],
+    approved: Boolean,
+    deprecated: Boolean,
     tags: [String],
     createdAt: Date,
     updatedAt: Date

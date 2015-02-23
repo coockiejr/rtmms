@@ -9,8 +9,15 @@ module.exports = function(app, qs, async, _) {
     var EnumGroup = require('./../models/enumGroup');
 
 
-    //get all rosetta
     app.get('/api/hrosettas', function(req, res) {
+        HRosetta.find({}, function(err, finalHRosettas) {
+            console.log(finalHRosettas.length);
+            res.json(finalHRosettas)
+        }).limit(10);
+    });
+
+    //update all rosetta
+    app.get('/api/updatehrosettas', function(req, res) {
         var filters = req.query.filters;
         var sort = req.query.sort;
         var limit = req.query.limit;
@@ -148,10 +155,18 @@ module.exports = function(app, qs, async, _) {
                         groups = _.union(groups);
                         vendorUom = _.union(vendorUom);
                         displayName = _.union(displayName);
-                        unitGroups = _.union(unitGroups);
-                        units = _.union(units);
-                        enumGroups = _.union(enumGroups);
-                        enums = _.union(enums);
+                        unitGroups = _.uniq(_.flatten(unitGroups), function(ug) {
+                            return ug._id;
+                        });
+                        units = _.uniq(_.flatten(units), function(u) {
+                            return u._id;
+                        });
+                        enumGroups = _.uniq(_.flatten(enumGroups), function(eg) {
+                            return eg._id;
+                        });
+                        enums = _.uniq(_.flatten(enums), function(e) {
+                            return e._id;
+                        });
                         tags = _.union(tags);
 
 
@@ -181,17 +196,17 @@ module.exports = function(app, qs, async, _) {
                         }
 
                         var hr = HRosetta.update({
-                            _id: refid
-                        }, 
-                            hros
-                        , {
-                            upsert: true
-                        }, function(err, r) {
-                            if (err) {
-                                callback(err);
-                            }
-                            callback(null);
-                        });
+                                _id: refid
+                            },
+                            hros, {
+                                upsert: true
+                            },
+                            function(err, r) {
+                                if (err) {
+                                    callback(err);
+                                }
+                                callback(null);
+                            });
 
 
                     },
@@ -201,7 +216,7 @@ module.exports = function(app, qs, async, _) {
                             console.log(err);
                         } else {
                             HRosetta.find({}, function(err, finalHRosettas) {
-                                console.log(finalHRosettas.length);
+                                console.log('updated ' + finalHRosettas.length + ' hrosetta terms');
                                 res.json(finalHRosettas)
                             });
                         }
@@ -221,29 +236,53 @@ module.exports = function(app, qs, async, _) {
 
         query = Rosetta.find();
         if (filters) {
+            if (typeof filters === 'string') {
+                filters = [filters];
+            }
+            filters.forEach(function(f) {
+                f = JSON.parse(f);
+                if (Rosetta.schema.path(f.column).instance === 'Number'){
+                    query = query.where(f.column).equals(f.value);
+                }else{
+                    query = query.where(f.column).regex(new RegExp(f.value, 'i'));
+                } 
+                
+            });
 
         }
 
         if (sort) {
-            query = query.sort(sort);
-        }
-        if (limit) {
-            query = query.limit(req.query.limit);
+            sort = JSON.parse(sort);
+            sortQ = {};
+            sortQ[sort.column] = sort.value;
+            query = query.sort(sortQ);
         }
 
         if (skip) {
             query = query.skip(req.query.skip);
         }
 
-        var start = new Date();
+        var queryNoLimit = query;
+
+        if (limit) {
+            query = query.limit(req.query.limit);
+        }
+
         query.exec(function(err, rosettas) {
             // if there is an error retrieving, send the error. nothing after res.send(err) will execute
             if (err) {
                 res.send(err)
             }
-            var end = new Date();
-            console.log(end - start);
-            res.json(rosettas); // return all members in JSON format
+
+
+            queryNoLimit.count().exec(function(error, count) {
+                res.json({
+                    totalItems: count,
+                    rosettas: rosettas
+                }); // return all members in JSON format
+            });
+
+
         });
     });
 

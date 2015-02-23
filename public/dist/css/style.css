@@ -7,9 +7,6 @@ footer {
   padding-bottom: 15px;
   font-size: 0.7em;
 }
-.container {
-  min-height: 800px;
-}
 .logo {
   background: #00349A;
   border-radius: 4px 4px 0px 0px;
@@ -70,6 +67,11 @@ footer {
   color: #606568;
   background-color: #EAF1FF;
   margin-bottom: 10px;
+  padding-top: 10px;
+}
+.jumbotron .container-fluid {
+  padding-left: 10px;
+  padding-rigth: 10px;
 }
 .detailscontainer {
   padding-left: 5px;
@@ -141,6 +143,9 @@ footer {
   border: 0px;
 }
 .listheader {
+  font-weight: bold;
+}
+.bold {
   font-weight: bold;
 }
 .tooltip-inner {

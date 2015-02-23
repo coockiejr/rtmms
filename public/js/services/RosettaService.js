@@ -7,9 +7,9 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
     // Rosetta API CALLS ===================
     // =====================================
 
-    //retrieve Rosetta
+    //retrieve Rosettas
     factory.getRosettas = function(params) {
-        return Rosetta.getList(params).then(function(rosettas) {
+        return Rosetta.customGET("",params).then(function(rosettas) {
             return rosettas;
         });
     };

@@ -176,6 +176,8 @@ var hRosettaSchema = mongoose.Schema({
         text: String,
         date: Date
     }],
+    approved: Boolean,
+    deprecated: Boolean,
     tags: [String],
     createdAt: Date,
     updatedAt: Date

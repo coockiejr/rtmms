@@ -6,7 +6,6 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
     });
 
 
-
     var paginationOptions = {
         pageNumber: 1,
         pageSize: 25,
@@ -16,88 +15,49 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
 
     $scope.gridOptions = {
         enableFiltering: true,
-        useExternalFilter: true,
         enableColumnResizing: true,
         paginationPageSizes: [25, 50, 75, 100],
         paginationPageSize: 25,
         useExternalPagination: true,
         useExternalSorting: true,
+        useExternalFiltering: true,
         enableRowSelection: true,
         columnDefs: [{
             name: 'groups',
-            cellFilter: 'ArrayAsString',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            cellFilter: 'ArrayAsString'
         }, {
-            name: 'refid',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            name: 'refid'
         }, {
-            name: 'cfCode10',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            name: 'cfCode10'
         }, {
-            name: 'systematicName',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            name: 'systematicName'
         }, {
-            name: 'commonTerm',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            name: 'commonTerm'
         }, {
-            name: 'acronym',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            name: 'acronym'
         }, {
-            name: 'termDescription',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            name: 'termDescription'
         }, {
-            name: 'partition',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            name: 'partition'
         }, {
             name: 'units',
             field: 'units',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.unitGroups | UnitGroupsAsString }}</span> <span class="bold">{{row.entity.units | UnitsAsString }}</span></div>',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.unitGroups | UnitGroupsAsString }}</span> <span>{{row.entity.units | UnitsAsString }}</span></div>'
+        }, {
+            name: 'ucums',
+            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity | UcumsAsString }}</div>'
         }, {
             name: 'enums',
             field: 'enums',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.enumGroups | EnumGroupsAsString }}</span> <span class="bold">{{row.entity.enums | EnumsAsString }}</span></div>',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.enumGroups | EnumGroupsAsString }}</span> <span>{{row.entity.enums | EnumsAsString }}</span></div>'
         }, {
-            name: 'code10',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            name: 'code10'
         }, {
-            name: 'vendorDescription',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            name: 'vendorDescription'
         }, {
-            name: 'displayName',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            name: 'displayName'
         }, {
-            name: 'vendorVmd',
-            filter: {
-                condition: uiGridConstants.filter.CONTAINS
-            }
+            name: 'vendorVmd'
         }],
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;
@@ -105,7 +65,10 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
                 if (sortColumns.length === 0) {
                     paginationOptions.sort = null;
                 } else {
-                    paginationOptions.sort = {column:sortColumns[0].colDef.name,value:sortColumns[0].sort.direction};
+                    paginationOptions.sort = {
+                        column: sortColumns[0].colDef.name,
+                        value: sortColumns[0].sort.direction
+                    };
                 }
                 getPage();
             });

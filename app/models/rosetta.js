@@ -31,7 +31,7 @@ var rosettaSchema = mongoose.Schema({
             unitOfMeasure: String,
             ucums: [{
                 _id: Number,
-                value: String
+                ucum: String
             }],
             display_name: String,
             comments: [{
@@ -72,7 +72,7 @@ var rosettaSchema = mongoose.Schema({
         unitOfMeasure: String,
         ucums: [{
             _id: Number,
-            value: String
+            ucum: String
         }],
         display_name: String,
         comments: [{

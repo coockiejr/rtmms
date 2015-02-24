@@ -32,7 +32,7 @@ module.exports = function(grunt) {
                         'public/libs/angular-dialog-service/dist/dialogs.min.js',
                         'public/libs/angulartics/dist/angulartics.min.js',
                         'public/libs/angulartics/dist/angulartics-ga.min.js',
-                        'public/libs/angular-ui-grid/ui-grid.min.js',
+                        'public/libs/angular-ui-grid/ui-grid.js',
                         'public/js/**/*.js',
                         'public/js/*.js'
                     ]

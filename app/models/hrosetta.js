@@ -11,6 +11,8 @@ var hRosettaSchema = mongoose.Schema({
     groups: [String],
     vendorUom: [String],
     displayName: [String],
+    vendorVmd :[String],
+    vendorDescription: [String],
     unitGroups: [{
         _id: Number,
         groupName: String,
@@ -29,7 +31,7 @@ var hRosettaSchema = mongoose.Schema({
             unitOfMeasure: String,
             ucums: [{
                 _id: Number,
-                value: String
+                ucum: String
             }],
             display_name: String,
             comments: [{
@@ -70,7 +72,7 @@ var hRosettaSchema = mongoose.Schema({
         unitOfMeasure: String,
         ucums: [{
             _id: Number,
-            value: String
+            ucum: String
         }],
         display_name: String,
         comments: [{

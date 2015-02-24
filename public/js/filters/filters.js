@@ -19,7 +19,7 @@ function secondsToTimeString(sec) {
     var minutes = Math.floor(((sec % 86400) % 3600) / 60);
     var seconds = Math.floor(((sec % 86400) % 3600) % 60);
     var timeString = '';
-    
+
     if (hours === 0) {
         if (seconds < 10) seconds = "0" + seconds;
         return minutes + ":" + seconds;
@@ -269,53 +269,77 @@ app.filter('resultSuperFilter', function(query) {
 
 
 
-app.filter('ArrayAsString', function () {
-  return function (input) {
-    return input.join(', ');
-  };
+app.filter('ArrayAsString', function() {
+    return function(input) {
+        return input.join(', ');
+    };
 });
 
-app.filter('UnitsAsString', function () {
-  return function (units) {
-    var res ='';
-    units.forEach(function(u){
-        res+=u.refid +', ';
-    });
-    res = res.slice(0, -2);
-    return res;
-  };
+app.filter('UnitsAsString', function() {
+    return function(units) {
+        var res = '';
+        units.forEach(function(u) {
+            res += u.refid + ', ';
+        });
+        res = res.slice(0, -2);
+        return res;
+    };
 });
 
-app.filter('UnitGroupsAsString', function () {
-  return function (unitGroups) {
-    var res ='';
-    unitGroups.forEach(function(u){
-        res+=ug.groupName +', ';
-    });
-    res = res.slice(0, -2);
-    return res;
-  };
+app.filter('UnitGroupsAsString', function() {
+    return function(unitGroups) {
+        var res = '';
+        unitGroups.forEach(function(ug) {
+            res += ug.groupName + ', ';
+        });
+        res = res.slice(0, -2);
+        return res;
+    };
 });
 
 
-app.filter('EnumsAsString', function () {
-  return function (enums) {
-    var res ='';
-    enums.forEach(function(e){
-        res+=e.refid +', ';
-    });
-    res = res.slice(0, -2);
-    return res;
-  };
+app.filter('EnumsAsString', function() {
+    return function(enums) {
+        var res = '';
+        enums.forEach(function(e) {
+            res += e.refid + ', ';
+        });
+        res = res.slice(0, -2);
+        return res;
+    };
 });
 
-app.filter('EnumGroupsAsString', function () {
-  return function (enumGroups) {
-    var res ='';
-    enumGroups.forEach(function(eg){
-        res+=eg.groupName +', ';
-    });
-    res = res.slice(0, -2);
-    return res;
-  };
+app.filter('EnumGroupsAsString', function() {
+    return function(enumGroups) {
+        var res = '';
+        enumGroups.forEach(function(eg) {
+            res += eg.groupName + ', ';
+        });
+        res = res.slice(0, -2);
+        return res;
+    };
+});
+
+
+app.filter('UcumsAsString', function() {
+    return function(rosetta) {
+        // console.log(rosetta);
+        var res = [];
+        rosetta.units.forEach(function(u) {
+            u.ucums.forEach(function(ucum) {
+                res.push(ucum.ucum);
+            });
+        });
+
+        rosetta.unitGroups.forEach(function(ug) {
+            ug.units.forEach(function(u) {
+                u.ucums.forEach(function(ucum) {
+                    res.push(ucum.ucum);
+                });
+            });
+        });
+
+        res = _.uniq(res);
+        return res.join(', ');
+    };
 });

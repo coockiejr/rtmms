@@ -9,8 +9,11 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
 
     //retrieve Rosettas
     factory.getRosettas = function(params) {
-        return Rosetta.customGET("",params).then(function(rosettas) {
-            return rosettas;
+        return Rosetta.customGET("", params).then(function(result) {
+            if (result.rosettas) {
+                Restangular.restangularizeCollection(null, result.rosettas, 'rosettas');
+            }
+            return result;
         });
     };
 
@@ -37,7 +40,7 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
 
     //edit a Rosetta
     factory.editRosetta = function(rosetta) {
-        rosetta.save();
+        rosetta.put();
     };
 
     //delete a Rosetta
@@ -50,17 +53,39 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
     };
 
 
+    //get rosetta groups
+    factory.getRosettaGroups = function(params) {
+        return Restangular.all('rosettagroups').getList(params).then(
+            function(groups) {
+                return groups;
+            },
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
+    
+    //get rosetta tags
+    factory.getRosettaTags = function(params) {
+        return Restangular.all('rosettatags').getList(params).then(
+            function(tags) {
+                return tags;
+            },
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
+
     // =====================================
     // Rosetta MODALS ======================
     // =====================================
 
     factory.showAddRosettaModal = function() {
         var modalInstance = $modal.open({
-            templateUrl: 'views/modals/RosettaModal.html',
+            templateUrl: 'views/templates/modals/rosettaModal.tpl.html',
             controller: 'RosettaModalInstanceController',
             size: 'lg',
             resolve: {
-                Rosetta: false
+                rosetta: false
             }
         });
 
@@ -72,10 +97,10 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
         });
     };
 
-    factory.retrieveRosettaForEdit = function(rosetta) {
+    factory.showEditRosettaModal = function(rosetta) {
         if (Rosetta) {
             var modalInstance = $modal.open({
-                templateUrl: 'views/modals/RosettaModal.html',
+                templateUrl: 'views/templates/modals/rosettaModal.tpl.html',
                 controller: 'RosettaModalInstanceController',
                 size: 'lg',
                 resolve: {

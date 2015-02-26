@@ -302,7 +302,12 @@ app.filter('EnumsAsString', function() {
     return function(enums) {
         var res = '';
         enums.forEach(function(e) {
-            res += e.refid + ', ';
+            if (e.refid){
+                res += e.refid + ', ';
+            }
+            if (e.token){
+                res += e.token + ', ';
+            }
         });
         res = res.slice(0, -2);
         return res;

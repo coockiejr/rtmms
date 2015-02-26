@@ -21,10 +21,14 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         useExternalPagination: true,
         useExternalSorting: true,
         useExternalFiltering: true,
+        enableGridMenu: true,
         enableRowSelection: true,
+        multiSelect: false,
+        enableSelectAll: false,
+        selectionRowHeaderWidth: 35,
         columnDefs: [{
             name: 'groups',
-            cellFilter: 'ArrayAsString'
+            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }, {
             name: 'refid'
         }, {
@@ -42,14 +46,17 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         }, {
             name: 'units',
             field: 'units',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.unitGroups | UnitGroupsAsString }}</span> <span>{{row.entity.units | UnitsAsString }}</span></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.unitGroups | UnitGroupsAsString }}</span> <span>{{row.entity.units | UnitsAsString }}</span></div>',
+            enableSorting: false
         }, {
             name: 'ucums',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity | UcumsAsString }}</div>'
+            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity | UcumsAsString }}</div>',
+            enableSorting: false
         }, {
             name: 'enums',
             field: 'enums',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.enumGroups | EnumGroupsAsString }}</span> <span>{{row.entity.enums | EnumsAsString }}</span></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.enumGroups | EnumGroupsAsString }}</span> <span>{{row.entity.enums | EnumsAsString }}</span></div>',
+            enableSorting: false
         }, {
             name: 'code10'
         }, {
@@ -93,6 +100,14 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
                 getPage();
             });
 
+
+            gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+                if (row.isSelected) {
+                    $scope.selectedEntity = row.entity;
+                } else {
+                    $scope.selectedEntity = null;
+                }
+            });
         }
     };
 
@@ -110,25 +125,53 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         });
 
     };
-
-
     getPage();
+
+
+    $scope.showAddRosettaModal = function() {
+        RosettaService.showAddRosettaModal().then(function(rosetta) {
+            if (rosetta !== null) {
+                $scope.gridOptions.data.unshift(rosetta);
+            }
+        });
+    };
+
+    $scope.showEditRosettaModal = function(rosetta) {
+        RosettaService.showEditRosettaModal(rosetta).then(function() {
+
+        });
+    };
 
 }]);
 
-angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$scope', '$modaslInstance', 'rosetta', 'MembersService', 'RosettaService', function($scope, $modalInstance, rosetta, RosettaService) {
+angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$scope', '$modalInstance', 'Restangular', 'rosetta', 'RosettaService', function($scope, $modalInstance, Restangular, rosetta, RosettaService) {
 
+    var formDataInitial;
+
+
+
+    $scope.groups = [];
+    $scope.tags = [];
+
+
+    $scope.$watch('groups', function() {
+        $scope.formData.groups = _.flatten(_.map($scope.groups, _.values));
+    }, true);
 
     $scope.editmode = false;
-    if (result) {
-
+    if (rosetta) {
+        $scope.formData = rosetta;
+        $scope.groups = rosetta.groups;
+        formDataInitial = Restangular.copy(rosetta);
+        $scope.editmode = true;
     } else {
-
-
+        $scope.formData = {};
+        $scope.editmode = false;
     }
 
 
-    $scope.addResult = function() {
+
+    $scope.addRosetta = function() {
         if ($scope.time.hours === undefined) $scope.time.hours = 0;
         if ($scope.time.minutes === undefined) $scope.time.minutes = 0;
         if ($scope.time.seconds === undefined) $scope.time.seconds = 0;
@@ -143,16 +186,44 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
         $modalInstance.close($scope.formData);
     };
 
-    $scope.editResult = function() {
+    $scope.editRosetta = function() {
         $modalInstance.close($scope.formData);
     };
 
     $scope.cancel = function() {
+        // console.log($scope.formData);
+        // console.log(formDataInitial);
+
+        // $scope.formData.groups = formDataInitial.groups;
+        // $scope.formData.vendorDescription = formDataInitial.vendorDescription;
+        // $scope.formData.displayName = formDataInitial.displayName;
+        // $scope.formData.vendorUom = formDataInitial.vendorUom;
+        // $scope.formData.vendorVmd = formDataInitial.vendorVmd;
+        // $scope.formData.refid = formDataInitial.refid;
+        // $scope.formData.enums = formDataInitial.enums;
+
+        $scope.formData = formDataInitial;
+
         $modalInstance.dismiss('cancel');
     };
 
 
 
+    $scope.loadGroups = function(query) {
+        return RosettaService.getRosettaGroups({
+            'query': query
+        }).then(function(groups) {
+            return _.without(groups, $scope.formData.groups);
+        });
+    };
+
+    $scope.loadTags = function(query) {
+        return RosettaService.getRosettaTags({
+            'query': query
+        }).then(function(tags) {
+            return _.without(tags, $scope.formData.tags);
+        });
+    };
 
 
 

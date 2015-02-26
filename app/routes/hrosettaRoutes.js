@@ -37,6 +37,8 @@ module.exports = function(app, qs, async, _) {
                     query = query.or([{
                         "enums.refid": new RegExp(f.value, 'i')
                     }, {
+                        "enums.token": new RegExp(f.value, 'i')
+                    }, {
                         "enumGroups.groupName": new RegExp(f.value, 'i')
                     }]);
                 } else if (f.column === 'ucums') {

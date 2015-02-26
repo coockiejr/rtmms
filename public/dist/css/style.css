@@ -1,3 +1,93 @@
+.btn-rtmms {
+  color: #000000;
+  background-color: #FFCC00;
+  border-color: #C69F00;
+}
+.btn-rtmms:hover,
+.btn-rtmms:focus,
+.btn-rtmms.focus,
+.btn-rtmms:active,
+.btn-rtmms.active,
+.open > .dropdown-toggle.btn-rtmms {
+  color: #ffffff;
+  background-color: #021A4C;
+  border-color: #002977;
+}
+.btn-rtmms:active,
+.btn-rtmms.active,
+.open > .dropdown-toggle.btn-rtmms {
+  background-image: none;
+}
+.btn-rtmms.disabled,
+.btn-rtmms[disabled],
+fieldset[disabled] .btn-rtmms,
+.btn-rtmms.disabled:hover,
+.btn-rtmms[disabled]:hover,
+fieldset[disabled] .btn-rtmms:hover,
+.btn-rtmms.disabled:focus,
+.btn-rtmms[disabled]:focus,
+fieldset[disabled] .btn-rtmms:focus,
+.btn-rtmms.disabled.focus,
+.btn-rtmms[disabled].focus,
+fieldset[disabled] .btn-rtmms.focus,
+.btn-rtmms.disabled:active,
+.btn-rtmms[disabled]:active,
+fieldset[disabled] .btn-rtmms:active,
+.btn-rtmms.disabled.active,
+.btn-rtmms[disabled].active,
+fieldset[disabled] .btn-rtmms.active {
+  background-color: #DBD0A6;
+  border-color: #C69F00;
+}
+.btn-rtmms .badge {
+  color: #008cba;
+  background-color: #ffffff;
+}
+
+.bootstrap .tags {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+.bootstrap .tags.focused {
+  border-color: #66afe9;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.bootstrap .tags .tag-item {
+  background: #428bca;
+  border: 1px solid #357ebd;
+  border-radius: 4px;
+  color: #fff;
+}
+.bootstrap .tags .tag-item.selected {
+  background: #d9534f;
+  border: 1px solid #d43f3a;
+  border-radius: 4px;
+  color: #fff;
+}
+.bootstrap .tags .tag-item button {
+  background: transparent;
+  color: #000;
+  opacity: .4;
+}
+.bootstrap .autocomplete {
+  border-radius: 4px;
+}
+.bootstrap .autocomplete .suggestion-item.selected {
+  color: #262626;
+  background-color: #e9e9e9;
+}
+.bootstrap .autocomplete .suggestion-item em {
+  font-weight: normal;
+  background-color: #ffff00;
+}
+.bootstrap .autocomplete .suggestion-item.selected em {
+  color: #262626;
+  background-color: #ffff00;
+}
+
 body {
   padding-top: 10px;
   color: #000000;
@@ -8,8 +98,8 @@ footer {
   font-size: 0.7em;
 }
 .logo {
-  background: #00349A;
-  border-radius: 4px 4px 0px 0px;
+  background: #021A4C;
+  border-radius: 0px 0px 0px 0px;
   height: 80px;
   margin-left: 0px;
   margin-right: 0px;
@@ -37,7 +127,7 @@ footer {
   }
 }
 .navbar {
-  border-radius: 0px 0px 4px 4px;
+  border-radius: 0px 0px 0x 0px;
   margin-bottom: 10px;
 }
 .navbar-inverse {
@@ -62,16 +152,17 @@ footer {
 .panel-title a {
   cursor: pointer;
 }
-.jumbotron {
+.containerOptions {
+  min-width: 800px;
+}
+.container-fluid .jumbotron {
   min-height: 730px;
   color: #606568;
   background-color: #EAF1FF;
   margin-bottom: 10px;
   padding-top: 10px;
-}
-.jumbotron .container-fluid {
-  padding-left: 10px;
-  padding-rigth: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 .detailscontainer {
   padding-left: 5px;
@@ -167,4 +258,11 @@ footer {
 }
 .hrosetta-grid {
   height: 600px;
+}
+.button-row {
+  padding-bottom: 5px;
+}
+
+.ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {
+  background-color: #DFE8F6 !important;
 }

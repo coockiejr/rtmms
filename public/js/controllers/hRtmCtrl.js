@@ -25,7 +25,7 @@ angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope'
         enableRowSelection: true,
         columnDefs: [{
             name: 'groups',
-            cellFilter: 'ArrayAsString'
+            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }, {
             name: 'refid'
         }, {
@@ -41,20 +41,22 @@ angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope'
         }, {
             name: 'units',
             field: 'units',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.unitGroups | UnitGroupsAsString }}</span> <span>{{row.entity.units | UnitsAsString }}</span></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.unitGroups | UnitGroupsAsString }}</span> <span>{{row.entity.units | UnitsAsString }}</span></div>',
+            enableSorting: false
         }, {
             name: 'enums',
             field: 'enums',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.enumGroups | EnumGroupsAsString }}</span> <span>{{row.entity.enums | EnumsAsString }}</span></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.enumGroups | EnumGroupsAsString }}</span> <span>{{row.entity.enums | EnumsAsString }}</span></div>',
+            enableSorting: false
         }, {
             name: 'vendorDescription',
-            cellFilter: 'ArrayAsString'
+            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }, {
             name: 'displayName',
-            cellFilter: 'ArrayAsString'
+            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }, {
             name: 'vendorVmd',
-            cellFilter: 'ArrayAsString'
+            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }],
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;

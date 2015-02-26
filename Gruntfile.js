@@ -33,6 +33,7 @@ module.exports = function(grunt) {
                         'public/libs/angulartics/dist/angulartics.min.js',
                         'public/libs/angulartics/dist/angulartics-ga.min.js',
                         'public/libs/angular-ui-grid/ui-grid.js',
+                        'public/libs/ng-tags-input/ng-tags-input.js',
                         'public/js/**/*.js',
                         'public/js/*.js'
                     ]
@@ -45,7 +46,7 @@ module.exports = function(grunt) {
         less: {
             build: {
                 files: {
-                    'public/dist/css/style.css': 'public/css/*.less'
+                    'public/dist/css/style.css': 'public/css/less/*.less'
                 }
             }
         },
@@ -60,10 +61,11 @@ module.exports = function(grunt) {
                     'public/dist/css/style.min.css': [
                         'public/libs/fontawesome/css/font-awesome.css',
                         'public/css/libs/select2.css',
-                        'public/libs/bootstrap/dist/css/bootstrap.css',
+                        'public/css/libs/bootstrap.css',
                         'public/libs/angular-loading-bar/build/loading-bar.css',
                         'public/libs/angular-ui-select/dist/select.css',
                         'public/libs/angular-ui-grid/ui-grid.css',
+                        'public/libs/ng-tags-input/ng-tags-input.css',
                         'public/dist/css/style.css'
                     ]
                 }

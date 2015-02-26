@@ -36,6 +36,8 @@ module.exports = function(app, qs, async, _) {
                     query = query.or([{
                         "enums.refid": new RegExp(f.value, 'i')
                     }, {
+                        "enums.token": new RegExp(f.value, 'i')
+                    }, {
                         "enumGroups.groupName": new RegExp(f.value, 'i')
                     }]);
                 } else if (f.column === 'ucums') {
@@ -124,26 +126,23 @@ module.exports = function(app, qs, async, _) {
 
     //update a rosetta term
     app.put('/api/rosettas/:rosetta_id', isAdminLoggedIn, function(req, res) {
-        Member.findById(req.params.member_id, function(err, rosetta) {
-            //update here
-            rosetta.save(function(err) {
-                if (!err) {
-
-                } else {
-                    console.log(err);
-                    res.send(err);
-                }
-            });
+        Rosetta.update({
+            _id: req.params.rosetta_id
+        }, req.body, function(err) {
+            if (!err) {
+                res.end('{"success" : "Rosetta updated successfully", "status" : 200}');
+            } else {
+                console.log(err);
+                res.send(err);
+            }
         });
-
-
 
     });
 
 
     // delete a rosetta
     app.delete('/api/rosettas/:rosetta_id', isAdminLoggedIn, function(req, res) {
-        Member.remove({
+        Rosetta.remove({
             _id: req.params.rosetta_id
         }, function(err, rosetta) {
             if (err) {
@@ -155,6 +154,39 @@ module.exports = function(app, qs, async, _) {
     });
 
 
+    // get rosetta groups
+    app.get('/api/rosettagroups', function(req, res) {
+        var q = req.query.query;
+        query = Rosetta.distinct('groups', {
+            groups: {
+                $regex: q,
+                $options: 'i'
+            }
+        }).sort();
+        query.exec(function(err, groups) {
+            if (err) {
+                res.send(err)
+            }
+            res.json(groups);
+        });
+    });
+
+    // get rosetta tags
+    app.get('/api/rosettatags', function(req, res) {
+        var q = req.query.query;
+        query = Rosetta.distinct('tags', {
+            groups: {
+                $regex: q,
+                $options: 'i'
+            }
+        }).sort();
+        query.exec(function(err, tags) {
+            if (err) {
+                res.send(err)
+            }
+            res.json(tags);
+        });
+    });
 
 
     // route middleware to make sure a user is logged in
@@ -170,7 +202,8 @@ module.exports = function(app, qs, async, _) {
     // route middleware to make sure a user is logged in and an admin
     function isAdminLoggedIn(req, res, next) {
         // if user is authenticated in the session and has an admin role, carry on 
-        if (req.isAuthenticated() && req.user.role === 'admin') {
+        // if (req.isAuthenticated() && req.user.role === 'admin') {
+        if (true) {
             return next();
         }
         // if they aren't redirect them to the home page

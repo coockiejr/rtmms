@@ -50,7 +50,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
             enableSorting: false
         }, {
             name: 'ucums',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity | UcumsAsString }}</div>',
+            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity | UcumsAsStringFromRosetta }}</div>',
             enableSorting: false
         }, {
             name: 'enums',
@@ -225,6 +225,30 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
         });
     };
 
+
+
+    //units and unitGroups table
+    $scope.unitGroupIsExpanded = [];
+    for (i = 0; i < $scope.formData.unitGroups.length; i += 1) {
+        $scope.unitGroupIsExpanded.push(false);
+    }
+
+    $scope.selectUnitGroupRow = function(index, groupName) {
+        $scope.unitGroupIsExpanded[index] = !$scope.unitGroupIsExpanded[index];
+        console.log($scope.unitGroupIsExpanded[index]);
+    };
+
+
+    //enums and enumGroups table
+    $scope.enumGroupIsExpanded = [];
+    for (i = 0; i < $scope.formData.enumGroups.length; i += 1) {
+        $scope.enumGroupIsExpanded.push(false);
+    }
+
+    $scope.selectEnumGroupRow = function(index, groupName) {
+        $scope.enumGroupIsExpanded[index] = !$scope.enumGroupIsExpanded[index];
+        console.log($scope.enumGroupIsExpanded[index]);
+    };
 
 
 }]);

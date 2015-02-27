@@ -36,21 +36,118 @@
                         <input type="text" name="refid" class="form-control  text-left" ng-model="formData.refid" ng-required="true" required>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="form-group-sm" ng-class="{ 'has-error' : tags.$invalid && !tags.$pristine}">
-                        <label class="text-left">Tags:</label>
-                        <tags-input class="bootstrap" ng-model="tags" placeholder="Add a tag" replace-spaces-with-dashes="false">
-                            <auto-complete source="loadTags($query)" min-length="0" debounce-delay="0" max-results="10"></auto-complete>
-                        </tags-input>
-                    </div>
-                </div>
+
             </div>
             <div class="col-md-5">
+                <div ng-show="(formData.unitGroups.length>0 || formData.units.length>0)">
+                    <table ng-show="formData.unitGroups.length>0" class="table table-hover table-condensed table-striped">
+                        <thead class="levelOne">
+                            <tr>
+                                <th>Group Name</th>
+                            </tr>
+                        </thead>
+                        <tbody data-ng-repeat="unitGroup in formData.unitGroups">
+                            <tr class="hoverhand" title="Expand" data-ng-click="selectUnitGroupRow($index, unitGroup.groupName)">
+                                <td><i ng-show="unitGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-down"></i><i ng-show="!unitGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-right"></i> {{unitGroup.groupName}}</td>
+                            </tr>
+                            <tr ng-show="unitGroupIsExpanded[$index]">
+                                <td colspan="2">
+                                    <div style="padding-left:10px;">
+                                        <table class="table table-hover table-condensed table-striped">
+                                            <thead class="levelTwo">
+                                                <tr>
+                                                    <th>REFID</th>
+                                                    <th>UCUMS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr data-ng-repeat="unit in unitGroup.units">
+                                                    <td>{{unit.refid}}</td>
+                                                    <td>{{unit | UcumsAsStringFromUnit}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table ng-show="formData.units.length>0" class="table table-hover table-condensed table-striped">
+                        <thead class="levelOne">
+                            <tr>
+                                <th>REFID</th>
+                                <th>UCUMS</th>
+                            </tr>
+                        </thead>
+                        <tbody data-ng-repeat="unit in formData.units">
+                            <tr>
+                                <td>{{unit.refid}}</td>
+                                <td>{{unit | UcumsAsStringFromUnit}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div ng-show="(formData.enumGroups.length>0 || formData.enums.length>0)">
+                    <table ng-show="formData.enumGroups.length>0" class="table table-hover table-condensed table-striped">
+                        <thead class="levelOne">
+                            <tr>
+                                <th>Group Name</th>
+                            </tr>
+                        </thead>
+                        <tbody data-ng-repeat="enumGroup in formData.enumGroups">
+                            <tr class="hoverhand" title="Expand" data-ng-click="selectEnumGroupRow($index, enumGroup.groupName)">
+                                <td><i ng-show="enumGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-down"></i><i ng-show="!enumGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-right"></i> {{enumGroup.groupName}}</td>
+                            </tr>
+                            <tr ng-show="enumGroupIsExpanded[$index]">
+                                <td colspan="2">
+                                    <div style="padding-left:10px;">
+                                        <table class="table table-hover table-condensed table-striped">
+                                            <thead class="levelTwo">
+                                                <tr>
+                                                    <th>REFID</th>
+                                                    <th>TOKEN</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr data-ng-repeat="enum in enumGroup.enums">
+                                                    <td>{{enum.refid}}</td>
+                                                    <td>{{enum.token}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table ng-show="formData.enums.length>0" class="table table-hover table-condensed table-striped">
+                        <thead class="levelOne">
+                            <tr>
+                                <th>REFID</th>
+                                <th>TOKEN</th>
+                            </tr>
+                        </thead>
+                        <tbody data-ng-repeat="enum in formData.enums">
+                            <tr>
+                                <td>{{enum.refid}}</td>
+                                <td>{{enum.token}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
 
 
 
+        </div>
+        <div class="row">
+            <div class="form-group-sm" ng-class="{ 'has-error' : tags.$invalid && !tags.$pristine}">
+                <label class="text-left">Tags:</label>
+                <tags-input class="bootstrap" ng-model="tags" placeholder="Add a tag" replace-spaces-with-dashes="false">
+                    <auto-complete source="loadTags($query)" min-length="0" debounce-delay="0" max-results="10"></auto-complete>
+                </tags-input>
+            </div>
         </div>
     </form>
 </div>

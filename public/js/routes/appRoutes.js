@@ -7,36 +7,40 @@ angular.module('appRoutes', []).config(function($stateProvider, $urlRouterProvid
     $stateProvider
         .state('/', {
             url: "/",
-            templateUrl: "views/home.html",
+            templateUrl: "views/templates/pages/home.tpl.html",
             controller: 'HomeController'
         }).state('/login', {
             url: "/login",
-            templateUrl: "views/login.html",
+            templateUrl: "views/templates/pages/login.tpl.html",
             controller: 'LoginController'
         }).state('/signup', {
             url: "/signup",
-            templateUrl: "views/signup.html",
+            templateUrl: "views/templates/pages/signup.tpl.html",
             controller: 'SignUpController'
         }).state('/profile', {
             url: "/profile",
-            templateUrl: "views/profile.html",
+            templateUrl: "views/templates/pages/profile.tpl.html",
             controller: 'ProfileController'
         }).state('/rosetta', {
             url: "/rosetta",
-            templateUrl: "views/rosetta.html",
+            templateUrl: "views/templates/pages/rosetta.tpl.html",
             controller: 'RosettaController'
         }).state('/hRtm', {
             url: "/hRtm",
-            templateUrl: "views/hRtm.html",
+            templateUrl: "views/templates/pages/hRtm.tpl.html",
             controller: 'HarmonizedRosettaController'
         }).state('/units', {
             url: "/units",
-            templateUrl: "views/units.html",
+            templateUrl: "views/templates/pages/units/units.tpl.html",
             controller: 'UnitController'
-        }).state('/enums', {
-            url: "/enums",
-            templateUrl: "views/enums.html",
-            controller: 'EnumController'
+        }).state('/enumValues', {
+            url: "/enumValues",
+            templateUrl: "views/templates/pages/enumerations/enumValues.tpl.html",
+            controller: 'EnumValuesController'
+        }).state('/enumGroups', {
+            url: "/enumGroups",
+            templateUrl: "views/templates/pages/enumerations/enumGroups.tpl.html",
+            controller: 'EnumGroupsController'
         });
 
 });

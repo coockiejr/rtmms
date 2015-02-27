@@ -25,7 +25,6 @@
 					<li><a ui-sref="/enums">Enumeration</a></li>
 				</ul>
 				<ul class="nav navbar-nav" style="float: right">
-					<li><a class="submitmenu" href="http://bit.ly/reportresult" target="_blank">Submit Result <i class="fa fa-plus-circle"></i></a></li>
 					<li class="dropdown" dropdown on-toggle="toggled(open)">
 				  	    <a href class="dropdown-toggle" dropdown-toggle>
 				        <%= user.email %> <span class="caret"></span>
@@ -41,8 +40,15 @@
 					<li><a ui-sref="/rosetta">Rosetta</a></li>
 					<li><a ui-sref="/hRtm">hRTM</a></li>
 					<li><a ui-sref="/units">Units</a></li>
-					<li><a ui-sref="/enums">Enumeration</a></li>
-					
+					<li class="dropdown" dropdown on-toggle="toggled(open)">
+				  	    <a href class="dropdown-toggle" dropdown-toggle>Enumeration<span class="caret"></span>
+				      </a>
+				      <ul class="dropdown-menu">
+				        <li><a ui-sref="/enumGroups">Enumeration Groups</a></li>
+				        <li><a ui-sref="/enumValues">Enumeartion Values</a></li>
+				      </ul>
+				    </li>
+
 				</ul>
 				<ul class="nav navbar-nav" style="float: right" >
 					<li><a ui-sref="/login">Login</a></li>

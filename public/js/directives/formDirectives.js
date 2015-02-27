@@ -56,7 +56,7 @@ app.directive("memberselector", function() {
             members: "=",
             index: "@"
         },
-        templateUrl: "views/templates/memberDropdown.html",
+        templateUrl: "views/templates/pagination/memberDropdown.html",
         link: function(scope, element) {
             scope.deleteMemberSelector = function(datamembers, index) {
                 datamembers.splice(index, 1);

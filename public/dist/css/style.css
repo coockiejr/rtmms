@@ -127,30 +127,54 @@ footer {
   }
 }
 .navbar {
-  border-radius: 0px 0px 0x 0px;
-  margin-bottom: 10px;
+  border-radius: 0px 0px 0px 0px;
 }
 .navbar-inverse {
-  color: #000000;
-  background: #FFCC00;
-  background-color: #FFCC00;
-  border: color: #FFCC00;
+  background: #7dd6fe;
+  background-color: #F3C60D;
+  border: color: #7DD6FE;
 }
 .navbar-inverse .navbar-nav > li > a {
-  color: #000000;
-}
-.activeNav {
   color: #FFF;
+}
+.navbar-inverse .navbar-header > .active,
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:focus,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav .open,
+.navbar-inverse .navbar-nav .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:focus,
+.navbar-inverse .navbar-nav > li:hover {
+  color: #FFFFF;
+  background-color: #F3C60D;
+}
+.dropdown-toggle {
+  background-color: transparent;
+}
+.dropdown {
   background-color: transparent;
 }
 .navbar-inverse .navbar-brand {
-  color: #000000;
+  color: #FFF;
+}
+.navbar-inverse .navbar-brand:hover {
+  color: #FFF;
+  background-color: #F3C60D;
 }
 .nav,
 .pagination,
 .carousel,
 .panel-title a {
   cursor: pointer;
+}
+.navbar-inverse .navbar-nav > li > .submitmenu {
+  font-size: 14px;
+  font-weight: bold;
+  color: #FF8300;
+}
+.navbar-inverse .navbar-nav > li > .submitmenu:hover {
+  color: #FF8300;
 }
 .containerOptions {
   min-width: 800px;
@@ -257,6 +281,9 @@ footer {
   height: 600px;
 }
 .hrosetta-grid {
+  height: 600px;
+}
+.enum-grid {
   height: 600px;
 }
 .button-row {

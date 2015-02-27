@@ -23,12 +23,16 @@ var enumSchema = mongoose.Schema({
     commonTerm: String,
     acronym: String,
     termDescription: String,
+    enumGroups: [{
+        _id: Number,
+        groupName: String
+    }],
     user: {
         _id: mongoose.Schema.ObjectId,
         name: String,
         suffix: String
     },
-    tags:[String],
+    tags: [String],
     createdAt: Date,
     updatedAt: Date
 });

@@ -302,10 +302,10 @@ app.filter('EnumsAsString', function() {
     return function(enums) {
         var res = '';
         enums.forEach(function(e) {
-            if (e.refid){
+            if (e.refid) {
                 res += e.refid + ', ';
             }
-            if (e.token){
+            if (e.token) {
                 res += e.token + ', ';
             }
         });
@@ -326,9 +326,8 @@ app.filter('EnumGroupsAsString', function() {
 });
 
 
-app.filter('UcumsAsString', function() {
+app.filter('UcumsAsStringFromRosetta', function() {
     return function(rosetta) {
-        // console.log(rosetta);
         var res = [];
         rosetta.units.forEach(function(u) {
             u.ucums.forEach(function(ucum) {
@@ -348,3 +347,17 @@ app.filter('UcumsAsString', function() {
         return res.join(', ');
     };
 });
+
+app.filter('UcumsAsStringFromUnit', function() {
+    return function(unit) {
+        var res = [];
+        unit.ucums.forEach(function(ucum) {
+            console.log(ucum.ucum);
+            res.push(ucum.ucum);
+        });
+
+        res = _.uniq(res);
+        return res.join(', ');
+    };
+});
+

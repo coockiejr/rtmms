@@ -13,19 +13,29 @@
 		</div>
 
 		<!-- HEADER -->
-		<nav class="navbar navbar-inverse" >
-			<div class="navbar-header">
-				<a class="navbar-brand" ui-sref="/">Home</a>
-			</div>
+		<nav class="navbar navbar-default" >
 			<% if (user && user.role === 'admin') { %>
-				<ul class="nav navbar-nav">
-					<li><a ui-sref="/rosetta">Rosetta</a></li>
-					<li><a ui-sref="/hRtm">hRTM</a></li>
-					<li><a ui-sref="/units">Units</a></li>
-					<li><a ui-sref="/enums">Enumeration</a></li>
+				<ul class="nav navbar-nav" >
+					<li ng-class="{active: $state.includes('/')}"><a ui-sref="/">Home</a></li>
+					<li ng-class="{active: $state.includes('/rosetta')}"><a ui-sref="/rosetta">Rosetta</a></li>
+					<li ng-class="{active: $state.includes('/hRtm')}"><a ui-sref="/hRtm">hRTM</a></li>
+					<li class="dropdown" dropdown on-toggle="toggled(open)">
+				  	    <a href class="dropdown-toggle" dropdown-toggle>Units<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+					        <li ng-class="{active: $state.includes('/unitGroups')}"><a ui-sref="/unitGroups">Unit Groups</a></li>
+					        <li ng-class="{active: $state.includes('/units')}"><a ui-sref="/units">Units</a></li>
+					    </ul>
+					</li>
+					<li class="dropdown" dropdown on-toggle="toggled(open)">
+				  	    <a href class="dropdown-toggle" dropdown-toggle>Enumeration<span class="caret"></span></a>
+				      <ul class="dropdown-menu">
+				        <li ng-class="{active: $state.includes('/enumGroups')}"><a ui-sref="/enumGroups">Enumeration Groups</a></li>
+				        <li ng-class="{active: $state.includes('/enumValues')}"><a ui-sref="/enumValues">Enumeration Values</a></li>
+				      </ul>
+				    </li>
 				</ul>
 				<ul class="nav navbar-nav" style="float: right">
-					<li class="dropdown" dropdown on-toggle="toggled(open)">
+					<li ng-class="{active: ($state.includes('/profile'))}" class="dropdown" dropdown on-toggle="toggled(open)">
 				  	    <a href class="dropdown-toggle" dropdown-toggle>
 				        <%= user.email %> <span class="caret"></span>
 				      </a>
@@ -37,21 +47,26 @@
 				</ul>
 			<%}else{ %>
 				<ul class="nav navbar-nav" >
-					<li><a ui-sref="/rosetta">Rosetta</a></li>
-					<li><a ui-sref="/hRtm">hRTM</a></li>
-					<li><a ui-sref="/units">Units</a></li>
+					<li ng-class="{active: $state.includes('/')}"><a ui-sref="/">Home</a></li>
+					<li ng-class="{active: $state.includes('/rosetta')}"><a ui-sref="/rosetta">Rosetta</a></li>
+					<li ng-class="{active: $state.includes('/hRtm')}"><a ui-sref="/hRtm">hRTM</a></li>
 					<li class="dropdown" dropdown on-toggle="toggled(open)">
-				  	    <a href class="dropdown-toggle" dropdown-toggle>Enumeration<span class="caret"></span>
-				      </a>
+				  	    <a href class="dropdown-toggle" dropdown-toggle>Units<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+					        <li ng-class="{active: $state.includes('/unitGroups')}"><a ui-sref="/unitGroups">Unit Groups</a></li>
+					        <li ng-class="{active: $state.includes('/units')}"><a ui-sref="/units">Units</a></li>
+					    </ul>
+					</li>
+					<li class="dropdown" dropdown on-toggle="toggled(open)">
+				  	    <a href class="dropdown-toggle" dropdown-toggle>Enumeration<span class="caret"></span></a>
 				      <ul class="dropdown-menu">
-				        <li><a ui-sref="/enumGroups">Enumeration Groups</a></li>
-				        <li><a ui-sref="/enumValues">Enumeartion Values</a></li>
+				        <li ng-class="{active: $state.includes('/enumGroups')}"><a ui-sref="/enumGroups">Enumeration Groups</a></li>
+				        <li ng-class="{active: $state.includes('/enumValues')}"><a ui-sref="/enumValues">Enumeration Values</a></li>
 				      </ul>
 				    </li>
-
 				</ul>
 				<ul class="nav navbar-nav" style="float: right" >
-					<li><a ui-sref="/login">Login</a></li>
+					<li ng-class="{active: $state.includes('/login')}"><a ui-sref="/login">Login</a></li>
 				</ul>
 			<%}%>	
 		</nav>

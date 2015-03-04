@@ -33,14 +33,18 @@ angular.module('appRoutes', []).config(function($stateProvider, $urlRouterProvid
             url: "/units",
             templateUrl: "views/templates/pages/units/units.tpl.html",
             controller: 'UnitController'
+        }).state('/unitGroups', {
+            url: "/unitGroups",
+            templateUrl: "views/templates/pages/units/unitGroups.tpl.html",
+            controller: 'UnitGroupController'
         }).state('/enumValues', {
             url: "/enumValues",
             templateUrl: "views/templates/pages/enumerations/enumValues.tpl.html",
-            controller: 'EnumValuesController'
+            controller: 'EnumValueController'
         }).state('/enumGroups', {
             url: "/enumGroups",
             templateUrl: "views/templates/pages/enumerations/enumGroups.tpl.html",
-            controller: 'EnumGroupsController'
+            controller: 'EnumGroupController'
         });
 
 });

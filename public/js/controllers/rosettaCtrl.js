@@ -46,7 +46,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         }, {
             name: 'units',
             field: 'units',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.unitGroups | UnitGroupsAsString }}</span> <span>{{row.entity.units | UnitsAsString }}</span></div>',
+            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.unitGroups | EnumOrUnitGroupsAsString }}</span> <span>{{row.entity.units | UnitsAsString }}</span></div>',
             enableSorting: false
         }, {
             name: 'ucums',
@@ -55,7 +55,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         }, {
             name: 'enums',
             field: 'enums',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.enumGroups | EnumGroupsAsString }}</span> <span>{{row.entity.enums | EnumsAsString }}</span></div>',
+            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.enumGroups | EnumOrUnitGroupsAsString }}</span> <span>{{row.entity.enums | EnumsAsString }}</span></div>',
             enableSorting: false
         }, {
             name: 'code10'

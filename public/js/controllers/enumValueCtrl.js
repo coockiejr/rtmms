@@ -1,10 +1,10 @@
-angular.module('rtmms.unit').controller('UnitController', ['$scope', 'AuthService', 'UnitService', 'dialogs', function($scope, AuthService, UnitService, dialogs) {
+angular.module('rtmms.enum').controller('EnumValueController', ['$scope', 'AuthService', 'EnumService', 'dialogs', function($scope, AuthService, EnumService, dialogs) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
         $scope.user = user;
     });
-    
+
 
     var paginationOptions = {
         pageNumber: 1,
@@ -28,21 +28,19 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', 'AuthServic
         selectionRowHeaderWidth: 35,
         columnDefs: [{
             name: 'groups',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.unitGroups | EnumOrUnitGroupsAsString }}</span></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.enumGroups | EnumOrUnitGroupsAsString }}</span></div>'
         }, {
             name: 'refid'
         }, {
-            name: 'ucode10'
+            name: 'ecode10'
         }, {
-            name: 'cfUcode10'
+            name: 'cfEcode10'
         }, {
             name: 'partition'
         }, {
-            name: 'unitOfMeasure'
-        },  {
-            name: 'ucums',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity | UcumsAsStringFromUnit }}</div>',
-            enableSorting: false
+            name: 'description'
+        }, {
+            name: 'token'
         }, {
             name: 'systematicName'
         }, {
@@ -98,61 +96,20 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', 'AuthServic
     };
 
     var getPage = function() {
-        UnitService.getUnits({
+        EnumService.getEnums({
             limit: paginationOptions.pageSize,
             skip: (paginationOptions.pageNumber - 1) * paginationOptions.pageSize,
             filters: paginationOptions.filters,
             sort: paginationOptions.sort
         }).then(function(result) {
             if (result !== null) {
-                $scope.gridOptions.data = result.units;
+                $scope.gridOptions.data = result.enums;
                 $scope.gridOptions.totalItems = result.totalItems;
             }
         });
 
     };
     getPage();
-   
-}]);
-
-angular.module('rtmms.unit').controller('UnitModalInstanceController', ['$scope', '$modalInstance', 'rosetta', 'MembersService', 'ResultsService', function($scope, $modalInstance, rosetta, RosettaService) {
-
-
-    $scope.editmode = false;
-    if (result) {
-        
-    } else {
-        
-
-    }
-
-
-    $scope.addResult = function() {
-        if ($scope.time.hours === undefined) $scope.time.hours = 0;
-        if ($scope.time.minutes === undefined) $scope.time.minutes = 0;
-        if ($scope.time.seconds === undefined) $scope.time.seconds = 0;
-        $scope.formData.time = $scope.time.hours * 3600 + $scope.time.minutes * 60 + $scope.time.seconds;
-
-        var members = $.map($scope.formData.member, function(value, index) {
-            return [value];
-        });
-        $scope.formData.member = members;
-
-
-
-        $modalInstance.close($scope.formData);
-    };
-
-    $scope.editResult = function() {
-        $modalInstance.close($scope.formData);
-    };
-
-    $scope.cancel = function() {
-        $modalInstance.dismiss('cancel');
-    };
-
-
-
 
 
 

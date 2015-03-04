@@ -31,7 +31,7 @@ app.run(['$http', 'AuthService', 'Restangular', function($http, AuthService, Res
 
 
 
-angular.module('rtmms').controller('MainController', ['$scope', 'AuthService', function($scope, AuthService) {
-
+angular.module('rtmms').controller('MainController', ['$scope', 'AuthService', '$state', function($scope, AuthService, $state) {
+    $scope.$state = $state;
 
 }]);

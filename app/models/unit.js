@@ -1,6 +1,4 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt-nodejs');
-
 
 // define the schema for our unit model
 var unitSchema = mongoose.Schema({
@@ -9,7 +7,6 @@ var unitSchema = mongoose.Schema({
     ucode10: Number,
     cfUcode10: Number,
     partition: Number,
-    description: String,
     dimension: String,
     dim: String,
     dimC: String,
@@ -31,6 +28,10 @@ var unitSchema = mongoose.Schema({
     commonTerm: String,
     acronym: String,
     termDescription: String,
+    enumGroups: [{
+        _id: Number,
+        groupName: String
+    }],
     user: {
         _id: Number,
         name: String

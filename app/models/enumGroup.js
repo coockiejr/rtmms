@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt-nodejs');
 
 
 // define the schema for our unitGroup model
@@ -38,7 +37,7 @@ var enumGroupSchema = mongoose.Schema({
     }],
     createdAt: Date,
     updatedAt: Date
-});
+},{ collection: 'enumGroups' });
 
 // keep track of when unitGroups are updated and created
 enumGroupSchema.pre('save', function(next, done) {

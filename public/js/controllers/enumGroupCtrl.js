@@ -1,14 +1,11 @@
-angular.module('rtmms.enum').controller('EnumValuesController', ['$scope', 'AuthService', 'EnumService', 'dialogs', function($scope, AuthService, EnumService, dialogs) {
-
+angular.module('rtmms.enum').controller('EnumGroupController', ['$scope', 'AuthService', 'EnumService', 'dialogs', function($scope, AuthService, EnumService, dialogs) {
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
         $scope.user = user;
     });
-    
 
 
-
-var paginationOptions = {
+    var paginationOptions = {
         pageNumber: 1,
         pageSize: 25,
         sort: null,
@@ -29,28 +26,9 @@ var paginationOptions = {
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name: 'groups',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.enumGroups | EnumGroupsAsString }}</span></div>'
+            name: 'groupName'
         }, {
-            name: 'refid'
-        }, {
-            name: 'ecode10'
-        }, {
-            name: 'cfEcode10'
-        }, {
-            name: 'partition'
-        }, {
-            name: 'description'
-        },{
-            name: 'token'
-        }, {
-            name: 'systematicName'
-        }, {
-            name: 'commonTerm'
-        }, {
-            name: 'acronym'
-        }, {
-            name: 'termDescription'
+            name: 'groupDescription'
         }],
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;
@@ -98,14 +76,14 @@ var paginationOptions = {
     };
 
     var getPage = function() {
-        EnumService.getEnums({
+        EnumService.getEnumGroups({
             limit: paginationOptions.pageSize,
             skip: (paginationOptions.pageNumber - 1) * paginationOptions.pageSize,
             filters: paginationOptions.filters,
             sort: paginationOptions.sort
         }).then(function(result) {
             if (result !== null) {
-                $scope.gridOptions.data = result.enums;
+                $scope.gridOptions.data = result.enumGroups;
                 $scope.gridOptions.totalItems = result.totalItems;
             }
         });
@@ -113,7 +91,4 @@ var paginationOptions = {
     };
     getPage();
 
-
-
 }]);
-

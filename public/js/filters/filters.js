@@ -286,17 +286,6 @@ app.filter('UnitsAsString', function() {
     };
 });
 
-app.filter('UnitGroupsAsString', function() {
-    return function(unitGroups) {
-        var res = '';
-        unitGroups.forEach(function(ug) {
-            res += ug.groupName + ', ';
-        });
-        res = res.slice(0, -2);
-        return res;
-    };
-});
-
 
 app.filter('EnumsAsString', function() {
     return function(enums) {
@@ -314,13 +303,15 @@ app.filter('EnumsAsString', function() {
     };
 });
 
-app.filter('EnumGroupsAsString', function() {
-    return function(enumGroups) {
+app.filter('EnumOrUnitGroupsAsString', function() {
+    return function(groups) {
         var res = '';
-        enumGroups.forEach(function(eg) {
-            res += eg.groupName + ', ';
-        });
-        res = res.slice(0, -2);
+        if (groups !== undefined) {
+            groups.forEach(function(eg) {
+                res += eg.groupName + ', ';
+            });
+            res = res.slice(0, -2);
+        }
         return res;
     };
 });
@@ -352,7 +343,6 @@ app.filter('UcumsAsStringFromUnit', function() {
     return function(unit) {
         var res = [];
         unit.ucums.forEach(function(ucum) {
-            console.log(ucum.ucum);
             res.push(ucum.ucum);
         });
 
@@ -360,4 +350,3 @@ app.filter('UcumsAsStringFromUnit', function() {
         return res.join(', ');
     };
 });
-

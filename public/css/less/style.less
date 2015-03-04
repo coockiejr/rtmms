@@ -1,3 +1,5 @@
+@import "variables.less";
+
 body {
     padding-top: 10px;
     color: #000000;
@@ -7,6 +9,8 @@ footer {
     padding-bottom: 15px;
     font-size: 0.7em;
 }
+
+
 .logo {
     background: #021A4C;
     border-radius: 0px 0px 0px 0px;
@@ -14,17 +18,15 @@ footer {
     margin-left: 0px;
     margin-right: 0px;
     padding-left: 15px;
-}
-.logo >h1 {
-    font-size: 40px;
-}
-.logo >h1 >a {
-    color: #F3C60D;
+    >h1 {
+        font-size: 40px;
+    }
+    >h1 >a {
     text-decoration: none;
+    }
 }
-.logo >h1 >a:hover {
-    color: #337AB7;
-}
+
+
 @media (max-width: 350px) {
     .logo >h1 {
         font-size: 16px;
@@ -36,45 +38,7 @@ footer {
         font-size: 30px;
     }
 }
-.navbar {
-    border-radius: 0px 0px 0px 0px;
-}
-.navbar-inverse {
-    background: #7dd6fe;
-    background-color: #F3C60D;
-    border: color: #7DD6FE;
-}
-.navbar-inverse .navbar-nav > li > a {
-    color: #FFF;
-}
-.navbar-inverse .navbar-header > .active, .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav .open, .navbar-inverse .navbar-nav .open > a:hover, .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:focus, .navbar-inverse .navbar-nav > li:hover {
-    color: #FFFFF;
-    background-color: #F3C60D;
-}
-.dropdown-toggle {
-    background-color: transparent;
-}
-.dropdown {
-    background-color: transparent;
-}
-.navbar-inverse .navbar-brand {
-    color: #FFF;
-}
-.navbar-inverse .navbar-brand:hover {
-    color: #FFF;
-    background-color: #F3C60D;
-}
-.nav, .pagination, .carousel, .panel-title a {
-    cursor: pointer;
-}
-.navbar-inverse .navbar-nav > li > .submitmenu {
-    font-size: 14px;
-    font-weight: bold;
-    color: #FF8300;
-}
-.navbar-inverse .navbar-nav > li > .submitmenu:hover {
-    color: #FF8300;
-}
+
 .containerOptions{
     min-width:800px;
 }
@@ -141,9 +105,6 @@ footer {
 .transparent {
     color: transparent;
 }
-.navbar-inverse .navbar-nav > li > .submitmenu {
-    color: #FF0010;
-}
 .resultlistheader {
     border-bottom: thick solid;
     color: #006699;
@@ -184,7 +145,17 @@ footer {
     height: 600px;
 }
 
-.enum-grid {
+.enums-grid {
+    height: 600px;
+}
+.enumgroups-grid {
+    height: 600px;
+}
+
+.units-grid {
+    height: 600px;
+}
+.unitgroups-grid {
     height: 600px;
 }
 

@@ -1,52 +1,52 @@
-angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', function(Restangular, $modal) {
+angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', function(Restangular, $modal) {
 
     var factory = {};
-    var Enum = Restangular.all('enums');
-    var EnumGroup = Restangular.all('enumgroups');
+    var Unit = Restangular.all('units');
+    var UnitGroup = Restangular.all('unitgroups');
 
     // =====================================
-    // ENUMERATION VALUES API CALLS ========
+    // Unit VALUES API CALLS ===============
     // =====================================
 
-    //retrieve Enums
-    factory.getEnums = function(params) {
-        return Enum.customGET("", params).then(function(result) {
-            if (result.enums) {
-                Restangular.restangularizeCollection(null, result.enums, 'enums');
+    //retrieve Units
+    factory.getUnits = function(params) {
+        return Unit.customGET("", params).then(function(result) {
+            if (result.units) {
+                Restangular.restangularizeCollection(null, result.units, 'units');
             }
             return result;
         });
     };
 
 
-    //retrieve a Enum by id
-    factory.getEnum = function(id) {
-        return Restangular.one('enums', id).get().then(
-            function(enumValue) {
-                return enumValue;
+    //retrieve a Unit by id
+    factory.getUnit = function(id) {
+        return Restangular.one('units', id).get().then(
+            function(unitValue) {
+                return unitValue;
             },
             function(res) {
                 console.log('Error: ' + res.status);
             });
     };
 
-    //create a Enum
-    factory.createEnum = function(enumValue) {
-        return Rosetta.post(enumValue).then(
-            function(enumValue) {},
+    //create a Unit
+    factory.createUnit = function(unitValue) {
+        return Rosetta.post(unitValue).then(
+            function(unitValue) {},
             function(res) {
                 console.log('Error: ' + res.status);
             });
     };
 
-    //edit a Enum
-    factory.editEnum = function(enumValue) {
-        enumValue.put();
+    //edit a Unit
+    factory.editUnit = function(unitValue) {
+        unitValue.put();
     };
 
-    //delete a Enum
-    factory.deleteEnum = function(enumValue) {
-        return enumValue.remove().then(
+    //delete a Unit
+    factory.deleteUnit = function(unitValue) {
+        return unitValue.remove().then(
             function() {},
             function(res) {
                 console.log('Error: ' + res.status);
@@ -54,48 +54,48 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
     };
 
     // =====================================
-    // ENUMERATION GROUPS API CALLS ========
+    // UNIT GROUPS API CALLS ===============
     // =====================================
 
-    //retrieve EnumGroups
-    factory.getEnumGroups = function(params) {
-        return EnumGroup.customGET("", params).then(function(result) {
-            if (result.enumgroups) {
-                Restangular.restangularizeCollection(null, result.enumgroups, 'enumgroups');
+    //retrieve UnitGroups
+    factory.getUnitGroups = function(params) {
+        return UnitGroup.customGET("", params).then(function(result) {
+            if (result.unitgroups) {
+                Restangular.restangularizeCollection(null, result.unitgroups, 'unitgroups');
             }
             return result;
         });
     };
 
 
-    //retrieve a EnumGroup by id
-    factory.getEnumGroup = function(id) {
-        return Restangular.one('enumgroups', id).get().then(
-            function(enumValue) {
-                return enumValue;
+    //retrieve a UnitGroup by id
+    factory.getUnitGroup = function(id) {
+        return Restangular.one('unitgroups', id).get().then(
+            function(unitValue) {
+                return unitValue;
             },
             function(res) {
                 console.log('Error: ' + res.status);
             });
     };
 
-    //create a Enum
-    factory.createEnum = function(enumValue) {
-        return EnumGroup.post(enumValue).then(
-            function(enumValue) {},
+    //create a Unit
+    factory.createUnit = function(unitValue) {
+        return UnitGroup.post(unitValue).then(
+            function(unitValue) {},
             function(res) {
                 console.log('Error: ' + res.status);
             });
     };
 
-    //edit a Enum
-    factory.editEnum = function(enumGroup) {
-        enumGroup.put();
+    //edit a Unit
+    factory.editUnit = function(unitGroup) {
+        unitGroup.put();
     };
 
-    //delete a Enum
-    factory.deleteEnum = function(enumGroup) {
-        return enumGroup.remove().then(
+    //delete a Unit
+    factory.deleteUnit = function(unitGroup) {
+        return unitGroup.remove().then(
             function() {},
             function(res) {
                 console.log('Error: ' + res.status);

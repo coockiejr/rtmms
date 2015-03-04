@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt-nodejs');
 
 // define the schema for our rosetta model
 var rosettaSchema = mongoose.Schema({

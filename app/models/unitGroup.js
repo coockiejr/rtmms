@@ -1,6 +1,4 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt-nodejs');
-
 
 // define the schema for our unitGroup model
 var unitGroupSchema = mongoose.Schema({
@@ -47,7 +45,7 @@ var unitGroupSchema = mongoose.Schema({
     }],
     createdAt: Date,
     updatedAt: Date
-});
+}, { collection: 'unitGroups' });
 
 // keep track of when unitGroups are updated and created
 unitGroupSchema.pre('save', function(next, done) {

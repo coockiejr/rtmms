@@ -19,6 +19,7 @@ module.exports = function(app, qs, async, _) {
         var limit = req.query.limit;
         var skip = req.query.skip;
         query = HRosetta.find();
+        queryCount = HRosetta.find();
         if (filters) {
             if (typeof filters === 'string') {
                 filters = [filters];
@@ -27,8 +28,14 @@ module.exports = function(app, qs, async, _) {
                 f = JSON.parse(f);
                 if (columnNumberSearch.indexOf(f.column) !== -1) {
                     query = query.where(f.column).equals(f.value);
+                    queryCount = queryCount.where(f.column).equals(f.value);
                 } else if (f.column === 'units') {
                     query = query.or([{
+                        "units.refid": new RegExp(f.value, 'i')
+                    }, {
+                        "unitGroups.groupName": new RegExp(f.value, 'i')
+                    }]);
+                     queryCount = queryCount.or([{
                         "units.refid": new RegExp(f.value, 'i')
                     }, {
                         "unitGroups.groupName": new RegExp(f.value, 'i')
@@ -41,14 +48,27 @@ module.exports = function(app, qs, async, _) {
                     }, {
                         "enumGroups.groupName": new RegExp(f.value, 'i')
                     }]);
+                    queryCount = queryCount.or([{
+                        "enums.refid": new RegExp(f.value, 'i')
+                    }, {
+                        "enums.token": new RegExp(f.value, 'i')
+                    }, {
+                        "enumGroups.groupName": new RegExp(f.value, 'i')
+                    }]);
                 } else if (f.column === 'ucums') {
                     query = query.or([{
                         "units.ucums.ucum": new RegExp(f.value, 'i')
                     }, {
                         "unitGroups.units.ucums.ucum": new RegExp(f.value, 'i')
                     }]);
+                    queryCount = queryCount.or([{
+                        "units.ucums.ucum": new RegExp(f.value, 'i')
+                    }, {
+                        "unitGroups.units.ucums.ucum": new RegExp(f.value, 'i')
+                    }]);
                 } else {
                     query = query.where(f.column).regex(new RegExp(f.value, 'i'));
+                    queryCount = queryCount.where(f.column).regex(new RegExp(f.value, 'i'));
                 }
 
             });
@@ -66,7 +86,6 @@ module.exports = function(app, qs, async, _) {
             query = query.skip(req.query.skip);
         }
 
-        var queryNoLimit = query;
 
         if (limit) {
             query = query.limit(req.query.limit);
@@ -79,7 +98,7 @@ module.exports = function(app, qs, async, _) {
             }
 
 
-            queryNoLimit.count().exec(function(error, count) {
+            queryCount.count().exec(function(error, count) {
                 res.json({
                     totalItems: count,
                     hrosettas: hrosettas

@@ -60,9 +60,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 require('./app/routes/hrosettaRoutes.js')(app, qs, async, _); 
 require('./app/routes/rosettaRoutes.js')(app, qs, async, _); 
 require('./app/routes/enumRoutes.js')(app, qs, async, _); 
-require('./app/routes/enumGroupsRoutes.js')(app, qs, async, _); 
 require('./app/routes/unitRoutes.js')(app, qs, async, _); 
-require('./app/routes/unitGroupsRoutes.js')(app, qs, async, _)
 require('./app/routes/routes.js')(app, qs, passport, async); 
 
 // launch ======================================================================

@@ -53,6 +53,17 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
             });
     };
 
+       //get enums ans enumGroups
+    factory.getEnumsAndEnumGroups = function(params) {
+        return Restangular.all('enumsandenumgroups').getList(params).then(
+            function(enumsAndEnumGroups) {
+                return enumsAndEnumGroups;
+            },
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
+
     // =====================================
     // ENUMERATION GROUPS API CALLS ========
     // =====================================

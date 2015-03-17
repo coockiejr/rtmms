@@ -350,3 +350,43 @@ app.filter('UcumsAsStringFromUnit', function() {
         return res.join(', ');
     };
 });
+
+
+app.filter('showUnitRefidOrGroupName', function() {
+    return function(u) { //unit or unit Group
+
+        if (u.refid !== undefined) { //unit
+            return u.refid;
+        } else if (u.groupName !== undefined) { //unit group
+            return '<span class="bold">' + u.groupName + '</span>';
+        } else {
+            return '';
+        }
+
+    };
+});
+
+app.filter('showEnumInfoOrGroupName', function() {
+    return function(e) { //enum or enum Group
+
+        if (e.refid !== undefined || e.token !== undefined) { //enum
+            var res = "";
+            if (e.refid !== undefined) {
+                res += e.refid;
+            }
+            if (e.token !== undefined) {
+                if (res !== "") {
+                    res += ", " + e.token;
+                } else {
+                    res += e.token;
+                }
+            }
+            return res;
+        } else if (e.groupName !== undefined) { //enum group
+            return '<span class="bold">' + e.groupName + '</span>';
+        } else {
+            return '';
+        }
+
+    };
+});

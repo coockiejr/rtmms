@@ -2283,7 +2283,7 @@ th {
   border-bottom-width: 2px;
 }
 .table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: #f9f9f9;
+  background-color: #f3f3f3;
 }
 .table-hover > tbody > tr:hover {
   background-color: #f5f5f5;
@@ -6893,6 +6893,9 @@ input[type="checkbox"] {
 .modal .close {
   color: #222222;
 }
+.modal-backdrop {
+  bottom: 0px;
+}
 
 .bootstrap .tags {
   background-color: #fff;
@@ -6936,6 +6939,51 @@ input[type="checkbox"] {
 .bootstrap .autocomplete .suggestion-item.selected em {
   color: #262626;
   background-color: #ffff00;
+}
+
+.top-buffer {
+  padding-top: 20px;
+}
+.tags-wrapper {
+  position: relative;
+}
+.picker {
+  width: 100%;
+  z-index: 9999;
+}
+.picker .suggestions-list {
+  margin-top: 5px;
+  position: absolute;
+  padding: 5px 0;
+  z-index: 9999;
+  width: 100%;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.picker .suggestions-list li {
+  z-index: 9999;
+  padding: 5px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font: 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #000;
+  background-color: #FFF;
+}
+.picker .suggestions-list li:hover {
+  background: #E9E9E9;
+}
+.picker .suggestions-list li:active,
+.picker .suggestions-list li.active {
+  color: #021a4c;
+  background: #E9E9E9;
+}
+.picker .suggestions-list li:focus {
+  outline: none;
 }
 
 body {
@@ -7037,6 +7085,15 @@ footer {
 .transparent {
   color: transparent;
 }
+.left {
+  text-align: left;
+}
+.center {
+  text-align: center;
+}
+.right {
+  text-align: right;
+}
 .resultlistheader {
   border-bottom: thick solid;
   color: #006699;
@@ -7070,26 +7127,66 @@ footer {
 .center {
   text-align: center;
 }
-.rosetta-grid {
+.grid {
+  font-size: 12px;
+}
+.grid.rosetta-grid {
   height: 600px;
 }
-.hrosetta-grid {
+.grid.hrosetta-grid {
   height: 600px;
 }
-.enums-grid {
+.grid.enums-grid {
   height: 600px;
 }
-.enumgroups-grid {
+.grid.enumgroups-grid {
   height: 600px;
 }
-.units-grid {
+.grid.units-grid {
   height: 600px;
 }
-.unitgroups-grid {
+.grid.unitgroups-grid {
   height: 600px;
 }
 .button-row {
   padding-bottom: 5px;
+}
+.formrosetta .unitenums {
+  padding-left: 20px;
+}
+.formrosetta .unitenums .choice-btn-group {
+  width: 100%;
+  vertical-align: baseline;
+}
+.formrosetta .unitenums .choice-btn-group label {
+  width: 50%;
+  margin-left: 0px;
+}
+.formrosetta .unitenums .unitlist {
+  overflow-y: scroll;
+  height: 300px;
+}
+.formrosetta .unitenums .enumlist {
+  overflow-y: scroll;
+  height: 300px;
+}
+.formrosetta .unitenums table {
+  margin-bottom: 0px;
+}
+.formrosetta .unitenums table.levelOne {
+  margin-top: 10px;
+}
+.formrosetta .unitenums table.levelTwo {
+  margin-top: 5px;
+}
+.formrosetta .unitenums table.super-table-striped > tbody:nth-of-type(odd) > tr:nth-of-type(odd) {
+  background-color: #f3f3f3;
+}
+.formrosetta .unitenums table th {
+  padding: 0px;
+}
+.formrosetta .unitenums table td {
+  padding: 4px;
 }
 
 .ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {

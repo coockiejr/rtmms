@@ -144,19 +144,36 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
 
 }]);
 
-angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$scope', '$modalInstance', 'Restangular', 'rosetta', 'RosettaService', function($scope, $modalInstance, Restangular, rosetta, RosettaService) {
+angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$scope', '$modalInstance', 'Restangular', 'rosetta', 'RosettaService', 'UnitService', function($scope, $modalInstance, Restangular, rosetta, RosettaService, UnitService) {
 
     var formDataInitial;
 
+    $scope.constraintType = 'units';
 
+
+    UnitService.getUnitsAndUnitGroups().then(function(unitsAndUnitGroups) {
+        $scope.unitsAndUnitGroups = unitsAndUnitGroups;
+    });
 
     $scope.groups = [];
     $scope.tags = [];
-
+    $scope.unitGroupIsExpanded = [];
+    $scope.enumGroupIsExpanded = [];
 
     $scope.$watch('groups', function() {
         $scope.formData.groups = _.flatten(_.map($scope.groups, _.values));
     }, true);
+
+    $scope.$watch('formData', function() {
+        if (($scope.formData.unitGroups !== undefined && $scope.formData.unitGroups.length > 0) || ($scope.formData.units !== undefined && $scope.formData.units.length > 0)) {
+            $scope.constraintType = 'units';
+        } else if (($scope.formData.enumGroups !== undefined && $scope.formData.enumGroups.length > 0) || ($scope.formData.enums !== undefined && $scope.formData.enums.length > 0)) {
+            $scope.constraintType = 'enums';
+        } else {
+            $scope.constraintType = null;
+        }
+    }, true);
+
 
     $scope.editmode = false;
     if (rosetta) {
@@ -164,10 +181,28 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
         $scope.groups = rosetta.groups;
         formDataInitial = Restangular.copy(rosetta);
         $scope.editmode = true;
+
+        //units and unitGroups table
+        if ($scope.formData.unitGroups !== undefined) {
+            for (i = 0; i < $scope.formData.unitGroups.length; i += 1) {
+                $scope.unitGroupIsExpanded.push(false);
+            }
+        }
+
+        //enums and enumGroups table
+        if ($scope.formData.enumGroups !== undefined) {
+            for (i = 0; i < $scope.formData.enumGroups.length; i += 1) {
+                $scope.enumGroupIsExpanded.push(false);
+            }
+        }
+
     } else {
         $scope.formData = {};
         $scope.editmode = false;
     }
+
+
+
 
 
 
@@ -226,28 +261,31 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
     };
 
 
+    $scope.removeUnit = function(index, unit) {
+        $scope.formData.units.splice(index, 1);
+    };
 
-    //units and unitGroups table
-    $scope.unitGroupIsExpanded = [];
-    for (i = 0; i < $scope.formData.unitGroups.length; i += 1) {
-        $scope.unitGroupIsExpanded.push(false);
-    }
+    $scope.removeUnitGroup = function(index, unitGroup) {
+        $scope.formData.unitGroups.splice(index, 1);
+    };
+
+    $scope.removeEnum = function(index, enumeration) {
+        $scope.formData.enums.splice(index, 1);
+    };
+
+    $scope.removeEnumGroup = function(index, enumGroup) {
+        $scope.formData.enumGroups.splice(index, 1);
+    };
 
     $scope.selectUnitGroupRow = function(index, groupName) {
         $scope.unitGroupIsExpanded[index] = !$scope.unitGroupIsExpanded[index];
-        console.log($scope.unitGroupIsExpanded[index]);
     };
 
 
-    //enums and enumGroups table
-    $scope.enumGroupIsExpanded = [];
-    for (i = 0; i < $scope.formData.enumGroups.length; i += 1) {
-        $scope.enumGroupIsExpanded.push(false);
-    }
+
 
     $scope.selectEnumGroupRow = function(index, groupName) {
         $scope.enumGroupIsExpanded[index] = !$scope.enumGroupIsExpanded[index];
-        console.log($scope.enumGroupIsExpanded[index]);
     };
 
 

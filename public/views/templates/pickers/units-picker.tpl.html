@@ -1,0 +1,12 @@
+<div class="tags-wrapper">
+    <div>
+        <input type="text" placeholder="Add a unit or unit group" ng-keydown="checkKeyDown($event)" class="form-control" ng-model="searchText" ng-change="search()" ng-blur="hideResults()" />
+    </div>
+    <div>
+        <div class="picker">
+            <ul class="suggestions-list" ng-show="visible && suggestions.length>0">
+                <li ng-repeat="unit in suggestions"  ng-mousedown="addToUnitLists($index)"  ng-mouseenter="$parent.selectedIndex=$index" ng-class="{active : selectedIndex===$index}"  ng-bind-html="unit | showUnitRefidOrGroupName"></li>
+            </ul>
+        </div>
+    </div>
+</div>

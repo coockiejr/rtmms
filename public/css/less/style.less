@@ -105,6 +105,17 @@ footer {
 .transparent {
     color: transparent;
 }
+.left{
+    text-align: left;
+}
+.center{
+    text-align: center;
+}
+.right{
+    text-align: right;
+}
+
+
 .resultlistheader {
     border-bottom: thick solid;
     color: #006699;
@@ -138,27 +149,84 @@ footer {
 .center {
     text-align: center;
 }
-.rosetta-grid {
-    height: 600px;
-}
-.hrosetta-grid {
-    height: 600px;
+
+.grid {
+    font-size:@font-size-small;
+    &.rosetta-grid {
+        height: 600px;
+    }
+    &.hrosetta-grid {
+        height: 600px;
+    }
+    &.enums-grid {
+        height: 600px;
+    }
+    &.enumgroups-grid {
+        height: 600px;
+    }
+    &.units-grid {
+        height: 600px;
+    }
+    &.unitgroups-grid {
+        height: 600px;
+    }
 }
 
-.enums-grid {
-    height: 600px;
-}
-.enumgroups-grid {
-    height: 600px;
-}
 
-.units-grid {
-    height: 600px;
-}
-.unitgroups-grid {
-    height: 600px;
-}
+
 
 .button-row{
     padding-bottom:5px;
 }
+
+
+
+
+
+.formrosetta {
+    .unitenums {
+        padding-left: 20px;
+        .choice-btn-group{
+            width:100%;
+            vertical-align:  baseline;
+            label{
+                width:50%;
+                margin-left: 0px;
+            }
+        }
+
+        .unitlist {
+            overflow-y: scroll;
+            height: 300px;
+        }
+        .enumlist {
+            overflow-y: scroll;
+            height: 300px;
+        }
+
+        table {
+            margin-bottom: 0px;
+            &.levelOne {
+                margin-top: 10px;
+            }
+            &.levelTwo {
+                margin-top: 5px;
+            }
+
+            &.super-table-striped {
+                > tbody:nth-of-type(odd) > tr:nth-of-type(odd) {
+                    background-color: @table-bg-accent;
+                }
+            }
+
+            th {
+                padding: 0px;
+            }
+            td {
+                padding: 4px;
+            }
+        }
+    }
+}
+
+

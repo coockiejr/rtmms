@@ -1,0 +1,44 @@
+@import "variables.less";
+.top-buffer {
+    padding-top: 20px;
+}
+.tags-wrapper {
+    position: relative;
+}
+.picker {
+    width: 100%;
+    z-index: 9999;
+    .suggestions-list {
+        margin-top: 5px;
+        position: absolute;
+        padding: 5px 0;
+        z-index: 9999;
+        width: 100%;
+        background-color: white;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+    .suggestions-list li {
+        z-index: 9999;
+        padding: 5px 10px;
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font: 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #000;
+        background-color: #FFF;
+        &:hover {
+            background: #E9E9E9;
+        }
+        &:active, &.active {
+            color: @brand-rtmms-blue;
+            background: #E9E9E9;
+        }
+        &:focus {
+            outline: none;
+        }
+    }
+}

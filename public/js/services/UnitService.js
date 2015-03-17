@@ -102,6 +102,19 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
             });
     };
 
+
+    //get units ans UnitGroups
+    factory.getUnitsAndUnitGroups = function(params) {
+        return Restangular.all('unitsandunitgroups').getList(params).then(
+            function(unitsAndUnitGroups) {
+                return unitsAndUnitGroups;
+            },
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
+
+
     // =====================================
     // Rosetta MODALS ======================
     // =====================================

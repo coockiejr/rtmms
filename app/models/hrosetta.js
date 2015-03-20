@@ -3,14 +3,21 @@ var mongoose = require('mongoose');
 // define the schema for our rosetta model
 var hRosettaSchema = mongoose.Schema({
     _id: String,
-    refid: String,
-    code10: Number,
-    cfCode10: Number,
-    partition: Number,
+    term: {
+        refid: String,
+        code10: Number,
+        cfCode10: Number,
+        partition: Number,
+        systematicName: String,
+        commonTerm: String,
+        acronym: String,
+        termDescription: String,
+        status: String
+    },
     groups: [String],
     vendorUom: [String],
     displayName: [String],
-    vendorVmd :[String],
+    vendorVmd: [String],
     vendorDescription: [String],
     unitGroups: [{
         _id: Number,
@@ -18,10 +25,17 @@ var hRosettaSchema = mongoose.Schema({
         groupDescription: String,
         units: [{
             _id: Number,
-            refid: String,
-            ucode10: Number,
-            cfUcode10: Number,
-            partition: Number,
+            term: {
+                refid: String,
+                code10: Number,
+                cfCode10: Number,
+                partition: Number,
+                systematicName: String,
+                commonTerm: String,
+                acronym: String,
+                termDescription: String,
+                status: String
+            },
             description: String,
             dimension: String,
             dim: String,
@@ -41,10 +55,6 @@ var hRosettaSchema = mongoose.Schema({
                 text: String,
                 date: Date
             }],
-            systematicName: String,
-            commonTerm: String,
-            acronym: String,
-            termDescription: String,
             user: {
                 _id: mongoose.Schema.ObjectId,
                 name: String,
@@ -59,10 +69,17 @@ var hRosettaSchema = mongoose.Schema({
     }],
     units: [{
         _id: Number,
-        refid: String,
-        ucode10: Number,
-        cfUcode10: Number,
-        partition: Number,
+        term: {
+            refid: String,
+            code10: Number,
+            cfCode10: Number,
+            partition: Number,
+            systematicName: String,
+            commonTerm: String,
+            acronym: String,
+            termDescription: String,
+            status: String
+        },
         description: String,
         dimension: String,
         dim: String,
@@ -82,10 +99,6 @@ var hRosettaSchema = mongoose.Schema({
             text: String,
             date: Date
         }],
-        systematicName: String,
-        commonTerm: String,
-        acronym: String,
-        termDescription: String,
         user: {
             _id: mongoose.Schema.ObjectId,
             name: String,
@@ -101,10 +114,17 @@ var hRosettaSchema = mongoose.Schema({
         groupDescription: String,
         enums: [{
             _id: Number,
-            refid: String,
-            ecode10: Number,
-            cfEcode10: Number,
-            partition: Number,
+            term: {
+                refid: String,
+                code10: Number,
+                cfCode10: Number,
+                partition: Number,
+                systematicName: String,
+                commonTerm: String,
+                acronym: String,
+                termDescription: String,
+                status: String
+            },
             token: String,
             description: String,
             comments: [{
@@ -115,10 +135,6 @@ var hRosettaSchema = mongoose.Schema({
                 text: String,
                 date: Date
             }],
-            systematicName: String,
-            commonTerm: String,
-            acronym: String,
-            termDescription: String,
             user: {
                 _id: mongoose.Schema.ObjectId,
                 name: String,
@@ -133,10 +149,17 @@ var hRosettaSchema = mongoose.Schema({
     }],
     enums: [{
         _id: Number,
-        refid: String,
-        ecode10: Number,
-        cfEcode10: Number,
-        partition: Number,
+        term: {
+            refid: String,
+            code10: Number,
+            cfCode10: Number,
+            partition: Number,
+            systematicName: String,
+            commonTerm: String,
+            acronym: String,
+            termDescription: String,
+            status: String
+        },
         token: String,
         description: String,
         comments: [{
@@ -147,10 +170,6 @@ var hRosettaSchema = mongoose.Schema({
             text: String,
             date: Date
         }],
-        systematicName: String,
-        commonTerm: String,
-        acronym: String,
-        termDescription: String,
         user: {
             _id: mongoose.Schema.ObjectId,
             name: String,
@@ -160,10 +179,6 @@ var hRosettaSchema = mongoose.Schema({
         createdAt: Date,
         updatedAt: Date
     }],
-    systematicName: String,
-    commonTerm: String,
-    acronym: String,
-    termDescription: String,
     contributingOrganization: String,
     // contributingOrganization: {
     //     _id: Number,

@@ -352,41 +352,53 @@ app.filter('UcumsAsStringFromUnit', function() {
 });
 
 
-app.filter('showUnitRefidOrGroupName', function() {
+app.filter('showUnitRefidOrGroupName',['$filter', function($filter) {
     return function(u) { //unit or unit Group
-
+        res ='';
         if (u.refid !== undefined) { //unit
-            return u.refid;
+            res +='<span>'+u.refid+'</span><div class="listdetail"><small>type: Unit</small>';
+            if (u.ucums !== undefined){
+                res +='<br><small>UCUMS: '+$filter('UcumsAsStringFromUnit')(u) +'</small>';
+            }
+            res +='</div>';
         } else if (u.groupName !== undefined) { //unit group
-            return '<span class="bold">' + u.groupName + '</span>';
-        } else {
-            return '';
-        }
-
+            res += '<span class="bold">' + u.groupName + '</span><div class="listdetail"><small>type: Unit group</small>';
+            if (u.groupDescription !== undefined){
+                res +='<br><small>Description: '+u.groupDescription+'</small>';
+            }
+            res +='</div>';
+        } 
+        return res;
     };
-});
+}]);
 
 app.filter('showEnumInfoOrGroupName', function() {
     return function(e) { //enum or enum Group
-
-        if (e.refid !== undefined || e.token !== undefined) { //enum
-            var res = "";
-            if (e.refid !== undefined) {
-                res += e.refid;
-            }
+        res = '';
+        hasref = false;
+        if ((e.refid !== undefined && e.refid !== "") || e.token !== undefined) { //enum
+            if (e.refid !== undefined && e.refid !== "") {
+                res +='<span>'+e.refid;
+                hasref = true;
+            }      
             if (e.token !== undefined) {
-                if (res !== "") {
+                if (hasref) {
                     res += ", " + e.token;
                 } else {
                     res += e.token;
                 }
-            }
-            return res;
+                res += '</span>';
+            }        
+            res +='<div class="listdetail"><small>type: Enum</small></div>';
         } else if (e.groupName !== undefined) { //enum group
-            return '<span class="bold">' + e.groupName + '</span>';
-        } else {
-            return '';
-        }
+            res += '<span class="bold">' + e.groupName + '</span><div class="listdetail"><small>type: Enum group</small>';
+            if (e.groupDescription !== undefined){
+                res +='<br><small>Description: '+e.groupDescription+'</small>';
+            }
+            res +='</div>';
+        } 
+
+        return res;
 
     };
 });

@@ -26,9 +26,11 @@ angular.module('rtmms.unit').controller('UnitGroupController', ['$scope', 'AuthS
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name: 'groupName'
+            name: 'groupName',
+            field: 'groupName'
         }, {
-            name: 'groupDescription'
+            name: 'groupDescription',
+            field: 'groupDescription'
         }],
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;
@@ -37,7 +39,7 @@ angular.module('rtmms.unit').controller('UnitGroupController', ['$scope', 'AuthS
                     paginationOptions.sort = null;
                 } else {
                     paginationOptions.sort = {
-                        column: sortColumns[0].colDef.name,
+                        column: sortColumns[0].colDef.field,
                         value: sortColumns[0].sort.direction
                     };
                 }
@@ -56,7 +58,7 @@ angular.module('rtmms.unit').controller('UnitGroupController', ['$scope', 'AuthS
                 angular.forEach(grid.columns, function(value, key) {
                     if (value.filters[0].term) {
                         paginationOptions.filters.push({
-                            column: value.colDef.name,
+                            column: value.colDef.field,
                             value: value.filters[0].term
                         });
                     }

@@ -8,7 +8,7 @@ module.exports = function(app, qs, async, _) {
     var Enum = require('./../models/enum');
     var EnumGroup = require('./../models/enumGroup');
 
-    var columnNumberSearch = ['code10', 'cfCode10', 'partition'];
+    var columnNumberSearch = ['term.code10', 'term.cfCode10', 'term.partition'];
 
 
 
@@ -31,7 +31,7 @@ module.exports = function(app, qs, async, _) {
                     queryCount = queryCount.where(f.column).equals(f.value);
                 } else if (f.column === 'units') {
                     query = query.or([{
-                        "units.refid": new RegExp(f.value, 'i')
+                        "units.term.refid": new RegExp(f.value, 'i')
                     }, {
                         "unitGroups.groupName": new RegExp(f.value, 'i')
                     }]);
@@ -42,14 +42,14 @@ module.exports = function(app, qs, async, _) {
                     }]);
                 } else if (f.column === 'enums') {
                     query = query.or([{
-                        "enums.refid": new RegExp(f.value, 'i')
+                        "enums.term.refid": new RegExp(f.value, 'i')
                     }, {
                         "enums.token": new RegExp(f.value, 'i')
                     }, {
                         "enumGroups.groupName": new RegExp(f.value, 'i')
                     }]);
                     queryCount = queryCount.or([{
-                        "enums.refid": new RegExp(f.value, 'i')
+                        "enums.term.refid": new RegExp(f.value, 'i')
                     }, {
                         "enums.token": new RegExp(f.value, 'i')
                     }, {
@@ -118,7 +118,7 @@ module.exports = function(app, qs, async, _) {
 
         var query = Rosetta.aggregate([{
             $group: {
-                _id: "$refid"
+                _id: "$term.refid"
             }
         }]);
 
@@ -146,7 +146,7 @@ module.exports = function(app, qs, async, _) {
 
             fetchRosettas = function(refid, callback) {
                 query = Rosetta.find();
-                query = query.where('refid').equals(refid);
+                query = query.where('term.refid').equals(refid);
                 query.exec(function(err, rosettas) {
                     if (err) {
                         callback(err);
@@ -176,32 +176,33 @@ module.exports = function(app, qs, async, _) {
                 async.each(hrosettas, function(r, callback) {
                         // for (i = 0; i < hrosettas.length; i++) {
                         var refid = r._id;
-
+                        console.log(r);
 
 
                         var hros = {};
+                        hros.term = {};
                         hros._id = refid;
-                        hros.refid = refid;
-                        if (findRes[refid][0].code10 !== undefined) {
-                            hros.code10 = findRes[refid][0].code10
+                        hros.term.refid = refid;
+                        if (findRes[refid][0].term.code10 !== undefined) {
+                            hros.term.code10 = findRes[refid][0].term.code10
                         };
-                        if (findRes[refid][0].cfCode10 !== undefined) {
-                            hros.cfCode10 = findRes[refid][0].cfCode10
+                        if (findRes[refid][0].term.cfCode10 !== undefined) {
+                            hros.term.cfCode10 = findRes[refid][0].term.cfCode10
                         };
-                        if (findRes[refid][0].partition !== undefined) {
-                            hros.partition = findRes[refid][0].partition
+                        if (findRes[refid][0].term.partition !== undefined) {
+                            hros.term.partition = findRes[refid][0].term.partition
                         };
-                        if (findRes[refid][0].systematicName !== undefined) {
-                            hros.systematicName = findRes[refid][0].systematicName
+                        if (findRes[refid][0].term.systematicName !== undefined) {
+                            hros.term.systematicName = findRes[refid][0].term.systematicName
                         };
-                        if (findRes[refid][0].commonTerm !== undefined) {
-                            hros.commonTerm = findRes[refid][0].commonTerm
+                        if (findRes[refid][0].term.commonTerm !== undefined) {
+                            hros.term.commonTerm = findRes[refid][0].term.commonTerm
                         };
-                        if (findRes[refid][0].acronym !== undefined) {
-                            hros.acronym = findRes[refid][0].acronym
+                        if (findRes[refid][0].term.acronym !== undefined) {
+                            hros.term.acronym = findRes[refid][0].term.acronym
                         };
-                        if (findRes[refid][0].termDescription !== undefined) {
-                            hros.termDescription = findRes[refid][0].termDescription
+                        if (findRes[refid][0].term.termDescription !== undefined) {
+                            hros.term.termDescription = findRes[refid][0].term.termDescription
                         };
 
 

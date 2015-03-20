@@ -6,7 +6,7 @@ module.exports = function(app, qs, async, _) {
     var Enum = require('./../models/enum');
     var EnumGroup = require('./../models/enumGroup');
 
-    var columnNumberSearch = ['ecode10', 'cfECode10', 'partition'];
+    var columnNumberSearch = ['term.code10', 'term.cfCode10', 'term.partition'];
 
     //get all enums
     app.get('/api/enums', function(req, res) {

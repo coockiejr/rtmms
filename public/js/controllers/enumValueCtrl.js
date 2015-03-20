@@ -28,27 +28,38 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', 'AuthS
         selectionRowHeaderWidth: 35,
         columnDefs: [{
             name: 'groups',
+            field: 'groups',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.enumGroups | EnumOrUnitGroupsAsString }}</span></div>'
         }, {
-            name: 'refid'
+            name: 'refid',
+            field: 'term.refid'
         }, {
-            name: 'ecode10'
+            name: 'ecode10',
+            field: 'term.code10'
         }, {
-            name: 'cfEcode10'
+            name: 'cfEcode10',
+            field: 'term.cfCode10'
         }, {
-            name: 'partition'
+            name: 'partition',
+            field: 'term.partition'
         }, {
-            name: 'description'
+            name: 'description',
+            field: 'description'
         }, {
-            name: 'token'
+            name: 'token',
+            field: 'token'
         }, {
-            name: 'systematicName'
+            name: 'systematicName',
+            field: 'term.systematicName'
         }, {
-            name: 'commonTerm'
+            name: 'commonTerm',
+            field: 'term.commonTerm'
         }, {
-            name: 'acronym'
+            name: 'acronym',
+            field: 'term.acronym'
         }, {
-            name: 'termDescription'
+            name: 'termDescription',
+            field: 'term.termDescription'
         }],
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;
@@ -57,7 +68,7 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', 'AuthS
                     paginationOptions.sort = null;
                 } else {
                     paginationOptions.sort = {
-                        column: sortColumns[0].colDef.name,
+                        column: sortColumns[0].colDef.field,
                         value: sortColumns[0].sort.direction
                     };
                 }
@@ -76,7 +87,7 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', 'AuthS
                 angular.forEach(grid.columns, function(value, key) {
                     if (value.filters[0].term) {
                         paginationOptions.filters.push({
-                            column: value.colDef.name,
+                            column: value.colDef.field,
                             value: value.filters[0].term
                         });
                     }

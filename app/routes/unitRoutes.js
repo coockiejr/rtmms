@@ -6,7 +6,7 @@ module.exports = function(app, qs, async, _) {
     var Unit = require('./../models/unit');
     var UnitGroup = require('./../models/unitGroup');
 
-    var columnNumberSearch = ['ecode10', 'cfECode10', 'partition'];
+    var columnNumberSearch = ['term.code10', 'term.cfCode10', 'term.partition'];
 
     //get all units
     app.get('/api/units', function(req, res) {

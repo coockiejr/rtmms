@@ -6897,10 +6897,20 @@ input[type="checkbox"] {
   bottom: 0px;
 }
 
+.modal-header {
+  padding: 5px;
+  background-color: #021a4c;
+}
+.modal-header h3 {
+  color: #f3c60d;
+}
+.modal-footer {
+  padding: 10px;
+}
+
 .bootstrap .tags {
   background-color: #fff;
   border: 1px solid #ccc;
-  border-radius: 4px;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
@@ -6909,16 +6919,15 @@ input[type="checkbox"] {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 .bootstrap .tags .tag-item {
-  background: #428bca;
-  border: 1px solid #357ebd;
-  border-radius: 4px;
-  color: #fff;
+  background: #021a4c;
+  border: 1px solid #021a4c;
+  color: #f3c60d;
+  border-radius: 0px;
 }
 .bootstrap .tags .tag-item.selected {
-  background: #d9534f;
-  border: 1px solid #d43f3a;
-  border-radius: 4px;
-  color: #fff;
+  background: #021a4c;
+  border: 1px solid #021a4c;
+  color: #f3c60d;
 }
 .bootstrap .tags .tag-item button {
   background: transparent;
@@ -7113,6 +7122,9 @@ footer {
 .bold {
   font-weight: bold;
 }
+.italic {
+  font-style: italic;
+}
 .tooltip-inner {
   text-align: left;
   max-width: 500px;
@@ -7151,6 +7163,75 @@ footer {
 .button-row {
   padding-bottom: 5px;
 }
+.formField {
+  margin: 2px;
+  padding: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ddd;
+  background-color: #EAF1FF;
+}
+.listdetail {
+  font-style: italic;
+  padding-left: 5px;
+}
+.formrosetta label {
+  margin-bottom: 0px;
+}
+.formrosetta .groupInfo.formField::before {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #021a4c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  content: "Group Information:";
+}
+.formrosetta .vendorInfo.formField::before {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #021a4c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  content: "Vendor Parameter Information:";
+}
+.formrosetta .termInfo.formField::before {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #021a4c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  content: "Term Information:";
+}
+.formrosetta .termInfo .refid-choice-btn-group {
+  float: right;
+}
+.formrosetta .termInfo .row {
+  margin-right: 0px;
+}
+.formrosetta .termInfo .row .col-sm-4 {
+  padding-right: 0px;
+}
+.formrosetta .constraintsInfo.formField::before {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #021a4c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  content: "Co-constraints Information:";
+}
+.formrosetta .miscInfo.formField::before {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #021a4c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  content: "Miscellaneous Information:";
+}
 .formrosetta .unitenums {
   padding-left: 20px;
 }
@@ -7162,13 +7243,49 @@ footer {
   width: 50%;
   margin-left: 0px;
 }
-.formrosetta .unitenums .unitlist {
+.formrosetta .unitenums .unitsFields {
+  overflow-y: scroll;
+  height: 340px;
+}
+.formrosetta .unitenums .unitsFields .unitlist.formField::before {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #021a4c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  content: "Units";
+}
+.formrosetta .unitenums .unitsFields .unitGrouplist.formField::before {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #021a4c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  content: "Unit Groups";
+}
+.formrosetta .unitenums .enumsFields {
   overflow-y: scroll;
   height: 300px;
 }
-.formrosetta .unitenums .enumlist {
-  overflow-y: scroll;
-  height: 300px;
+.formrosetta .unitenums .enumsFields .enumlist.formField::before {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #021a4c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  content: "Enumeration Values";
+}
+.formrosetta .unitenums .enumsFields .enumGrouplist.formField::before {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #021a4c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  content: "Enumeration Groups";
 }
 .formrosetta .unitenums table {
   margin-bottom: 0px;

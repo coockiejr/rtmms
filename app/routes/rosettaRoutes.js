@@ -8,7 +8,7 @@ module.exports = function(app, qs, async, _) {
     var Enum = require('./../models/enum');
     var EnumGroup = require('./../models/enumGroup');
 
-    var columnNumberSearch = ['code10', 'cfCode10', 'partition'];
+    var columnNumberSearch = ['term.code10', 'term.cfCode10', 'term.partition'];
 
     //get all rosetta
     app.get('/api/rosettas', function(req, res) {

@@ -4,10 +4,17 @@ var mongoose = require('mongoose');
 // define the schema for our enum model
 var enumSchema = mongoose.Schema({
     _id: Number,
-    refid: String,
-    ecode10: Number,
-    cfEcode10: Number,
-    partition: Number,
+    term: {
+        refid: String,
+        code10: Number,
+        cfCode10: Number,
+        partition: Number,
+        systematicName: String,
+        commonTerm: String,
+        acronym: String,
+        termDescription: String,
+        status: String
+    },
     token: String,
     description: String,
     comments: [{
@@ -18,10 +25,6 @@ var enumSchema = mongoose.Schema({
         text: String,
         date: Date
     }],
-    systematicName: String,
-    commonTerm: String,
-    acronym: String,
-    termDescription: String,
     enumGroups: [{
         _id: Number,
         groupName: String

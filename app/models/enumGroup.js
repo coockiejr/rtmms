@@ -8,10 +8,17 @@ var enumGroupSchema = mongoose.Schema({
     groupDescription: String,
     enums: [{
         _id: Number,
-        refid: String,
-        ecode10: Number,
-        cfEcode10: Number,
-        partition: Number,
+        term: {
+            refid: String,
+            code10: Number,
+            cfCode10: Number,
+            partition: Number,
+            systematicName: String,
+            commonTerm: String,
+            acronym: String,
+            termDescription: String,
+            status: String
+        },
         token: String,
         description: String,
         comments: [{
@@ -22,10 +29,6 @@ var enumGroupSchema = mongoose.Schema({
             text: String,
             date: Date
         }],
-        systematicName: String,
-        commonTerm: String,
-        acronym: String,
-        termDescription: String,
         user: {
             _id: mongoose.Schema.ObjectId,
             name: String,
@@ -37,7 +40,9 @@ var enumGroupSchema = mongoose.Schema({
     }],
     createdAt: Date,
     updatedAt: Date
-},{ collection: 'enumGroups' });
+}, {
+    collection: 'enumGroups'
+});
 
 // keep track of when unitGroups are updated and created
 enumGroupSchema.pre('save', function(next, done) {

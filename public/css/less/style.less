@@ -135,6 +135,9 @@ footer {
 .bold {
     font-weight: bold;
 }
+.italic{
+    font-style: italic;
+}
 .tooltip-inner {
     text-align: left;
     max-width: 500px;
@@ -181,9 +184,98 @@ footer {
 
 
 
+.formField{
+    margin:2px;
+    padding: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ddd;
+    background-color: #EAF1FF;
+}
+
+.listdetail{
+    font-style: italic;
+    padding-left: 5px;
+}
 
 
 .formrosetta {
+
+    label{
+        margin-bottom:0px;
+    }
+
+    .groupInfo{
+        &.formField::before {
+            position: relative;
+            font-size: 12px;
+            font-weight: 700;
+            color: @brand-rtmms-blue;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            content: "Group Information:";          
+        }
+    }
+
+    .vendorInfo{
+        &.formField::before {
+            position: relative;
+            font-size: 12px;
+            font-weight: 700;
+            color: @brand-rtmms-blue;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            content: "Vendor Parameter Information:";          
+        }
+    }
+
+    .termInfo {
+        &.formField::before {
+            position: relative;
+            font-size: 12px;
+            font-weight: 700;
+            color: @brand-rtmms-blue;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            content: "Term Information:";
+        }
+
+        .refid-choice-btn-group{
+            float:right;
+        }
+        
+        .row{
+            margin-right: 0px;
+            .col-sm-4 {
+                padding-right: 0px;
+            }
+        }
+       
+   }
+
+    .constraintsInfo{
+        &.formField::before {
+            position: relative;
+            font-size: 12px;
+            font-weight: 700;
+            color: @brand-rtmms-blue;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            content: "Co-constraints Information:";
+        }
+   }
+   .miscInfo {
+       &.formField::before {
+           position: relative;
+           font-size: 12px;
+           font-weight: 700;
+           color: @brand-rtmms-blue;
+           text-transform: uppercase;
+           letter-spacing: 1px;
+           content: "Miscellaneous Information:";
+       }
+   }
+
     .unitenums {
         padding-left: 20px;
         .choice-btn-group{
@@ -195,14 +287,55 @@ footer {
             }
         }
 
-        .unitlist {
+        .unitsFields{
+            overflow-y: scroll;
+            height: 340px;
+            .unitlist.formField::before {
+                    position: relative;
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: @brand-rtmms-blue;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    content: "Units";
+                
+            }
+            .unitGrouplist.formField::before {
+                    position: relative;
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: @brand-rtmms-blue;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    content: "Unit Groups";
+                    
+            }        
+        }
+
+        .enumsFields{
             overflow-y: scroll;
             height: 300px;
+            .enumlist.formField::before {
+                    position: relative;
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: @brand-rtmms-blue;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    content: "Enumeration Values";
+                
+            }
+            .enumGrouplist.formField::before {
+                    position: relative;
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: @brand-rtmms-blue;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    content: "Enumeration Groups";
+            }        
         }
-        .enumlist {
-            overflow-y: scroll;
-            height: 300px;
-        }
+
 
         table {
             margin-bottom: 0px;

@@ -7,10 +7,17 @@ var unitGroupSchema = mongoose.Schema({
     groupDescription: String,
     units: [{
         _id: Number,
-        refid: String,
-        ucode10: Number,
-        cfUcode10: Number,
-        partition: Number,
+        term: {
+            refid: String,
+            code10: Number,
+            cfCode10: Number,
+            partition: Number,
+            systematicName: String,
+            commonTerm: String,
+            acronym: String,
+            termDescription: String,
+            status: String
+        },
         description: String,
         dimension: String,
         dim: String,
@@ -30,10 +37,6 @@ var unitGroupSchema = mongoose.Schema({
             text: String,
             date: Date
         }],
-        systematicName: String,
-        commonTerm: String,
-        acronym: String,
-        termDescription: String,
         user: {
             _id: mongoose.Schema.ObjectId,
             name: String,
@@ -45,7 +48,9 @@ var unitGroupSchema = mongoose.Schema({
     }],
     createdAt: Date,
     updatedAt: Date
-}, { collection: 'unitGroups' });
+}, {
+    collection: 'unitGroups'
+});
 
 // keep track of when unitGroups are updated and created
 unitGroupSchema.pre('save', function(next, done) {
@@ -60,4 +65,3 @@ unitGroupSchema.pre('save', function(next, done) {
 
 // create the model for unitGroups and expose it to our app
 module.exports = mongoose.model('UnitGroup', unitGroupSchema);
-

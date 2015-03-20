@@ -65,5 +65,3 @@ app.directive("memberselector", function() {
         }
     };
 });
-
-

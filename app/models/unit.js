@@ -3,10 +3,17 @@ var mongoose = require('mongoose');
 // define the schema for our unit model
 var unitSchema = mongoose.Schema({
     _id: Number,
-    refid: String,
-    ucode10: Number,
-    cfUcode10: Number,
-    partition: Number,
+    term: {
+        refid: String,
+        code10: Number,
+        cfCode10: Number,
+        partition: Number,
+        systematicName: String,
+        commonTerm: String,
+        acronym: String,
+        termDescription: String,
+        status: String
+    },
     dimension: String,
     dim: String,
     dimC: String,
@@ -24,10 +31,6 @@ var unitSchema = mongoose.Schema({
         text: String,
         date: Date
     }],
-    systematicName: String,
-    commonTerm: String,
-    acronym: String,
-    termDescription: String,
     enumGroups: [{
         _id: Number,
         groupName: String

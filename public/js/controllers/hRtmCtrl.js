@@ -1,6 +1,6 @@
 angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope', 'AuthService', 'HRosettaService', 'dialogs', 'uiGridConstants', function($scope, AuthService, HRosettaService, dialogs, uiGridConstants) {
 
-     $scope.authService = AuthService;
+    $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
         $scope.user = user;
     });
@@ -25,19 +25,26 @@ angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope'
         enableRowSelection: true,
         columnDefs: [{
             name: 'groups',
+            field: 'groups',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }, {
-            name: 'refid'
+            name: 'refid',
+            field: 'term.refid'
         }, {
-            name: 'cfCode10'
+            name: 'cfCode10',
+            field: 'term.cfCode10'
         }, {
-            name: 'systematicName'
+            name: 'systematicName',
+            field: 'term.systematicName'
         }, {
-            name: 'commonTerm'
+            name: 'commonTerm',
+            field: 'term.commonTerm'
         }, {
-            name: 'acronym'
+            name: 'acronym',
+            field: 'term.acronym'
         }, {
-            name: 'termDescription'
+            name: 'termDescription',
+            field: 'term.termDescription'
         }, {
             name: 'units',
             field: 'units',
@@ -50,12 +57,15 @@ angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope'
             enableSorting: false
         }, {
             name: 'vendorDescription',
+            fields: 'vendorDescription',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }, {
             name: 'displayName',
+            field: 'displayName',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }, {
             name: 'vendorVmd',
+            field: 'vendorVmd',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }],
         onRegisterApi: function(gridApi) {
@@ -64,7 +74,10 @@ angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope'
                 if (sortColumns.length === 0) {
                     paginationOptions.sort = null;
                 } else {
-                    paginationOptions.sort = {column:sortColumns[0].colDef.name,value:sortColumns[0].sort.direction};
+                    paginationOptions.sort = {
+                        column: sortColumns[0].colDef.field,
+                        value: sortColumns[0].sort.direction
+                    };
                 }
                 getPage();
             });
@@ -81,7 +94,7 @@ angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope'
                 angular.forEach(grid.columns, function(value, key) {
                     if (value.filters[0].term) {
                         paginationOptions.filters.push({
-                            column: value.colDef.name,
+                            column: value.colDef.field,
                             value: value.filters[0].term
                         });
                     }
@@ -109,17 +122,17 @@ angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope'
 
 
     getPage();
-   
+
 }]);
 
-angular.module('rtmms.hRtm').controller('HarmonizedRosettaModalInstanceController', ['$scope', '$modalInstance', 'hrosetta',  function($scope, $modalInstance, hrosetta) {
+angular.module('rtmms.hRtm').controller('HarmonizedRosettaModalInstanceController', ['$scope', '$modalInstance', 'hrosetta', function($scope, $modalInstance, hrosetta) {
 
 
     $scope.editmode = false;
     if (result) {
-        
+
     } else {
-        
+
 
     }
 

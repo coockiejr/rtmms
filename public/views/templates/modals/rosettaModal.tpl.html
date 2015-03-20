@@ -7,186 +7,214 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="row">
-                    <div class="form-group-sm" ng-class="{ 'has-error' : groups.$invalid && !groups.$pristine}">
-                        <label class="text-left">Groups:</label>
-                        <tags-input class="bootstrap" ng-model="groups" placeholder="Add a group" replace-spaces-with-dashes="false">
-                            <auto-complete source="loadGroups($query)" min-length="0" debounce-delay="0" max-results="10"></auto-complete>
-                        </tags-input>
+                    <div class="groupInfo formField">
+                        <div class="form-group-sm" ng-class="{ 'has-error' : groups.$invalid && !groups.$pristine}">
+                            <label class="text-left">Groups:</label>
+                            <tags-input class="bootstrap" ng-model="groups" placeholder="Add a group" replace-spaces-with-dashes="false">
+                                <auto-complete source="loadGroups($query)" min-length="0" debounce-delay="0" max-results="10"></auto-complete>
+                            </tags-input>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorDescription.$invalid && !formrosetta.vendorDescription.$pristine}">
-                        <label class="text-left">Vendor Description:</label>
-                        <input type="text" name="vendorDescription" class="form-control  text-left" ng-model="formData.vendorDescription" ng-required="true">
+                    <div class="vendorInfo formField">
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorDescription.$invalid && !formrosetta.vendorDescription.$pristine}">
+                            <label class="text-left">Vendor Description:</label>
+                            <input type="text" name="vendorDescription" class="form-control  text-left" ng-model="formData.vendorDescription" ng-required="true">
+                        </div>
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.displayName.$invalid && !formrosetta.displayName.$pristine}">
+                            <label class="text-left">Display Name:</label>
+                            <input type="text" name="displayName" class="form-control  text-left" ng-model="formData.displayName" ng-required="true">
+                        </div>
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorUom.$invalid && !formrosetta.vendorUom.$pristine}">
+                            <label class="text-left">Vendor UOM:</label>
+                            <input type="text" name="vendorUom" class="form-control  text-left" ng-model="formData.vendorUom" ng-required="true">
+                        </div>
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorVmd.$invalid && !formrosetta.vendorVmd.$pristine}">
+                            <label class="text-left">Vendor VMD:</label>
+                            <input type="text" name="vendorVmd" class="form-control  text-left" ng-model="formData.vendorVmd" ng-required="true">
+                        </div>
                     </div>
-                    <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.displayName.$invalid && !formrosetta.displayName.$pristine}">
-                        <label class="text-left">Display Name:</label>
-                        <input type="text" name="displayName" class="form-control  text-left" ng-model="formData.displayName" ng-required="true">
-                    </div>
-                    <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorUom.$invalid && !formrosetta.vendorUom.$pristine}">
-                        <label class="text-left">Vendor UOM:</label>
-                        <input type="text" name="vendorUom" class="form-control  text-left" ng-model="formData.vendorUom" ng-required="true">
-                    </div>
-                    <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorVmd.$invalid && !formrosetta.vendorVmd.$pristine}">
-                        <label class="text-left">Vendor VMD:</label>
-                        <input type="text" name="vendorVmd" class="form-control  text-left" ng-model="formData.vendorVmd" ng-required="true">
-                    </div>
-                    <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.refid.$invalid && !formrosetta.refid.$pristine}">
-                        <label class="text-left">Refid:</label>
-                        <input type="text" name="refid" class="form-control  text-left" ng-model="formData.refid" ng-required="true" required>
+                    <div class="termInfo formField">
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.refid.$invalid && !formrosetta.refid.$pristine}">
+                            <label class="text-left">Refid:</label>
+                            <div class="btn-group choice-btn-group refid-choice-btn-group">
+                                <label class="btn btn-primary" ng-model="refidType " btn-radio="'new'">New</label>
+                                <label class="btn btn-primary" ng-model="refidType" btn-radio="'existing'">Existing</label>
+                            </div>
+                            <input type="text" name="refid" class="form-control  text-left" ng-model="formData.term.refid" ng-required="true" required>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label class="text-left">Partition:</label>
+                                    <input type="text" name="partition" class="form-control  text-left" ng-model="formData.term.partition">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="text-left">Code10:</label>
+                                    <input type="text" name="code10" class="form-control  text-left" ng-model="formData.term.code10">
+                                </div>
+                                <div class="col-sm-4">  
+                                    <label class="text-left">CF_Code10:</label>
+                                    <input type="text" name="cfCode10" class="form-control  text-left" ng-model="formData.term.cfCode10">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
             <div class="unitenums col-md-6">
                 <div class="row">
-                    <div class="btn-group choice-btn-group">
-                        <label class="btn btn-primary" ng-disabled="(formData.enumGroups.length>0 || formData.enums.length>0)" ng-model="constraintType " btn-radio="'units'">Units</label>
-                        <label class="btn btn-primary" ng-disabled="(formData.unitGroups.length>0 || formData.units.length>0)" ng-model="constraintType" btn-radio="'enums'">Enumerations</label>
+                    <div class="constraintsInfo formField">
+                        <div class="center red" ng-show="constraintType===null">
+                            Select a type of co-constraint
+                        </div>
+                        <div class="btn-group choice-btn-group">
+                            <label class="btn btn-primary" ng-disabled="(formData.enumGroups.length>0 || formData.enums.length>0)" ng-model="constraintType " btn-radio="'units'">Units</label>
+                            <label class="btn btn-primary" ng-disabled="(formData.unitGroups.length>0 || formData.units.length>0)" ng-model="constraintType" btn-radio="'enums'">Enumerations</label>
+                        </div>
+                        <div class="form-group-sm">
+                            <div ng-show="constraintType=='units'" units-picker unitgroups="formData.unitGroups" units="formData.units" limit="5"></div>
+                            <div ng-show="constraintType=='enums'" enums-picker enumgroups="formData.enumGroups" enums="formData.enums" limit="5"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="row" ng-show="constraintType=='units'">
-                    <div class="form-group-sm">
-                        <div units-picker unitgroups="formData.unitGroups" units="formData.units" limit="5"></div>
-                    </div>
-
-                    <div ng-show="(formData.unitGroups.length>0 || formData.units.length>0)" class="unitlist">
-                        <table ng-show="formData.unitGroups.length>0" class="table super-table-striped levelOne ">
-                            <thead>
-                                <tr>
-                                    <th>Group Name</th>
-                                </tr>
-                            </thead>
-                            <tbody data-ng-repeat="unitGroup in formData.unitGroups">
-                                <tr>
-                                    <td class="hoverhand" data-ng-click="selectUnitGroupRow($index, unitGroup.groupName)">
-                                        <i title="collapse" ng-show="unitGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-down"></i>
-                                        <i title="expand" ng-show="!unitGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-right"></i>
-                                        <span class="bold">{{unitGroup.groupName}}</span>
-                                    </td>
-                                    <td class="right">
-                                        <i ng-click="removeUnitGroup($index,unitGroup)" class="fa fa-times hoverhand red"></i>
-                                    </td>
-                                </tr>
-                                <tr ng-show="unitGroupIsExpanded[$index]">
-                                    <td colspan="2">
-                                        <div style="padding-left:10px;">
-                                            <table class="table table-striped levelTwo">
-                                                <thead>
-                                                    <tr>
-                                                        <th>REFID</th>
-                                                        <th>UCUMS</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr data-ng-repeat="unit in unitGroup.units">
-                                                        <td>{{unit.refid}}</td>
-                                                        <td>{{unit | UcumsAsStringFromUnit}}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table ng-show="formData.units.length>0" class="table table-striped levelOne">
-                            <thead>
-                                <tr>
-                                    <th>REFID</th>
-                                    <th>UCUMS</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr data-ng-repeat="unit in formData.units">
-                                    <td>{{unit.refid}}</td>
-                                    <td>{{unit | UcumsAsStringFromUnit}}</td>
-                                    <td class="right">
-                                        <i ng-click="removeUnit($index,unit)" class="fa fa-times hoverhand red "></i>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="unitsFields">
+                        <div ng-show="formData.unitGroups.length>0" class="formField unitGrouplist">
+                            <table ng-show="formData.unitGroups.length>0" class="table super-table-striped levelOne ">
+                                <thead>
+                                    <tr>
+                                        <th>Group Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-ng-repeat="unitGroup in formData.unitGroups">
+                                    <tr>
+                                        <td class="hoverhand" data-ng-click="selectUnitGroupRow($index, unitGroup.groupName)">
+                                            <i title="collapse" ng-show="unitGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-down"></i>
+                                            <i title="expand" ng-show="!unitGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-right"></i>
+                                            <span class="bold">{{unitGroup.groupName}}</span>
+                                        </td>
+                                        <td class="right">
+                                            <i ng-click="removeUnitGroup($index,unitGroup)" class="fa fa-times hoverhand red"></i>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="unitGroupIsExpanded[$index]">
+                                        <td colspan="2">
+                                            <div style="padding-left:10px;">
+                                                <table class="table table-striped levelTwo">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>REFID</th>
+                                                            <th>UCUMS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr data-ng-repeat="unit in unitGroup.units">
+                                                            <td>{{unit.refid}}</td>
+                                                            <td>{{unit | UcumsAsStringFromUnit}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-show="formData.units.length>0" class="formField unitlist">
+                            <table ng-show="formData.units.length>0" class="table table-striped levelOne">
+                                <thead>
+                                    <tr>
+                                        <th>REFID</th>
+                                        <th>UCUMS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="unit in formData.units">
+                                        <td>{{unit.refid}}</td>
+                                        <td>{{unit | UcumsAsStringFromUnit}}</td>
+                                        <td class="right">
+                                            <i ng-click="removeUnit($index,unit)" class="fa fa-times hoverhand red "></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-
                 <div class="row" ng-show="constraintType=='enums'">
-
-                    <div class="form-group-sm">
-                        <div enums-picker enumgroups="formData.enumGroups" enums="formData.enums" limit="5"></div>
-                    </div>
-
-                    <div ng-show="(formData.enumGroups.length>0 || formData.enums.length>0)" class="enumlist">
-                        <table ng-show="formData.enumGroups.length>0" class="table super-table-striped levelOne">
-                            <thead>
-                                <tr>
-                                    <th>Group Name</th>
-                                </tr>
-                            </thead>
-                            <tbody data-ng-repeat="enumGroup in formData.enumGroups">
-                                <tr>
-                                    <td class="hoverhand" data-ng-click="selectEnumGroupRow($index, enumGroup.groupName)">
-                                        <i title="collapse" ng-show="enumGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-down"></i>
-                                        <i title="expand" ng-show="!enumGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-right"></i>
-                                        <span class="bold">{{enumGroup.groupName}}</span>
-                                    </td>
-                                    <td class="right">
-                                        <i ng-click="removeEnumGroup($index,enumGroup)" class="fa fa-times hoverhand red"></i>
-                                    </td>
-                                </tr>
-                                <tr ng-show="enumGroupIsExpanded[$index]">
-                                    <td colspan="2">
-                                        <div style="padding-left:10px;">
-                                            <table class="table table-striped levelTwo">
-                                                <thead>
-                                                    <tr>
-                                                        <th>REFID</th>
-                                                        <th>TOKEN</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr data-ng-repeat="enum in enumGroup.enums">
-                                                        <td>{{enum.refid}}</td>
-                                                        <td>{{enum.token}}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table ng-show="formData.enums.length>0" class="table table-striped levelOne">
-                            <thead>
-                                <tr>
-                                    <th>REFID</th>
-                                    <th>TOKEN</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr data-ng-repeat="enum in formData.enums">
-                                    <td>{{enum.refid}}</td>
-                                    <td>{{enum.token}}</td>
-                                    <td class="right">
-                                        <i ng-click="removeEnum($index,enum)" class="fa fa-times hoverhand red "></i>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="enumsFields">
+                        <div ng-show="(formData.enumGroups.length>0 || formData.enums.length>0)" class="formField enumGrouplist">
+                            <table ng-show="formData.enumGroups.length>0" class="table super-table-striped levelOne">
+                                <thead>
+                                    <tr>
+                                        <th>Group Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-ng-repeat="enumGroup in formData.enumGroups">
+                                    <tr>
+                                        <td class="hoverhand" data-ng-click="selectEnumGroupRow($index, enumGroup.groupName)">
+                                            <i title="collapse" ng-show="enumGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-down"></i>
+                                            <i title="expand" ng-show="!enumGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-right"></i>
+                                            <span class="bold">{{enumGroup.groupName}}</span>
+                                        </td>
+                                        <td class="right">
+                                            <i ng-click="removeEnumGroup($index,enumGroup)" class="fa fa-times hoverhand red"></i>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="enumGroupIsExpanded[$index]">
+                                        <td colspan="2">
+                                            <div style="padding-left:10px;">
+                                                <table class="table table-striped levelTwo">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>REFID</th>
+                                                            <th>TOKEN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr data-ng-repeat="enum in enumGroup.enums">
+                                                            <td>{{enum.refid}}</td>
+                                                            <td>{{enum.token}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-show="formData.enums.length>0" class="formField enumlist">
+                            <table ng-show="formData.enums.length>0" class="table table-striped levelOne">
+                                <thead>
+                                    <tr>
+                                        <th>REFID</th>
+                                        <th>TOKEN</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="enum in formData.enums">
+                                        <td>{{enum.refid}}</td>
+                                        <td>{{enum.token}}</td>
+                                        <td class="right">
+                                            <i ng-click="removeEnum($index,enum)" class="fa fa-times hoverhand red "></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-
             </div>
-
-
-
         </div>
         <div class="row">
-            <div class="form-group-sm" ng-class="{ 'has-error' : tags.$invalid && !tags.$pristine}">
-                <label class="text-left">Tags:</label>
-                <tags-input class="bootstrap" ng-model="tags" placeholder="Add a tag" replace-spaces-with-dashes="false">
-                    <auto-complete source="loadTags($query)" min-length="0" debounce-delay="0" max-results="10"></auto-complete>
-                </tags-input>
+            <div class="miscInfo formField">
+                <div class="form-group-sm" ng-class="{ 'has-error' : tags.$invalid && !tags.$pristine}">
+                    <label class="text-left">Tags:</label>
+                    <tags-input class="bootstrap" ng-model="tags" placeholder="Add a tag" replace-spaces-with-dashes="false">
+                        <auto-complete source="loadTags($query)" min-length="0" debounce-delay="0" max-results="10"></auto-complete>
+                    </tags-input>
+                </div>
             </div>
         </div>
     </form>

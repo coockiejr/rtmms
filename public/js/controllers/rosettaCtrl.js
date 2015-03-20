@@ -28,21 +28,29 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         selectionRowHeaderWidth: 35,
         columnDefs: [{
             name: 'groups',
+            field: 'groups',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }, {
-            name: 'refid'
+            name: 'refid',
+            field: 'term.refid'
         }, {
-            name: 'cfCode10'
+            name: 'cfCode10',
+            field: 'term.cfCode10'
         }, {
-            name: 'systematicName'
+            name: 'systematicName',
+            field: 'term.systematicName'
         }, {
-            name: 'commonTerm'
+            name: 'commonTerm',
+            field: 'term.commonTerm'
         }, {
-            name: 'acronym'
+            name: 'acronym',
+            field: 'term.acronym'
         }, {
-            name: 'termDescription'
+            name: 'termDescription',
+            field: 'term.termDescription'
         }, {
-            name: 'partition'
+            name: 'partition',
+            field: 'term.partition'
         }, {
             name: 'units',
             field: 'units',
@@ -50,6 +58,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
             enableSorting: false
         }, {
             name: 'ucums',
+            field: 'ucums',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity | UcumsAsStringFromRosetta }}</div>',
             enableSorting: false
         }, {
@@ -58,13 +67,17 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
             cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.enumGroups | EnumOrUnitGroupsAsString }}</span> <span>{{row.entity.enums | EnumsAsString }}</span></div>',
             enableSorting: false
         }, {
-            name: 'code10'
+            name: 'code10',
+            field: 'term.code10'
         }, {
-            name: 'vendorDescription'
+            name: 'vendorDescription',
+            field: 'vendorDescription'
         }, {
-            name: 'displayName'
+            name: 'displayName',
+            field: 'displayName'
         }, {
-            name: 'vendorVmd'
+            name: 'vendorVmd',
+            field: 'vendorVmd'
         }],
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;
@@ -73,7 +86,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
                     paginationOptions.sort = null;
                 } else {
                     paginationOptions.sort = {
-                        column: sortColumns[0].colDef.name,
+                        column: sortColumns[0].colDef.field,
                         value: sortColumns[0].sort.direction
                     };
                 }
@@ -92,7 +105,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
                 angular.forEach(grid.columns, function(value, key) {
                     if (value.filters[0].term) {
                         paginationOptions.filters.push({
-                            column: value.colDef.name,
+                            column: value.colDef.field,
                             value: value.filters[0].term
                         });
                     }
@@ -197,6 +210,7 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
         }
 
     } else {
+        $scope.refidType = "new";
         $scope.formData = {};
         $scope.editmode = false;
     }

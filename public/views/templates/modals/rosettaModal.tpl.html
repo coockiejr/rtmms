@@ -37,24 +37,24 @@
                     </div>
                     <div class="termInfo formField">
                         <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.refid.$invalid && !formrosetta.refid.$pristine}">
-                            <label class="text-left">Refid:</label>
                             <div class="btn-group choice-btn-group refid-choice-btn-group">
-                                <label class="btn btn-primary" ng-model="refidType " btn-radio="'new'">New</label>
-                                <label class="btn btn-primary" ng-model="refidType" btn-radio="'existing'">Existing</label>
+                                <label class="choice btn btn-primary" ng-model="refidType " btn-radio="'new'">Propose new term</label>
+                                <label class="choice btn btn-primary" ng-model="refidType" btn-radio="'existing'">Map existing term</label>
                             </div>
+                            <label class="text-left">Refid:</label>
                             <input type="text" name="refid" class="form-control  text-left" ng-model="formData.term.refid" ng-required="true" required>
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <label class="text-left">Partition:</label>
-                                    <input type="text" name="partition" class="form-control  text-left" ng-model="formData.term.partition">
+                                    <label class="text-left">Partition #:</label>
+                                    <input type="text" only-digits name="partition" class="form-control  text-left" ng-model="formData.term.partition">
                                 </div>
                                 <div class="col-sm-4">
                                     <label class="text-left">Code10:</label>
-                                    <input type="text" name="code10" class="form-control  text-left" ng-model="formData.term.code10">
+                                    <input type="text" only-digits name="code10" class="form-control  text-left" ng-model="formData.term.code10">
                                 </div>
                                 <div class="col-sm-4">  
                                     <label class="text-left">CF_Code10:</label>
-                                    <input type="text" name="cfCode10" class="form-control  text-left" ng-model="formData.term.cfCode10">
+                                    <input type="text" only-digits name="cfCode10" class="form-control  text-left" ng-model="formData.term.cfCode10">
                                 </div>
                             </div>
                         </div>
@@ -68,8 +68,8 @@
                             Select a type of co-constraint
                         </div>
                         <div class="btn-group choice-btn-group">
-                            <label class="btn btn-primary" ng-disabled="(formData.enumGroups.length>0 || formData.enums.length>0)" ng-model="constraintType " btn-radio="'units'">Units</label>
-                            <label class="btn btn-primary" ng-disabled="(formData.unitGroups.length>0 || formData.units.length>0)" ng-model="constraintType" btn-radio="'enums'">Enumerations</label>
+                            <label class="choice btn btn-primary" ng-disabled="(formData.enumGroups.length>0 || formData.enums.length>0)" ng-model="constraintType " btn-radio="'units'">Units</label>
+                            <label class="choice btn btn-primary" ng-disabled="(formData.unitGroups.length>0 || formData.units.length>0)" ng-model="constraintType" btn-radio="'enums'">Enumerations</label>
                         </div>
                         <div class="form-group-sm">
                             <div ng-show="constraintType=='units'" units-picker unitgroups="formData.unitGroups" units="formData.units" limit="5"></div>
@@ -109,7 +109,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr data-ng-repeat="unit in unitGroup.units">
-                                                            <td>{{unit.refid}}</td>
+                                                            <td>{{unit.term.refid}}</td>
                                                             <td>{{unit | UcumsAsStringFromUnit}}</td>
                                                         </tr>
                                                     </tbody>
@@ -130,7 +130,7 @@
                                 </thead>
                                 <tbody>
                                     <tr data-ng-repeat="unit in formData.units">
-                                        <td>{{unit.refid}}</td>
+                                        <td>{{unit.term.refid}}</td>
                                         <td>{{unit | UcumsAsStringFromUnit}}</td>
                                         <td class="right">
                                             <i ng-click="removeUnit($index,unit)" class="fa fa-times hoverhand red "></i>
@@ -173,7 +173,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr data-ng-repeat="enum in enumGroup.enums">
-                                                            <td>{{enum.refid}}</td>
+                                                            <td>{{enum.term.refid}}</td>
                                                             <td>{{enum.token}}</td>
                                                         </tr>
                                                     </tbody>
@@ -194,7 +194,7 @@
                                 </thead>
                                 <tbody>
                                     <tr data-ng-repeat="enum in formData.enums">
-                                        <td>{{enum.refid}}</td>
+                                        <td>{{enum.term.refid}}</td>
                                         <td>{{enum.token}}</td>
                                         <td class="right">
                                             <i ng-click="removeEnum($index,enum)" class="fa fa-times hoverhand red "></i>

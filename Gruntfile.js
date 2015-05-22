@@ -34,6 +34,7 @@ module.exports = function(grunt) {
                         'public/libs/angulartics/dist/angulartics-ga.min.js',
                         'public/libs/angular-ui-grid/ui-grid.js',
                         'public/libs/ng-tags-input/ng-tags-input.js',
+                        'public/libs/angular-bootstrap-toggle-switch/angular-toggle-switch.min.js',
                         'public/js/**/*.js',
                         'public/js/*.js'
                     ]
@@ -46,7 +47,10 @@ module.exports = function(grunt) {
         less: {
             build: {
                 files: {
-                    'public/dist/css/style.css': 'public/css/less/*.less'
+                    'public/dist/css/style.css': [
+                    'public/css/less/*.less',
+                    'public/css/less/toggle-switch/angular-toggle-switch-bootstrap-3.less',
+                    ]
                 }
             }
         },

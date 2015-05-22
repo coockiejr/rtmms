@@ -279,7 +279,7 @@ app.filter('UnitsAsString', function() {
     return function(units) {
         var res = '';
         units.forEach(function(u) {
-            res += u.refid + ', ';
+            res += u.term.refid + ', ';
         });
         res = res.slice(0, -2);
         return res;
@@ -291,8 +291,8 @@ app.filter('EnumsAsString', function() {
     return function(enums) {
         var res = '';
         enums.forEach(function(e) {
-            if (e.refid) {
-                res += e.refid + ', ';
+            if (e.term && e.term.refid) {
+                res += e.term.refid + ', ';
             }
             if (e.token) {
                 res += e.token + ', ';

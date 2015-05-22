@@ -159,7 +159,7 @@ module.exports = function(app, qs, async, _) {
         if (filter) {
             queryEnumGroups = queryEnumGroups.where('groupName').regex(new RegExp(filter, 'i'));
             // queryEnums = queryEnums.where('refid').regex(new RegExp(filter, 'i'));
-            queryEnums = queryEnums.or([{ 'refid': { $regex: new RegExp(filter, 'i') }}, { 'token': { $regex: new RegExp(filter, 'i') }}])
+            queryEnums = queryEnums.or([{ 'term.refid': { $regex: new RegExp(filter, 'i') }}, { 'token': { $regex: new RegExp(filter, 'i') }}])
         }
         if (limit) {
             queryEnumGroups.limit(limit);

@@ -355,8 +355,8 @@ app.filter('UcumsAsStringFromUnit', function() {
 app.filter('showUnitRefidOrGroupName',['$filter', function($filter) {
     return function(u) { //unit or unit Group
         res ='';
-        if (u.refid !== undefined) { //unit
-            res +='<span>'+u.refid+'</span><div class="listdetail"><small>type: Unit</small>';
+        if (u.term !== undefined) { //unit
+            res +='<span>'+u.term.refid+'</span><div class="listdetail"><small>type: Unit</small>';
             if (u.ucums !== undefined){
                 res +='<br><small>UCUMS: '+$filter('UcumsAsStringFromUnit')(u) +'</small>';
             }
@@ -376,9 +376,9 @@ app.filter('showEnumInfoOrGroupName', function() {
     return function(e) { //enum or enum Group
         res = '';
         hasref = false;
-        if ((e.refid !== undefined && e.refid !== "") || e.token !== undefined) { //enum
-            if (e.refid !== undefined && e.refid !== "") {
-                res +='<span>'+e.refid;
+        if ((e.term !== undefined && e.term.refid !== undefined && e.term.refid !== "") || e.token !== undefined) { //enum
+            if (e.term !== undefined && e.term.refid !== undefined && e.term.refid !== "") {
+                res +='<span>'+e.term.refid;
                 hasref = true;
             }      
             if (e.token !== undefined) {

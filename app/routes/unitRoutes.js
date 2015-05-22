@@ -162,7 +162,7 @@ module.exports = function(app, qs, async, _) {
         queryUnits = Unit.find();
         if (filter) {
                 queryUnitGroups = queryUnitGroups.where('groupName').regex(new RegExp(filter, 'i'));
-                queryUnits = queryUnits.where('refid').regex(new RegExp(filter, 'i'));
+                queryUnits = queryUnits.where('term.refid').regex(new RegExp(filter, 'i'));
         }
         if (limit){
             queryUnitGroups.limit(limit);

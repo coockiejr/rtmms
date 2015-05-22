@@ -153,7 +153,7 @@ app.directive('enumsPicker', ['$timeout', '$document', 'EnumService', function($
 
                 if (scope.suggestions[scope.selectedIndex].groupName !== undefined) {
                     scope.enumGroupsList.push(scope.suggestions[scope.selectedIndex]);
-                } else if (scope.suggestions[scope.selectedIndex].refid !== undefined) {
+                } else {//if (scope.suggestions[scope.selectedIndex].refid !== undefined) {
                     scope.enumsList.push(scope.suggestions[scope.selectedIndex]);
                 }
 

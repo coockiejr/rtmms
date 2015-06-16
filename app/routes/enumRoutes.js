@@ -84,27 +84,31 @@ module.exports = function(app, qs, async, _) {
     });
 
     // create enum 
-    app.post('/api/enums', isAdminLoggedIn, function(req, res) {
-        Enum.create({
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            dateofbirth: req.body.dateofbirth,
-            sex: req.body.sex,
-            bio: req.body.bio,
-            memberStatus: req.body.memberStatus
-        }, function(err, enumVal) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.end('{"success" : "Enumeration value created successfully", "status" : 200}');
-            }
+    app.post('/api/enums', isAdminLoggedIn, function(req, res,next) {
+        var query=Enum.find(null);
+    query.sort({_id:-1}).exec(function(err,enu){
+       max=enu[0]._id;
+     
+    }).then(function(){
+            console.log(req.body);
+            var enumVal=new Enum(req.body);
+            enumVal._id=max+1;
+            enumVal.save(function(err,enumVal){
+            if(err) {return next(err)}
+            res.json(201,enumVal)
+            });
+            return;
 
-        });
     });
+       
+    });
+
 
     //update an enum term
     app.put('/api/enums/:enum_id', isAdminLoggedIn, function(req, res) {
-        Enum.update({
+                console.log(req.body);
+
+        Enum.findOneAndUpdate({
             _id: req.params.enum_id
         }, req.body, function(err) {
             if (!err) {
@@ -135,7 +139,7 @@ module.exports = function(app, qs, async, _) {
     // get enum tags
     app.get('/api/enumtags', function(req, res) {
         var q = req.query.query;
-        query = Enum.distinct('tags', {
+        query = Rosetta.distinct('tags', {
             groups: {
                 $regex: q,
                 $options: 'i'

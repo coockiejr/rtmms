@@ -254,6 +254,29 @@ footer {
         }
     }
 
+     .unitInfo{
+        &.formField::before {
+            position: relative;
+            font-size: 12px;
+            font-weight: 700;
+            color: @brand-rtmms-blue;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            content: "Unit Information:";          
+        }
+    }
+    .enumInfo{
+        &.formField::before {
+            position: relative;
+            font-size: 12px;
+            font-weight: 700;
+            color: @brand-rtmms-blue;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            content: "Enum Information:";          
+        }
+    }
+
     .termInfo {
         &.formField::before {
             position: relative;
@@ -293,6 +316,17 @@ footer {
             text-transform: uppercase;
             letter-spacing: 1px;
             content: "Co-constraints Information:";
+        }
+   }
+    .ucumInfo{
+        &.formField::before {
+            position: relative;
+            font-size: 12px;
+            font-weight: 700;
+            color: @brand-rtmms-blue;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            content: "Ucum Information:";
         }
    }
    .miscInfo {
@@ -366,6 +400,60 @@ footer {
                     content: "Enumeration Groups";
             }        
         }
+
+
+        table {
+            margin-bottom: 0px;
+            &.levelOne {
+                margin-top: 10px;
+            }
+            &.levelTwo {
+                margin-top: 5px;
+            }
+
+            &.super-table-striped {
+                > tbody:nth-of-type(odd) > tr:nth-of-type(odd) {
+                    background-color: @table-bg-accent;
+                }
+            }
+
+            th {
+                padding: 0px;
+            }
+            td {
+                padding: 4px;
+            }
+        }
+    }
+
+    .ucums {
+        padding-left: 20px;
+        .choice-btn-group{
+            width:100%;
+            vertical-align:  baseline;
+            label{
+                width:50%;
+                margin-left: 0px;
+            }
+        }
+
+        .ucumsFields{
+            overflow-y: scroll;
+            height: 340px;
+            .ucumlist.formField::before {
+                    position: relative;
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: @brand-rtmms-blue;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    content: "Ucums";
+                
+            }
+                
+        }
+
+        
 
 
         table {

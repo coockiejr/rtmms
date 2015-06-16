@@ -21,6 +21,10 @@ angular.module('appRoutes', []).config(function($stateProvider, $urlRouterProvid
             url: "/profile",
             templateUrl: "views/templates/pages/profile.tpl.html",
             controller: 'ProfileController'
+        }).state('/myRosetta', {
+            url: "/myRosetta",
+            templateUrl: "views/templates/pages/rosetta.tpl.html",
+            controller: 'MyRosettaController'
         }).state('/rosetta', {
             url: "/rosetta",
             templateUrl: "views/templates/pages/rosetta.tpl.html",

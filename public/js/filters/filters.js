@@ -277,77 +277,117 @@ app.filter('ArrayAsString', function() {
 
 app.filter('UnitsAsString', function() {
     return function(units) {
-        var res = '';
-        units.forEach(function(u) {
-            res += u.term.refid + ', ';
-        });
-        res = res.slice(0, -2);
-        return res;
+        if(units){
+            var res = '';
+            units.forEach(function(u) {
+                res += u.term.refid + ', ';
+            });
+            res = res.slice(0, -2);
+            return res;
+        }
     };
 });
 
 
 app.filter('EnumsAsString', function() {
     return function(enums) {
-        var res = '';
-        enums.forEach(function(e) {
-            if (e.term && e.term.refid) {
-                res += e.term.refid + ', ';
-            }
-            if (e.token) {
-                res += e.token + ', ';
-            }
-        });
-        res = res.slice(0, -2);
-        return res;
+        if(enums){
+            var res = '';
+
+            enums.forEach(function(e) {
+                if (e.term && e.term.refid) {
+                    res += e.term.refid + ', ';
+                }
+                if (e.token) {
+                    res += e.token + ', ';
+                }
+            });
+            res = res.slice(0, -2);
+            return res;
+        }
     };
 });
 
+
+
+
 app.filter('EnumOrUnitGroupsAsString', function() {
     return function(groups) {
-        var res = '';
-        if (groups !== undefined) {
-            groups.forEach(function(eg) {
-                res += eg.groupName + ', ';
-            });
-            res = res.slice(0, -2);
+        if(groups){
+            //console.log(groups);
+            var res = '';
+            if (groups !== undefined) {
+                groups.forEach(function(eg) {
+                   // console.log(eg);
+                   if(eg.groupName!==undefined){
+                        res += eg.groupName + ', ';
+                   } 
+                });
+                res = res.slice(0, -2);
+            }
+                     //   console.log("res");
+
+            return res;
         }
-        return res;
     };
 });
 
 
 app.filter('UcumsAsStringFromRosetta', function() {
     return function(rosetta) {
-        var res = [];
-        rosetta.units.forEach(function(u) {
-            u.ucums.forEach(function(ucum) {
-                res.push(ucum.ucum);
-            });
-        });
+       // console.log(rosetta);
+       
+            
+            var res = [];
+            if(rosetta.units){
+                rosetta.units.forEach(function(u) {
+                    u.ucums.forEach(function(ucum) {
+                        if(ucum!==null){
+                            res.push(ucum.ucum);
 
-        rosetta.unitGroups.forEach(function(ug) {
-            ug.units.forEach(function(u) {
-                u.ucums.forEach(function(ucum) {
-                    res.push(ucum.ucum);
+                        }
+                    });
                 });
-            });
-        });
+            }
 
-        res = _.uniq(res);
-        return res.join(', ');
+            if(rosetta.unitGroups){
+
+                rosetta.unitGroups.forEach(function(ug) {
+                    ug.units.forEach(function(u) {
+                        u.ucums.forEach(function(ucum) {
+                             if(ucum!==null){
+                                res.push(ucum.ucum);
+
+                            }
+                        });
+                    });
+                });
+            }
+            res = _.uniq(res);
+            return res.join(', ');
+        
     };
 });
 
+
+
+
 app.filter('UcumsAsStringFromUnit', function() {
     return function(unit) {
-        var res = [];
-        unit.ucums.forEach(function(ucum) {
-            res.push(ucum.ucum);
-        });
+       // console.log(unit);
 
+            var res = [];
+            if(unit.ucums){
+                unit.ucums.forEach(function(ucum) {
+                    if(ucum!==null){
+                       // console.log(ucum.ucum);
+                    res.push(ucum.ucum);
+                    }
+                });
+            }
         res = _.uniq(res);
         return res.join(', ');
+        
     };
 });
 
@@ -368,6 +408,21 @@ app.filter('showUnitRefidOrGroupName',['$filter', function($filter) {
             }
             res +='</div>';
         } 
+        return res;
+    };
+}]);
+
+
+app.filter('showUcumId',['$filter', function($filter) {
+    return function(u) { //unit or unit Group
+        res ='';
+        if (u.ucums !== undefined) { //unit
+            //console.log(u.ucums);
+        
+                res +='<span>'+$filter('UcumsAsStringFromUnit')(u) +'</span>';
+           
+        }
+       
         return res;
     };
 }]);

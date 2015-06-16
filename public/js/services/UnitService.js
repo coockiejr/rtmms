@@ -30,9 +30,10 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
             });
     };
 
+
     //create a Unit
     factory.createUnit = function(unitValue) {
-        return Rosetta.post(unitValue).then(
+        return Unit.post(unitValue).then(
             function(unitValue) {},
             function(res) {
                 console.log('Error: ' + res.status);
@@ -41,6 +42,7 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
 
     //edit a Unit
     factory.editUnit = function(unitValue) {
+      
         unitValue.put();
     };
 
@@ -63,9 +65,11 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
             if (result.unitgroups) {
                 Restangular.restangularizeCollection(null, result.unitgroups, 'unitgroups');
             }
+          //  console.log(result);
             return result;
         });
     };
+
 
 
     //retrieve a UnitGroup by id
@@ -79,22 +83,24 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
             });
     };
 
+  
+
     //create a Unit
-    factory.createUnit = function(unitValue) {
-        return UnitGroup.post(unitValue).then(
-            function(unitValue) {},
+    factory.createUnitGroup = function(unitGroup) {
+        return UnitGroup.post(unitGroup).then(
+            function(unitGroup) {},
             function(res) {
                 console.log('Error: ' + res.status);
             });
     };
 
     //edit a Unit
-    factory.editUnit = function(unitGroup) {
+    factory.editUnitGroup = function(unitGroup) {
         unitGroup.put();
     };
 
     //delete a Unit
-    factory.deleteUnit = function(unitGroup) {
+    factory.deleteUnitGroup = function(unitGroup) {
         return unitGroup.remove().then(
             function() {},
             function(res) {
@@ -114,50 +120,69 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
             });
     };
 
+    //get unit ucums
+    factory.getUnitUcums = function(params) {
+        return Restangular.all('unitucums').getList(params).then(
+            function(unitUcums) {
+                return unitUcums;
+            },
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
 
+     //get unit tags
+    factory.getUnitTags = function(params) {
+        return Restangular.all('unittags').getList(params).then(
+            function(tags) {
+                return tags;
+            },
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
     // =====================================
     // Rosetta MODALS ======================
     // =====================================
 
-    factory.showAddRosettaModal = function() {
+     factory.showAddUnitModal = function() {
         var modalInstance = $modal.open({
-            templateUrl: 'views/templates/modals/rosettaModal.tpl.html',
-            controller: 'RosettaModalInstanceController',
+            templateUrl: 'views/templates/modals/unitModal.tpl.html',
+            controller: 'UnitModalInstanceController',
             size: 'lg',
             resolve: {
-                rosetta: false
+                unitValue: false
             }
         });
 
-        return modalInstance.result.then(function(Rosetta) {
-            factory.createRosetta(Rosetta);
-            return Rosetta;
+        return modalInstance.result.then(function(unitValue) {
+            factory.createUnit(unitValue);
+            return unitValue;
         }, function() {
             return null;
         });
     };
 
-    factory.showEditRosettaModal = function(rosetta) {
-        if (Rosetta) {
+    factory.showEditUnitModal = function(unitValue) {
+        if (Unit) {
             var modalInstance = $modal.open({
-                templateUrl: 'views/templates/modals/rosettaModal.tpl.html',
-                controller: 'RosettaModalInstanceController',
+                templateUrl: 'views/templates/modals/unitModal.tpl.html',
+                controller: 'UnitModalInstanceController',
                 size: 'lg',
                 resolve: {
-                    rosetta: function() {
-                        return rosetta;
+                    unitValue: function() {
+                        return unitValue;
                     }
                 }
             });
 
-            return modalInstance.result.then(function(rosetta) {
-                factory.editRosetta(rosetta);
+            return modalInstance.result.then(function(unitValue) {
+                factory.editUnit(unitValue);
             }, function() {
                 return null;
             });
         }
     };
-
     return factory;
 
 }]);

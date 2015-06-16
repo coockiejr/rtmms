@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 
 // define the schema for our enum model
 var enumSchema = mongoose.Schema({
-    _id: Number,
+        _id:Number,
+
     term: {
         refid: String,
         code10: Number,

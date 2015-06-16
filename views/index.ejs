@@ -17,6 +17,7 @@
 			<% if (user && user.role === 'admin') { %>
 				<ul class="nav navbar-nav" >
 					<li ng-class="{active: $state.includes('/')}"><a ui-sref="/">Home</a></li>
+					<li ng-class="{active: $state.includes('/myRosetta')}"><a ui-sref="/myRosetta">My Rosetta</a></li>
 					<li ng-class="{active: $state.includes('/rosetta')}"><a ui-sref="/rosetta">Rosetta</a></li>
 					<li ng-class="{active: $state.includes('/hRtm')}"><a ui-sref="/hRtm">hRTM</a></li>
 					<li class="dropdown" dropdown on-toggle="toggled(open)">
@@ -48,6 +49,7 @@
 			<%}else{ %>
 				<ul class="nav navbar-nav" >
 					<li ng-class="{active: $state.includes('/')}"><a ui-sref="/">Home</a></li>
+					<li ng-class="{active: $state.includes('/myRosetta')}"><a ui-sref="/myRosetta">My Rosetta</a></li>
 					<li ng-class="{active: $state.includes('/rosetta')}"><a ui-sref="/rosetta">Rosetta</a></li>
 					<li ng-class="{active: $state.includes('/hRtm')}"><a ui-sref="/hRtm">hRTM</a></li>
 					<li class="dropdown" dropdown on-toggle="toggled(open)">

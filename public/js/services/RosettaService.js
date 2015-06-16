@@ -2,6 +2,7 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
 
     var factory = {};
     var Rosetta = Restangular.all('rosettas');
+    var MyRosetta = Restangular.all('myrosettas');
 
     // =====================================
     // Rosetta API CALLS ===================
@@ -17,7 +18,15 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
         });
     };
 
-
+    //retrieve myRosettas
+    factory.getMyRosettas = function(params) {
+        return MyRosetta.customGET("", params).then(function(result) {
+            if (result.rosettas) {
+                Restangular.restangularizeCollection(null, result.rosettas, 'myrosettas');
+            }
+            return result;
+        });
+    };
     //retrieve a Rosetta by id
     factory.getRosetta = function(id) {
         return Restangular.one('rosettas', id).get().then(
@@ -40,7 +49,7 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
 
     //edit a Rosetta
     factory.editRosetta = function(rosetta) {
-        rosetta.put();
+         rosetta.put();
     };
 
     //delete a Rosetta
@@ -74,7 +83,6 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
                 console.log('Error: ' + res.status);
             });
     };
-
     // =====================================
     // Rosetta MODALS ======================
     // =====================================
@@ -89,9 +97,9 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
             }
         });
 
-        return modalInstance.result.then(function(Rosetta) {
-            factory.createRosetta(Rosetta);
-            return Rosetta;
+        return modalInstance.result.then(function(rosetta) {
+            factory.createRosetta(rosetta);
+            return rosetta;
         }, function() {
             return null;
         });

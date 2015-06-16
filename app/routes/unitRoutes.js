@@ -63,7 +63,7 @@ module.exports = function(app, qs, async, _) {
                     units: units
                 }); 
             });
-
+            
         });
     });
 
@@ -84,27 +84,31 @@ module.exports = function(app, qs, async, _) {
     });
 
     // create unit 
-    app.post('/api/units', isAdminLoggedIn, function(req, res) {
-        Unit.create({
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            dateofbirth: req.body.dateofbirth,
-            sex: req.body.sex,
-            bio: req.body.bio,
-            memberStatus: req.body.memberStatus
-        }, function(err, unitVal) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.end('{"success" : "Unit value created successfully", "status" : 200}');
-            }
+    app.post('/api/units', isAdminLoggedIn, function(req, res,next) {
+        var query=Unit.find(null);
+    query.sort({_id:-1}).exec(function(err,uni){
+       max=uni[0]._id;
+     console.log(uni[0]);
+     console.log(max);
 
-        });
+    }).then(function(){
+        console.log(req.body);
+            var unitVal=new Unit(req.body);
+            unitVal._id=max+1;
+            unitVal.save(function(err,unitVal){
+            if(err) {return next(err)}
+            res.json(201,unitVal)
+            });
+            return;
+
+    });
+       
     });
 
     //update an unit term
     app.put('/api/units/:unit_id', isAdminLoggedIn, function(req, res) {
-        Unit.update({
+        console.log(req.body);
+        Unit.findOneAndUpdate({
             _id: req.params.unit_id
         }, req.body, function(err) {
             if (!err) {
@@ -137,7 +141,9 @@ module.exports = function(app, qs, async, _) {
     // get unit tags
     app.get('/api/unittags', function(req, res) {
         var q = req.query.query;
-        query = Unit.distinct('tags', {
+        console.log(req.query);
+        console.log(q);
+        query = Rosetta.distinct('tags', {
             groups: {
                 $regex: q,
                 $options: 'i'
@@ -188,7 +194,33 @@ module.exports = function(app, qs, async, _) {
         });
     });
 
+    app.get('/api/unitucums', function(req, res) {
+        var filter = req.query.filter;
+        var sort = req.query.sort;
+        var limit = req.query.limit;
 
+        queryUnits = Unit.find();
+                        
+
+        if (filter) {
+                queryUnits = queryUnits.where('ucums.ucum').regex(new RegExp(filter, 'i'));
+        }
+         if (limit){
+            queryUnits.limit(limit);
+        }
+
+        var results = [];
+        
+            queryUnits.exec(function(error, units) {
+
+                results = results.concat(units);
+                res.json(results); 
+            });
+
+       
+    });
+
+     
 
 
     //get all unit groups
@@ -232,6 +264,7 @@ module.exports = function(app, qs, async, _) {
             if (err) {
                 res.send(err)
             }
+                              //  console.log(unitGroups);
 
             queryCount.count().exec(function(error, count) {
                 res.json({

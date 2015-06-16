@@ -1,0 +1,126 @@
+<div class="modal-header">
+    <h3 ng-show="!editmode" class="modal-title">Add a Unit</h3>
+    <h3 ng-show="editmode" class="modal-title">Edit a Unit</h3>
+</div>
+
+<div class="modal-body">
+    <form class="formrosetta" name="formrosetta">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="groupInfo formField">
+                        <div class="form-group-sm" ng-class="{ 'has-error' : groups.$invalid && !groups.$pristine}">
+                            <label class="text-left">Groups:</label>
+
+                             
+                      <tags-input  class="bootstrap"   ng-model="unitgroups" placeholder="Add a group" replace-spaces-with-dashes="false">
+                                 
+                             <auto-complete source="loadGroups($query)" min-length="0" debounce-delay="0" max-results="10"></auto-complete> 
+
+                            </tags-input> 
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="unitInfo formField">
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorDescription.$invalid && !formrosetta.vendorDescription.$pristine}">
+                            <label class="text-left">Dimension:</label>
+                            <input type="text" name="dimension" class="form-control  text-left" ng-model="formData.dimension" ng-required="true">
+                        </div>
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.displayName.$invalid && !formrosetta.displayName.$pristine}">
+                            <label class="text-left">Symbol:</label>
+                            <input type="text" name="symbol" class="form-control  text-left" ng-model="formData.symbol" ng-required="true">
+                        </div>
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorUom.$invalid && !formrosetta.vendorUom.$pristine}">
+                            <label class="text-left">Unit Of Measure:</label>
+                            <input type="text" name="unitOfMeasure" class="form-control  text-left" ng-model="formData.unitOfMeasure" ng-required="true">
+                        </div>
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorVmd.$invalid && !formrosetta.vendorVmd.$pristine}">
+                            <label class="text-left">dimC:</label>
+                            <input type="text" name="dimC" class="form-control  text-left" ng-model="formData.dimC" ng-required="true">
+                        </div>
+                    </div>
+                    <div class="termInfo formField">
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.refid.$invalid && !formrosetta.refid.$pristine}">
+                            <div class="btn-group choice-btn-group refid-choice-btn-group">
+                                <label class="choice btn btn-primary" ng-model="refidType " btn-radio="'new'">Propose new term</label>
+                                <label class="choice btn btn-primary" ng-model="refidType" btn-radio="'existing'">Map existing term</label>
+                            </div>
+                            <label class="text-left">Refid:</label>
+                            <input type="text" name="refid" class="form-control  text-left" ng-model="formData.term.refid" ng-required="true" required>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label class="text-left">Partition #:</label>
+                                    <input type="text" only-digits name="partition" class="form-control  text-left" ng-model="formData.term.partition">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="text-left">Code10:</label>
+                                    <input type="text" only-digits name="code10" class="form-control  text-left" ng-model="formData.term.code10">
+                                </div>
+                                <div class="col-sm-4">  
+                                    <label class="text-left">CF_Code10:</label>
+                                    <input type="text" only-digits name="cfCode10" class="form-control  text-left" ng-model="formData.term.cfCode10">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="unitenums col-md-6">
+                <div class="row">
+                    <div class="ucumInfo formField">
+                        
+                       
+                        <div class="form-group-sm">
+                            <div  ucums-picker ucums="formData.ucums" limit="5"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" >
+                    <div class="unitsFields">
+                        <div ng-show="formData.ucums.length>0" class="formField ucumlist">
+                            <table ng-show="formData.ucums.length>0" class="table super-table-striped levelOne ">
+                                <thead>
+                                    <tr>
+                                        <th>Ucums</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-ng-repeat="ucum in formData.ucums track by $index">
+                                    <tr>
+                                        <td >
+                                            
+                                            <span class="bold">{{ucum.ucum}}</span>
+                                        </td>
+                                        <td class="right">
+                                            <i ng-click="removeUcum($index,ucum)" class="fa fa-times hoverhand red"></i>
+                                        </td>
+                                    </tr>
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+                </div>
+             
+            </div>
+        </div>
+        <div class="row">
+            <div class="miscInfo formField">
+                <div class="form-group-sm" ng-class="{ 'has-error' : tags.$invalid && !tags.$pristine}">
+                    <label class="text-left">Tags:</label>
+                    <tags-input class="bootstrap" ng-model="tags" placeholder="Add a tag" replace-spaces-with-dashes="false">
+                        <auto-complete source="loadTags($query)" min-length="0" debounce-delay="0" max-results="10"></auto-complete>
+                    </tags-input>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <!-- createMember() WILL CREATE NEW Members -->
+    <button ng-show="editmode" type="submit" class="btn btn-primary" ng-click="editUnit()">Edit Unit</button>
+    <button ng-show="!editmode" type="submit" class="btn btn-primary" ng-click="addUnit()">Add Unit</button>
+    <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+</div>

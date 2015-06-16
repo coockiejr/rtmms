@@ -32,7 +32,7 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
 
     //create a Enum
     factory.createEnum = function(enumValue) {
-        return Rosetta.post(enumValue).then(
+        return Enum.post(enumValue).then(
             function(enumValue) {},
             function(res) {
                 console.log('Error: ' + res.status);
@@ -91,21 +91,21 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
     };
 
     //create a Enum
-    factory.createEnum = function(enumValue) {
-        return EnumGroup.post(enumValue).then(
-            function(enumValue) {},
+    factory.createEnumGroup = function(enumGroup) {
+        return EnumGroup.post(enumGroup).then(
+            function(enumGroup) {},
             function(res) {
                 console.log('Error: ' + res.status);
             });
     };
 
     //edit a Enum
-    factory.editEnum = function(enumGroup) {
+    factory.editEnumGroup = function(enumGroup) {
         enumGroup.put();
     };
 
     //delete a Enum
-    factory.deleteEnum = function(enumGroup) {
+    factory.deleteEnumGroup = function(enumGroup) {
         return enumGroup.remove().then(
             function() {},
             function(res) {
@@ -113,43 +113,56 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
             });
     };
 
+
+
+     //get enum tags
+    factory.getEnumTags = function(params) {
+        return Restangular.all('enumtags').getList(params).then(
+            function(tags) {
+                return tags;
+            },
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
+
     // =====================================
-    // Rosetta MODALS ======================
+    // Enum MODALS ======================
     // =====================================
 
-    factory.showAddRosettaModal = function() {
+    factory.showAddEnumModal = function() {
         var modalInstance = $modal.open({
-            templateUrl: 'views/templates/modals/rosettaModal.tpl.html',
-            controller: 'RosettaModalInstanceController',
+            templateUrl: 'views/templates/modals/enumModal.tpl.html',
+            controller: 'EnumModalInstanceController',
             size: 'lg',
             resolve: {
-                rosetta: false
+                enumValue: false
             }
         });
 
-        return modalInstance.result.then(function(Rosetta) {
-            factory.createRosetta(Rosetta);
-            return Rosetta;
+        return modalInstance.result.then(function(enumValue) {
+            factory.createEnum(enumValue);
+            return enumValue;
         }, function() {
             return null;
         });
     };
 
-    factory.showEditRosettaModal = function(rosetta) {
-        if (Rosetta) {
+    factory.showEditEnumModal = function(enumValue) {
+        if (Enum) {
             var modalInstance = $modal.open({
-                templateUrl: 'views/templates/modals/rosettaModal.tpl.html',
-                controller: 'RosettaModalInstanceController',
+                templateUrl: 'views/templates/modals/enumModal.tpl.html',
+                controller: 'EnumModalInstanceController',
                 size: 'lg',
                 resolve: {
-                    rosetta: function() {
-                        return rosetta;
+                    enumValue: function() {
+                        return enumValue;
                     }
                 }
             });
 
-            return modalInstance.result.then(function(rosetta) {
-                factory.editRosetta(rosetta);
+            return modalInstance.result.then(function(enumValue) {
+                factory.editEnum(enumValue);
             }, function() {
                 return null;
             });

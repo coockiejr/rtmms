@@ -5,7 +5,7 @@
     <div>
         <div class="picker">
             <ul class="suggestions-list" ng-show="visible && suggestions.length>0">
-                <li ng-repeat="enum in suggestions"  ng-mousedown="addToEnumLists($index)"  ng-mouseenter="$parent.selectedIndex=$index" ng-class="{active : selectedIndex===$index}"  ng-bind-html="enum | showEnumInfoOrGroupName"></li>
+                <li ng-repeat="enum in suggestions track by $index"  ng-mousedown="addToEnumLists($index)"  ng-mouseenter="$parent.selectedIndex=$index" ng-class="{active : selectedIndex===$index}"  ng-bind-html="enum | showEnumInfoOrGroupName"></li>
             </ul>
         </div>
     </div>

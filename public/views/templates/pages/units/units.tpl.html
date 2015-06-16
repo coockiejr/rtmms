@@ -1,3 +1,9 @@
 <div class="jumbotron ">
-    <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid units-grid"></div>
+    <div class="row button-row ">
+        <button type="submit" class="btn btn-primary" ng-click="showAddUnitModal()">Add</button>
+        <button ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showEditUnitModal(selectedEntity)">Edit</button>
+    </div>
+    <div class="row">
+        <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
+    </div>
 </div>

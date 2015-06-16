@@ -4,7 +4,7 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', 'AuthServic
     $scope.$watch('authService.isLoggedIn()', function(user) {
         $scope.user = user;
     });
-    
+
 
     var paginationOptions = {
         pageNumber: 1,
@@ -27,8 +27,8 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', 'AuthServic
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name: 'groups',
-            field: 'groups',
+            name: 'unitGroups',
+            field: 'unitGroups',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.unitGroups | EnumOrUnitGroupsAsString }}</span></div>'
         }, {
             name: 'refid',
@@ -123,44 +123,165 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', 'AuthServic
 
     };
     getPage();
+
+
+    $scope.showAddUnitModal = function() {
+        UnitService.showAddUnitModal().then(function(unitValue) {
+
+            if (unitValue !== null) {
+                $scope.gridOptions.data.unshift(unitValue);
+            }
+        });
+    };
+
+    $scope.showEditUnitModal = function(unitValue) {
+        UnitService.showEditUnitModal(unitValue).then(function() {
+
+        });
+    };
+   
    
 }]);
 
-angular.module('rtmms.unit').controller('UnitModalInstanceController', ['$scope', '$modalInstance', 'rosetta', 'MembersService', 'ResultsService', function($scope, $modalInstance, rosetta, RosettaService) {
+angular.module('rtmms.unit').controller('UnitModalInstanceController', ['$scope', '$modalInstance','Restangular', 'unitValue', 'UnitService', 'RosettaService', function($scope, $modalInstance, Restangular, unitValue,  UnitService, RosettaService) {
 
+     var formDataInitial;
+
+     var getGroupAsObject=function(groupList){
+        UnitService.getUnitGroups().then(function(unitGroups) {
+           
+                $scope.formData.unitGroups=[];
+            
+            for(i=0;i<unitGroups.unitGroups.length;i++){
+                for(t=0;t<groupList.length;t++){
+                    if( unitGroups.unitGroups[i].groupName===groupList[t]){
+                           $scope.formData.unitGroups[t]=unitGroups.unitGroups[i];
+                       } 
+                }
+            }
+    });
+    } ;
+
+    $scope.unitgroups = [];
+    $scope.groups=[];
+    $scope.tags = [];
+    $scope.ucumIsExpanded=[];
+
+
+
+    $scope.$watch('unitgroups', function() {
+      //  console.log($scope.unitgroups);
+        $scope.groups = _.pluck($scope.unitgroups,'text');
+
+        getGroupAsObject($scope.groups);
+    }, true);
+
+     $scope.$watch('tags', function() {
+        
+        $scope.formData.tags = _.flatten(_.map($scope.tags, _.values));
+    }, true);
+
+
+    $scope.$watch('formData', function() {
+        if (($scope.formData.unitGroups !== undefined && $scope.formData.unitGroups.length > 0) || ($scope.formData.units !== undefined && $scope.formData.units.length > 0)) {
+            $scope.constraintType = 'units';
+        } else if (($scope.formData.enumGroups !== undefined && $scope.formData.enumGroups.length > 0) || ($scope.formData.enums !== undefined && $scope.formData.enums.length > 0)) {
+            $scope.constraintType = 'enums';
+        } else {
+            $scope.constraintType = null;
+        }
+    }, true);
+    
 
     $scope.editmode = false;
-    if (result) {
-        
-    } else {
-        
+    if (unitValue) {
+        $scope.formData = unitValue;
+      //  console.log($scope.formData.ucums);
 
+      //unitValue.unitGroups=[];
+        for(i=0;i<unitValue.unitGroups.length;i++){
+            $scope.unitgroups[i]=unitValue.unitGroups[i].groupName;
+        }
+        $scope.tags=unitValue.tags;
+        formDataInitial = Restangular.copy(unitValue);
+        $scope.editmode = true;
+
+      
+        //ucums table
+        if ($scope.formData.ucums !== undefined) {
+            for (i = 0; i < $scope.formData.ucums.length; i += 1) {
+                $scope.ucumIsExpanded.push(false);
+            }
+        }
+
+      
+
+    } else {
+        $scope.refidType = "new";
+        $scope.formData = {};
+        $scope.editmode = false;
     }
 
 
-    $scope.addResult = function() {
-        if ($scope.time.hours === undefined) $scope.time.hours = 0;
-        if ($scope.time.minutes === undefined) $scope.time.minutes = 0;
-        if ($scope.time.seconds === undefined) $scope.time.seconds = 0;
-        $scope.formData.time = $scope.time.hours * 3600 + $scope.time.minutes * 60 + $scope.time.seconds;
+    $scope.addUnit = function() {
 
-        var members = $.map($scope.formData.member, function(value, index) {
-            return [value];
-        });
-        $scope.formData.member = members;
+     UnitService.createUnit($scope.formData);
 
 
-
-        $modalInstance.close($scope.formData);
+        $modalInstance.dismiss('add');
     };
 
-    $scope.editResult = function() {
+    $scope.editUnit = function() {
         $modalInstance.close($scope.formData);
     };
 
     $scope.cancel = function() {
+
+        $scope.formData = formDataInitial;
+
         $modalInstance.dismiss('cancel');
     };
+
+
+
+    $scope.loadGroups = function(query) {
+        return UnitService.getUnitGroups({
+            'query': query
+        }).then(function(unitGroups) {
+            
+            for(i=0;i<unitGroups.unitGroups.length;i++){
+              unitGroups.unitGroups[i]=unitGroups.unitGroups[i].groupName;
+            }
+           
+           return _.without(unitGroups.unitGroups,$scope.formData.unitGroups);
+
+        });
+    };
+
+
+
+    $scope.loadTags = function(query) {
+        return UnitService.getUnitTags({
+            'query': query
+        }).then(function(tags) {
+            
+            return _.without(tags, $scope.formData.tags);
+        });
+    };
+
+
+
+
+   
+     $scope.removeUcum = function(index, ucum) {
+        $scope.formData.ucums.splice(index, 1);
+    };
+
+      $scope.selectUcumRow = function(index, ucum) {
+        $scope.ucumIsExpanded[index] = !$scope.ucumIsExpanded[index];
+    };
+
+
 
 
 

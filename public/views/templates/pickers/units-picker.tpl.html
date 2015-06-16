@@ -5,7 +5,7 @@
     <div>
         <div class="picker">
             <ul class="suggestions-list" ng-show="visible && suggestions.length>0">
-                <li ng-repeat="unit in suggestions"  ng-mousedown="addToUnitLists($index)"  ng-mouseenter="$parent.selectedIndex=$index" ng-class="{active : selectedIndex===$index}"  ng-bind-html="unit | showUnitRefidOrGroupName"></li>
+                <li ng-repeat="unit in suggestions track by $index"  ng-mousedown="addToUnitLists($index)"  ng-mouseenter="$parent.selectedIndex=$index" ng-class="{active : selectedIndex===$index}"  ng-bind-html="unit | showUnitRefidOrGroupName"></li>
             </ul>
         </div>
     </div>

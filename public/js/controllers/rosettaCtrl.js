@@ -157,6 +157,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
 
 }]);
 
+
 angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$scope', '$modalInstance', 'Restangular', 'rosetta', 'RosettaService', 'UnitService', function($scope, $modalInstance, Restangular, rosetta, RosettaService, UnitService) {
 
     var formDataInitial;
@@ -175,7 +176,15 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
 
     $scope.$watch('groups', function() {
         $scope.formData.groups = _.flatten(_.map($scope.groups, _.values));
+
     }, true);
+
+    $scope.$watch('tags', function() {
+        
+        $scope.formData.tags = _.flatten(_.map($scope.tags, _.values));
+    }, true);
+
+
 
     $scope.$watch('formData', function() {
         if (($scope.formData.unitGroups !== undefined && $scope.formData.unitGroups.length > 0) || ($scope.formData.units !== undefined && $scope.formData.units.length > 0)) {
@@ -192,6 +201,8 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
     if (rosetta) {
         $scope.formData = rosetta;
         $scope.groups = rosetta.groups;
+
+        $scope.tags=rosetta.tags;
         formDataInitial = Restangular.copy(rosetta);
         $scope.editmode = true;
 
@@ -217,22 +228,10 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
 
 
 
-
-
-
     $scope.addRosetta = function() {
-        if ($scope.time.hours === undefined) $scope.time.hours = 0;
-        if ($scope.time.minutes === undefined) $scope.time.minutes = 0;
-        if ($scope.time.seconds === undefined) $scope.time.seconds = 0;
-        $scope.formData.time = $scope.time.hours * 3600 + $scope.time.minutes * 60 + $scope.time.seconds;
+        RosettaService.createRosetta($scope.formData);
+        $modalInstance.dismiss('add');
 
-        var members = $.map($scope.formData.member, function(value, index) {
-            return [value];
-        });
-        $scope.formData.member = members;
-
-
-        $modalInstance.close($scope.formData);
     };
 
     $scope.editRosetta = function() {
@@ -240,17 +239,7 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
     };
 
     $scope.cancel = function() {
-        // console.log($scope.formData);
-        // console.log(formDataInitial);
-
-        // $scope.formData.groups = formDataInitial.groups;
-        // $scope.formData.vendorDescription = formDataInitial.vendorDescription;
-        // $scope.formData.displayName = formDataInitial.displayName;
-        // $scope.formData.vendorUom = formDataInitial.vendorUom;
-        // $scope.formData.vendorVmd = formDataInitial.vendorVmd;
-        // $scope.formData.refid = formDataInitial.refid;
-        // $scope.formData.enums = formDataInitial.enums;
-
+       
         $scope.formData = formDataInitial;
 
         $modalInstance.dismiss('cancel');
@@ -286,6 +275,7 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
     $scope.removeEnum = function(index, enumeration) {
         $scope.formData.enums.splice(index, 1);
     };
+
 
     $scope.removeEnumGroup = function(index, enumGroup) {
         $scope.formData.enumGroups.splice(index, 1);

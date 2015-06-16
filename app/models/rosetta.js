@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 // define the schema for our rosetta model
-var rosettaSchema = mongoose.Schema({
+var rosettaSchema = new mongoose.Schema({
     _id: Number,
     term: {
         refid: String,
@@ -200,6 +200,7 @@ var rosettaSchema = mongoose.Schema({
 
 });
 
+
 // keep track of when rosettas are updated and created
 rosettaSchema.pre('save', function(next, done) {
     if (this.isNew) {
@@ -208,6 +209,8 @@ rosettaSchema.pre('save', function(next, done) {
     this.updatedAt = Date.now();
     next();
 });
+
+
 
 
 

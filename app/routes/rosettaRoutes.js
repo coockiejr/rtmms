@@ -109,6 +109,115 @@ module.exports = function(app, qs, async, _) {
         });
     });
 
+
+    //get myrosettas
+    app.get('/api/myrosettas', function(req, res) {
+        var filters = req.query.filters;
+        var sort = req.query.sort;
+        var limit = req.query.limit;
+        var skip = req.query.skip;
+
+        query = Rosetta.find();
+        queryCount = Rosetta.find();
+        if (filters) {
+            if (typeof filters === 'string') {
+                filters = [filters];
+            }
+            filters.forEach(function(f) {
+                f = JSON.parse(f);
+                if (columnNumberSearch.indexOf(f.column) !== -1) {
+                    query = query.where(f.column).equals(f.value);
+                    queryCount = queryCount.where(f.column).equals(f.value);
+                } else if (f.column === 'units') {
+                    query = query.or([{
+                        "units.refid": new RegExp(f.value, 'i')
+                    }, {
+                        "unitGroups.groupName": new RegExp(f.value, 'i')
+                    }]);
+                    queryCount = queryCount.or([{
+                        "units.refid": new RegExp(f.value, 'i')
+                    }, {
+                        "unitGroups.groupName": new RegExp(f.value, 'i')
+                    }]);
+                } else if (f.column === 'enums') {
+                    query = query.or([{
+                        "enums.refid": new RegExp(f.value, 'i')
+                    }, {
+                        "enums.token": new RegExp(f.value, 'i')
+                    }, {
+                        "enumGroups.groupName": new RegExp(f.value, 'i')
+                    }]);
+                     queryCount = queryCount.or([{
+                        "enums.refid": new RegExp(f.value, 'i')
+                    }, {
+                        "enums.token": new RegExp(f.value, 'i')
+                    }, {
+                        "enumGroups.groupName": new RegExp(f.value, 'i')
+                    }]);
+                } else if (f.column === 'ucums') {
+                    query = query.or([{
+                        "units.ucums.ucum": new RegExp(f.value, 'i')
+                    }, {
+                        "unitGroups.units.ucums.ucum": new RegExp(f.value, 'i')
+                    }]);
+                    queryCount = queryCount.or([{
+                        "units.ucums.ucum": new RegExp(f.value, 'i')
+                    }, {
+                        "unitGroups.units.ucums.ucum": new RegExp(f.value, 'i')
+                    }]);
+                } else {
+                    query = query.where(f.column).regex(new RegExp(f.value, 'i'));
+                    queryCount = queryCount.where(f.column).regex(new RegExp(f.value, 'i'));
+                }
+
+            });
+
+        }
+
+
+
+        if (sort) {
+            sort = JSON.parse(sort);
+            sortQ = {};
+            sortQ[sort.column] = sort.value;
+            query = query.sort(sortQ);
+        }
+
+        if (skip) {
+            query = query.skip(req.query.skip);
+        }
+
+
+
+        if (limit) {
+            query = query.limit(req.query.limit);
+        }
+
+
+        //gets rosettas of one vendor (Philips)
+
+        query=query.where("contributingOrganization").regex(new RegExp("Philips",'i'));
+        queryCount=queryCount.where("contributingOrganization").regex(new RegExp("Philips",'i'));
+
+
+
+
+        query.exec(function(err, rosettas) {
+            // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+            if (err) {
+                res.send(err)
+            }
+
+            queryCount.count().exec(function(error, count) {
+                res.json({
+                    totalItems: count,
+                    rosettas: rosettas
+                }); // return all members in JSON format
+            });
+
+        });
+    });
+
     // get a rosetta
     app.get('/api/rosettas/:rosetta_id', function(req, res) {
         Rosetta.findOne({
@@ -126,31 +235,34 @@ module.exports = function(app, qs, async, _) {
     });
 
     // create rosetta 
-    app.post('/api/rosettas', isAdminLoggedIn, function(req, res) {
-        Rosetta.create({
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            dateofbirth: req.body.dateofbirth,
-            sex: req.body.sex,
-            bio: req.body.bio,
-            memberStatus: req.body.memberStatus,
-            done: false
-        }, function(err, rosetta) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.end('{"success" : "Rosetta created successfully", "status" : 200}');
-            }
+    app.post('/api/rosettas', isAdminLoggedIn, function(req, res,next) {
+//        console.log(req.body);
+    
+    var query=Rosetta.find(null);
+    query.sort({_id:-1}).exec(function(err,ros){
+       max=ros[0]._id;
+     
 
-        });
+    }).then(function(){
+            var rosetta=new Rosetta(req.body);
+            rosetta._id=max+1;
+            rosetta.save(function(err,rosetta){
+            if(err) {return next(err)}
+            res.json(201,rosetta)
+            });
+            return;
+
+    });
+       
     });
 
     //update a rosetta term
     app.put('/api/rosettas/:rosetta_id', isAdminLoggedIn, function(req, res) {
-        Rosetta.update({
+        Rosetta.findOneAndUpdate({
             _id: req.params.rosetta_id
         }, req.body, function(err) {
             if (!err) {
+                
                 res.end('{"success" : "Rosetta updated successfully", "status" : 200}');
             } else {
                 console.log(err);
@@ -195,6 +307,7 @@ module.exports = function(app, qs, async, _) {
     // get rosetta tags
     app.get('/api/rosettatags', function(req, res) {
         var q = req.query.query;
+
         query = Rosetta.distinct('tags', {
             groups: {
                 $regex: q,

@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 // define the schema for our unit model
 var unitSchema = mongoose.Schema({
-    _id: Number,
+    _id:Number,
     term: {
         refid: String,
         code10: Number,
@@ -31,7 +31,7 @@ var unitSchema = mongoose.Schema({
         text: String,
         date: Date
     }],
-    enumGroups: [{
+    unitGroups: [{
         _id: Number,
         groupName: String
     }],

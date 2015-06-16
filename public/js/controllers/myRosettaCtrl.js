@@ -1,4 +1,4 @@
-angular.module('rtmms.enum').controller('EnumValueController', ['$scope', 'AuthService', 'EnumService', 'dialogs', function($scope, AuthService, EnumService, dialogs) {
+angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope', 'AuthService', 'RosettaService', 'dialogs', 'uiGridConstants', function($scope, AuthService, RosettaService, dialogs, uiGridConstants) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -28,26 +28,14 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', 'AuthS
         selectionRowHeaderWidth: 35,
         columnDefs: [{
             name: 'groups',
-            field: 'enums',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.enumGroups | EnumOrUnitGroupsAsString  }}</span></div>'
+            field: 'groups',
+            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }, {
             name: 'refid',
             field: 'term.refid'
         }, {
-            name: 'ecode10',
-            field: 'term.code10'
-        }, {
-            name: 'cfEcode10',
+            name: 'cfCode10',
             field: 'term.cfCode10'
-        }, {
-            name: 'partition',
-            field: 'term.partition'
-        }, {
-            name: 'description',
-            field: 'description'
-        }, {
-            name: 'token',
-            field: 'token'
         }, {
             name: 'systematicName',
             field: 'term.systematicName'
@@ -60,6 +48,39 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', 'AuthS
         }, {
             name: 'termDescription',
             field: 'term.termDescription'
+        }, {
+            name: 'partition',
+            field: 'term.partition'
+        }, {
+            name: 'units',
+            field: 'units',
+            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.unitGroups | EnumOrUnitGroupsAsString }}</span> <span>{{row.entity.units | UnitsAsString }}</span></div>',
+            enableSorting: false
+        }, {
+            name: 'ucums',
+            field: 'ucums',
+            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity | UcumsAsStringFromRosetta }}</div>',
+            enableSorting: false
+        }, {
+            name: 'enums',
+            field: 'enums',
+            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.enumGroups | EnumOrUnitGroupsAsString }}</span> <span>{{row.entity.enums | EnumsAsString }}</span></div>',
+            enableSorting: false
+        }, {
+            name: 'code10',
+            field: 'term.code10'
+        },{
+            name: 'contributingOrganization',
+            field: 'contributingOrganization'
+        }, {
+            name: 'vendorDescription',
+            field: 'vendorDescription'
+        }, {
+            name: 'displayName',
+            field: 'displayName'
+        }, {
+            name: 'vendorVmd',
+            field: 'vendorVmd'
         }],
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;
@@ -107,14 +128,16 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', 'AuthS
     };
 
     var getPage = function() {
-        EnumService.getEnums({
+        RosettaService.getMyRosettas({
             limit: paginationOptions.pageSize,
             skip: (paginationOptions.pageNumber - 1) * paginationOptions.pageSize,
             filters: paginationOptions.filters,
             sort: paginationOptions.sort
         }).then(function(result) {
             if (result !== null) {
-                $scope.gridOptions.data = result.enums;
+
+
+                $scope.gridOptions.data = result.rosettas;
                 $scope.gridOptions.totalItems = result.totalItems;
             }
         });
@@ -123,61 +146,41 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', 'AuthS
     getPage();
 
 
-
-
-    $scope.showAddEnumModal = function() {
-        EnumService.showAddEnumModal().then(function(enumValue) {
-
-            if (enumValue !== null) {
-                $scope.gridOptions.data.unshift(enumValue);
+    $scope.showAddRosettaModal = function() {
+        RosettaService.showAddRosettaModal().then(function(rosetta) {
+            if (rosetta !== null) {
+                $scope.gridOptions.data.unshift(rosetta);
             }
         });
     };
 
-    $scope.showEditEnumModal = function(enumValue) {
-        EnumService.showEditEnumModal(enumValue).then(function() {
+    $scope.showEditRosettaModal = function(rosetta) {
+        RosettaService.showEditRosettaModal(rosetta).then(function() {
 
         });
     };
-   
-   
+
 }]);
 
-angular.module('rtmms.enum').controller('EnumModalInstanceController', ['$scope', '$modalInstance','Restangular', 'enumValue', 'EnumService', 'RosettaService', function($scope, $modalInstance, Restangular, enumValue,  EnumService, RosettaService) {
+angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$scope', '$modalInstance', 'Restangular', 'rosetta', 'RosettaService', 'UnitService', function($scope, $modalInstance, Restangular, rosetta, RosettaService, UnitService) {
 
-     var formDataInitial;
+    var formDataInitial;
 
-    var getGroupAsObject=function(groupList){
-        EnumService.getEnumGroups().then(function(enumGroups) {
-           
-                $scope.formData.enumGroups=[];
-            
-            for(i=0;i<enumGroups.enumGroups.length;i++){
-                for(t=0;t<groupList.length;t++){
-                    if( enumGroups.enumGroups[i].groupName===groupList[t]){
-                           $scope.formData.enumGroups[t]=enumGroups.enumGroups[i];
-                       } 
-                }
-            }
+    $scope.constraintType = 'units';
+
+
+    UnitService.getUnitsAndUnitGroups().then(function(unitsAndUnitGroups) {
+        $scope.unitsAndUnitGroups = unitsAndUnitGroups;
     });
-    } ;
 
-
-    $scope.enumgroups = [];
-    $scope.groups=[];
+    $scope.groups = [];
     $scope.tags = [];
-   
+    $scope.unitGroupIsExpanded = [];
+    $scope.enumGroupIsExpanded = [];
 
-    $scope.$watch('enumgroups', function() {
-        $scope.groups = _.pluck($scope.enumgroups,'text');
-
-        getGroupAsObject($scope.groups);
+    $scope.$watch('groups', function() {
+        $scope.formData.groups = _.flatten(_.map($scope.groups, _.values));
     }, true);
-
-      $scope.$watch('tags', function() {
-        $scope.formData.tags = _.flatten(_.map($scope.tags, _.values));
-    }, true);
-
 
     $scope.$watch('formData', function() {
         if (($scope.formData.unitGroups !== undefined && $scope.formData.unitGroups.length > 0) || ($scope.formData.units !== undefined && $scope.formData.units.length > 0)) {
@@ -191,17 +194,25 @@ angular.module('rtmms.enum').controller('EnumModalInstanceController', ['$scope'
 
 
     $scope.editmode = false;
-    if (enumValue) {
-        $scope.formData = enumValue;
-
-      //enumValue.enumGroups=[];
-        for(i=0;i<enumValue.enumGroups.length;i++){
-            $scope.enumgroups[i]=enumValue.enumGroups[i].groupName;
-        }
-        $scope.tags=enumValue.tags;
-        formDataInitial = Restangular.copy(enumValue);
+    if (rosetta) {
+        $scope.formData = rosetta;
+        $scope.groups = rosetta.groups;
+        formDataInitial = Restangular.copy(rosetta);
         $scope.editmode = true;
-        
+
+        //units and unitGroups table
+        if ($scope.formData.unitGroups !== undefined) {
+            for (i = 0; i < $scope.formData.unitGroups.length; i += 1) {
+                $scope.unitGroupIsExpanded.push(false);
+            }
+        }
+
+        //enums and enumGroups table
+        if ($scope.formData.enumGroups !== undefined) {
+            for (i = 0; i < $scope.formData.enumGroups.length; i += 1) {
+                $scope.enumGroupIsExpanded.push(false);
+            }
+        }
 
     } else {
         $scope.refidType = "new";
@@ -210,18 +221,40 @@ angular.module('rtmms.enum').controller('EnumModalInstanceController', ['$scope'
     }
 
 
-    $scope.addEnum = function() {
-        EnumService.createEnum($scope.formData);
 
-        $modalInstance.dismiss('add');
+
+
+
+    $scope.addRosetta = function() {
+        if ($scope.time.hours === undefined) $scope.time.hours = 0;
+        if ($scope.time.minutes === undefined) $scope.time.minutes = 0;
+        if ($scope.time.seconds === undefined) $scope.time.seconds = 0;
+        $scope.formData.time = $scope.time.hours * 3600 + $scope.time.minutes * 60 + $scope.time.seconds;
+
+        var members = $.map($scope.formData.member, function(value, index) {
+            return [value];
+        });
+        $scope.formData.member = members;
+
+
+        $modalInstance.close($scope.formData);
     };
 
-    $scope.editEnum = function() {
+    $scope.editRosetta = function() {
         $modalInstance.close($scope.formData);
     };
 
     $scope.cancel = function() {
-       
+        // console.log($scope.formData);
+        // console.log(formDataInitial);
+
+        // $scope.formData.groups = formDataInitial.groups;
+        // $scope.formData.vendorDescription = formDataInitial.vendorDescription;
+        // $scope.formData.displayName = formDataInitial.displayName;
+        // $scope.formData.vendorUom = formDataInitial.vendorUom;
+        // $scope.formData.vendorVmd = formDataInitial.vendorVmd;
+        // $scope.formData.refid = formDataInitial.refid;
+        // $scope.formData.enums = formDataInitial.enums;
 
         $scope.formData = formDataInitial;
 
@@ -231,23 +264,17 @@ angular.module('rtmms.enum').controller('EnumModalInstanceController', ['$scope'
 
 
     $scope.loadGroups = function(query) {
-        return EnumService.getEnumGroups({
+        return RosettaService.getRosettaGroups({
             'query': query
-        }).then(function(enumGroups) {
-           
-            for(i=0;i<enumGroups.enumGroups.length;i++){
-                enumGroups.enumGroups[i]=enumGroups.enumGroups[i].groupName;
-            }
-
-            return _.without(enumGroups.enumGroups, $scope.formData.enumGroups);
+        }).then(function(groups) {
+            return _.without(groups, $scope.formData.groups);
         });
     };
 
     $scope.loadTags = function(query) {
-        return EnumService.getEnumTags({
+        return RosettaService.getRosettaTags({
             'query': query
         }).then(function(tags) {
-
             return _.without(tags, $scope.formData.tags);
         });
     };
@@ -279,11 +306,6 @@ angular.module('rtmms.enum').controller('EnumModalInstanceController', ['$scope'
     $scope.selectEnumGroupRow = function(index, groupName) {
         $scope.enumGroupIsExpanded[index] = !$scope.enumGroupIsExpanded[index];
     };
-
-
-
-
-
 
 
 }]);

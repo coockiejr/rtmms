@@ -24,7 +24,7 @@ app.directive('unitsPicker', ['$timeout', '$document', 'UnitService', function($
 
             scope.suggestions = [];
             scope.selectedIndex = -1;
-
+            
 
             scope.search = function() {
                 if (scope.searchText === '') {
@@ -43,12 +43,18 @@ app.directive('unitsPicker', ['$timeout', '$document', 'UnitService', function($
             };
 
             scope.addToUnitLists = function(index) {
-                input[0].focus();	
-
+                input[0].focus();
+                if(scope.unitGroupsList===undefined){
+                    scope.unitGroupsList=[];
+                }
+                if(scope.unitsList===undefined){
+                    scope.unitsList=[];
+                }	
                 if (scope.suggestions[scope.selectedIndex].groupName !== undefined) {
                     scope.unitGroupsList.push(scope.suggestions[scope.selectedIndex]);
-                } else if (scope.suggestions[scope.selectedIndex].refid !== undefined) {
+                } else if (scope.suggestions[scope.selectedIndex].term.refid !== undefined) {
                     scope.unitsList.push(scope.suggestions[scope.selectedIndex]);
+
                 }
 
                 scope.searchText = '';
@@ -106,6 +112,123 @@ app.directive('unitsPicker', ['$timeout', '$document', 'UnitService', function($
 }]);
 
 
+app.directive('ucumsPicker', ['$timeout', '$document', 'UnitService', function($timeout, $document, UnitService) {
+    return {
+        restrict: 'A',
+        scope: {
+            ucumsList: '=ucums',
+            limit: '=limit'
+        },
+        templateUrl: 'views/templates/pickers/ucums-picker.tpl.html',
+        link: function(scope, elem, attrs) {
+            if (scope.limit === undefined) {
+                scope.limit = 10;
+            }
+            input = elem.find('input');
+
+
+            scope.visible = true;
+
+
+            events = scope.events;
+
+            scope.suggestions = [];
+            scope.selectedIndex = -1;
+
+
+            scope.search = function() {
+                if (scope.searchText === '') {
+                    scope.suggestions = [];
+                } else {
+                    scope.visible = true;
+                    UnitService.getUnitUcums({
+                        "filter": scope.searchText,
+                        "limit": scope.limit
+                    }).then(function(unitUcums) {
+                        scope.suggestions = unitUcums;
+                    });
+                }
+                scope.selectedIndex = -1;
+
+            };
+
+
+
+            scope.addToUcumLists = function(index) {
+                input[0].focus();
+                    
+                 if(scope.ucumsList===undefined){
+                    scope.ucumsList=[];
+                }
+             //  console.log(scope.ucumsList);
+
+                if (scope.suggestions[scope.selectedIndex].ucums !== undefined ) {
+                   for(i=0;i<scope.suggestions[scope.selectedIndex].ucums.length;i++){
+
+                        scope.ucumsList.push(scope.suggestions[scope.selectedIndex].ucums[i]);
+                            
+                        console.log(scope.suggestions[scope.selectedIndex]);
+                    }
+                    
+                }
+                            //   console.log(scope.ucumsList);
+
+                scope.searchText = '';
+                scope.suggestions = [];
+
+            };
+
+            scope.checkKeyDown = function(event) {
+                if (event.keyCode === 40) { //down
+                    event.preventDefault();
+                    if (scope.selectedIndex + 1 !== scope.suggestions.length) {
+                        scope.selectedIndex++;
+                    }
+                } else if (event.keyCode === 38) { //up
+                    event.preventDefault();
+                    if (scope.selectedIndex - 1 !== -1) {
+                        scope.selectedIndex--;
+                    }
+                } else if (event.keyCode === 13 || event.keyCode === 9) { //enter or tab
+                    scope.addToUcumLists(scope.selectedIndex);
+                    event.preventDefault();
+                }
+            };
+
+            scope.$watch('selectedIndex', function(val) {
+                if (val !== -1) {
+                    
+                    if (scope.suggestions[scope.selectedIndex].ucums !== undefined) {
+                            for(i=0;i<scope.suggestions[scope.selectedIndex].ucums.length;i++){
+
+                                scope.searchText = scope.suggestions[scope.selectedIndex].ucums[i].ucum;
+                            }
+                    } 
+                }
+            });
+
+
+
+            scope.hideResults = function() {
+                $timeout(function() {
+                    var activeElement = $document.prop('activeElement'),
+                        lostFocusToBrowserWindow = activeElement !== input[0],
+                        lostFocusToChildElement = elem[0].contains(activeElement);
+
+                    //lost focus and not a suggestion click
+                    if (lostFocusToBrowserWindow && !lostFocusToChildElement) {
+                        scope.visible = false;
+                        scope.suggestions = [];
+                        scope.searchText = '';
+                    }
+                });
+
+            };
+        }
+    };
+}]);
+
+
 
 app.directive('enumsPicker', ['$timeout', '$document', 'EnumService', function($timeout, $document, EnumService) {
     return {
@@ -130,7 +253,7 @@ app.directive('enumsPicker', ['$timeout', '$document', 'EnumService', function($
 
             scope.suggestions = [];
             scope.selectedIndex = -1;
-
+            
 
             scope.search = function() {
                 if (scope.searchText === '') {
@@ -150,10 +273,16 @@ app.directive('enumsPicker', ['$timeout', '$document', 'EnumService', function($
 
             scope.addToEnumLists = function(index) {
                 input[0].focus();	
+               if(scope.enumGroupsList===undefined){
+                    scope.enumGroupsList=[];
+                }
+                if(scope.enumsList===undefined){
+                    scope.enumsList=[];
+                }   
 
                 if (scope.suggestions[scope.selectedIndex].groupName !== undefined) {
                     scope.enumGroupsList.push(scope.suggestions[scope.selectedIndex]);
-                } else {//if (scope.suggestions[scope.selectedIndex].refid !== undefined) {
+                } else if ( scope.suggestions[scope.selectedIndex].term.refid !== undefined) {
                     scope.enumsList.push(scope.suggestions[scope.selectedIndex]);
                 }
 

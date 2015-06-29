@@ -326,6 +326,23 @@ module.exports = function(app, qs, async, _) {
         });
     });
 
+     app.get('/api/enumrefids', function(req, res,next) {
+       var filter = req.query.filter;
+        var limit = req.query.limit;
+
+       queryEnums=Enum.find();
+       if(filter){
+        queryEnums=queryEnums.where('term.refid').regex(new RegExp(filter,'i'));
+       }
+       if(limit){
+        queryEnums.limit(limit);
+       }
+       queryEnums.exec(function(err,enums){
+        if(err) { return next(err); }
+        res.json(enums);
+       });
+    });
+
 
     // route middleware to make sure a user is logged in
     function isLoggedIn(req, res, next) {

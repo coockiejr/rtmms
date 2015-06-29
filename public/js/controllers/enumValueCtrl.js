@@ -186,6 +186,16 @@ angular.module('rtmms.enum').controller('EnumModalInstanceController', ['$scope'
             $scope.constraintType = 'enums';
         } else {
             $scope.constraintType = null;
+        } if ($scope.formData.term.refid!==undefined && $scope.formData.term.partition===undefined){
+            $scope.refidType='new';
+
+        }if($scope.refidType==='new'){
+            delete $scope.formData.term.partition;
+            delete $scope.formData.term.code10;
+            delete $scope.formData.term.cfCode10;
+            $scope.status='pending';
+        }  if( $scope.formData.term.partition!==undefined){
+          $scope.refidType='existing';
         }
     }, true);
 
@@ -204,7 +214,6 @@ angular.module('rtmms.enum').controller('EnumModalInstanceController', ['$scope'
         
 
     } else {
-        $scope.refidType = "new";
         $scope.formData = {};
         $scope.editmode = false;
     }
@@ -267,6 +276,18 @@ angular.module('rtmms.enum').controller('EnumModalInstanceController', ['$scope'
 
     $scope.removeEnumGroup = function(index, enumGroup) {
         $scope.formData.enumGroups.splice(index, 1);
+    };
+
+     $scope.removeTerm = function(index, term) {
+
+       delete $scope.formData.term.refid;
+       delete $scope.formData.term.partition;
+       delete $scope.formData.term.code10;
+       delete $scope.formData.term.cfCode10;
+       delete $scope.formData.term.status;
+    //    delete $scope.formData.term;
+
+
     };
 
     $scope.selectUnitGroupRow = function(index, groupName) {

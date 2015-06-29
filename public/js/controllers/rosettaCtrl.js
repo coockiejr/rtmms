@@ -170,6 +170,7 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
     });
 
     $scope.groups = [];
+    $scope.refid = [];
     $scope.tags = [];
     $scope.unitGroupIsExpanded = [];
     $scope.enumGroupIsExpanded = [];
@@ -178,7 +179,7 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
         $scope.formData.groups = _.flatten(_.map($scope.groups, _.values));
 
     }, true);
-
+   
     $scope.$watch('tags', function() {
         
         $scope.formData.tags = _.flatten(_.map($scope.tags, _.values));
@@ -193,6 +194,16 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
             $scope.constraintType = 'enums';
         } else {
             $scope.constraintType = null;
+        } if ( $scope.formData.term.refid!==undefined && $scope.formData.term.partition===undefined){
+            $scope.refidType='new';
+
+        }if($scope.refidType==='new'){
+            delete $scope.formData.term.partition;
+            delete $scope.formData.term.code10;
+            delete $scope.formData.term.cfCode10;
+            $scope.status='pending';
+        }  if( $scope.formData.term.partition!==undefined){
+          $scope.refidType='existing';
         }
     }, true);
 
@@ -221,7 +232,6 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
         }
 
     } else {
-        $scope.refidType = "new";
         $scope.formData = {};
         $scope.editmode = false;
     }
@@ -244,8 +254,7 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
 
         $modalInstance.dismiss('cancel');
     };
-
-
+    
 
     $scope.loadGroups = function(query) {
         return RosettaService.getRosettaGroups({
@@ -254,7 +263,8 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
             return _.without(groups, $scope.formData.groups);
         });
     };
-
+   
+    
     $scope.loadTags = function(query) {
         return RosettaService.getRosettaTags({
             'query': query
@@ -270,6 +280,20 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
 
     $scope.removeUnitGroup = function(index, unitGroup) {
         $scope.formData.unitGroups.splice(index, 1);
+    };
+    $scope.removeTerm = function(index, term) {
+
+        
+
+        
+       delete $scope.formData.term.refid;
+       delete $scope.formData.term.partition;
+       delete $scope.formData.term.code10;
+       delete $scope.formData.term.cfCode10;
+       delete $scope.formData.term.status;
+    //    delete $scope.formData.term;
+
+
     };
 
     $scope.removeEnum = function(index, enumeration) {

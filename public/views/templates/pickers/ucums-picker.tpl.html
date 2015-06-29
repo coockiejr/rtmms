@@ -5,7 +5,7 @@
     <div>
         <div class="picker">
             <ul class="suggestions-list" ng-show="visible && suggestions.length>0">
-                <li ng-repeat="ucum in suggestions track by $index"  ng-mousedown="addToUcumLists($index)"  ng-mouseenter="$parent.selectedIndex=$index" ng-class="{active : selectedIndex===$index}"  ng-bind-html="ucum | showUcumId"></li>
+                <li ng-repeat="ucum in suggestions track by $index"  ng-mousedown="addToUcumLists($index)"  ng-mouseenter="$parent.selectedIndex=$index" ng-class="{active : selectedIndex===$index}"  ng-bind-html="ucum | showUcumValue"></li>
             </ul>
         </div>
     </div>

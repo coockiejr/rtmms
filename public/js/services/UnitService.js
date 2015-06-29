@@ -3,6 +3,7 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
     var factory = {};
     var Unit = Restangular.all('units');
     var UnitGroup = Restangular.all('unitgroups');
+    var Ucums = Restangular.all('ucums');
 
     // =====================================
     // Unit VALUES API CALLS ===============
@@ -131,11 +132,31 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
             });
     };
 
+     factory.getUcums = function(params) {
+        return Restangular.all('ucums').getList(params).then(
+            function(ucums) {
+                return ucums;
+            },
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
+
      //get unit tags
     factory.getUnitTags = function(params) {
         return Restangular.all('unittags').getList(params).then(
             function(tags) {
                 return tags;
+            },
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
+
+    factory.getUnitRefids = function(params) {
+        return Restangular.all('unitrefids').getList(params).then(
+            function(refids) {
+                return refids;
             },
             function(res) {
                 console.log('Error: ' + res.status);

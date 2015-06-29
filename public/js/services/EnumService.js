@@ -64,6 +64,16 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
             });
     };
 
+     factory.getEnumRefids = function(params) {
+        return Restangular.all('enumrefids').getList(params).then(
+            function(refids) {
+                return refids;
+            },
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
+
     // =====================================
     // ENUMERATION GROUPS API CALLS ========
     // =====================================

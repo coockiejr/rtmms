@@ -25,26 +25,41 @@
                        
                        
                     </div>
-                    <div class="termInfo formField">
+                     <div class="termInfo formField">
                         <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.refid.$invalid && !formrosetta.refid.$pristine}">
                             <div class="btn-group choice-btn-group refid-choice-btn-group">
-                                <label class="choice btn btn-primary" ng-model="refidType " btn-radio="'new'">Propose new term</label>
-                                <label class="choice btn btn-primary" ng-model="refidType" btn-radio="'existing'">Map existing term</label>
+                                <label class="choice btn btn-primary" ng-model="refidType " btn-radio="'new'" uncheckable>Propose new term</label>
+                                <label class="choice btn btn-primary" ng-model="refidType" btn-radio="'existing'" uncheckable>Map existing term</label>
                             </div>
-                            <label class="text-left">Refid:</label>
-                            <input type="text" name="refid" class="form-control  text-left" ng-model="formData.term.refid" ng-required="true" required>
+                         
+                            <div class="form-group-sm">
+                                <div ng-show="refidType=='existing'" enum-refid-picker refids="formData.term" limit="5" ></div>
+                                 
+
+
+                                <div ng-show="refidType=='new'">
+                                    <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.term.refid.$invalid && !formrosetta.term.refid.$pristine}">
+                                        <label class="text-left">Refid:</label>
+                                        <input   type="text" name="refid" class="form-control  text-left" ng-model="formData.term.refid" ng-required="true">
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
                             <div class="row">
                                 <div class="col-sm-4">
                                     <label class="text-left">Partition #:</label>
-                                    <input type="text" only-digits name="partition" class="form-control  text-left" ng-model="formData.term.partition">
+                                    <input ng-init="partition=formData.term.partition" type="text" only-digits name="partition" class="form-control  text-left" ng-model="formData.term.partition" value="partition" disabled>
                                 </div>
                                 <div class="col-sm-4">
                                     <label class="text-left">Code10:</label>
-                                    <input type="text" only-digits name="code10" class="form-control  text-left" ng-model="formData.term.code10">
+                                    <input ng-init="code10=formData.term.code10" type="text" only-digits name="code10" class="form-control  text-left" ng-model="formData.term.code10" value="code10" disabled>
                                 </div>
                                 <div class="col-sm-4">  
                                     <label class="text-left">CF_Code10:</label>
-                                    <input type="text" only-digits name="cfCode10" class="form-control  text-left" ng-model="formData.term.cfCode10">
+                                    <input ng-init="cfCode10=formData.term.cfCode10"  type="text" only-digits name="cfCode10" class="form-control  text-left" ng-model="formData.term.cfCode10" value="cfCode10" disabled>
                                 </div>
                             </div>
                         </div>

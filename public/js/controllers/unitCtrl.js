@@ -48,7 +48,7 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', 'AuthServic
         },  {
             name: 'ucums',
             field: 'ucums',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity | UcumsAsStringFromUnit }}</div>',
+            cellTemplate: '<div class="ui-grid-cell-contents"> <span>{{row.entity.ucums | UcumsAsString }} </span></div>',
             enableSorting: false
         }, {
             name: 'systematicName',
@@ -162,6 +162,7 @@ angular.module('rtmms.unit').controller('UnitModalInstanceController', ['$scope'
     });
     } ;
 
+  
     $scope.unitgroups = [];
     $scope.groups=[];
     $scope.tags = [];
@@ -189,6 +190,16 @@ angular.module('rtmms.unit').controller('UnitModalInstanceController', ['$scope'
             $scope.constraintType = 'enums';
         } else {
             $scope.constraintType = null;
+        } if ($scope.formData.term.refid!==undefined && $scope.formData.term.partition===undefined){
+            $scope.refidType='new';
+
+        }if($scope.refidType==='new'){
+            delete $scope.formData.term.partition;
+            delete $scope.formData.term.code10;
+            delete $scope.formData.term.cfCode10;
+            $scope.status='pending';
+        }  if( $scope.formData.term.partition!==undefined){
+          $scope.refidType='existing';
         }
     }, true);
     
@@ -196,7 +207,7 @@ angular.module('rtmms.unit').controller('UnitModalInstanceController', ['$scope'
     $scope.editmode = false;
     if (unitValue) {
         $scope.formData = unitValue;
-      //  console.log($scope.formData.ucums);
+     //  console.log($scope.formData.ucums);
 
       //unitValue.unitGroups=[];
         for(i=0;i<unitValue.unitGroups.length;i++){
@@ -217,7 +228,6 @@ angular.module('rtmms.unit').controller('UnitModalInstanceController', ['$scope'
       
 
     } else {
-        $scope.refidType = "new";
         $scope.formData = {};
         $scope.editmode = false;
     }
@@ -277,6 +287,17 @@ angular.module('rtmms.unit').controller('UnitModalInstanceController', ['$scope'
         $scope.formData.ucums.splice(index, 1);
     };
 
+    $scope.removeTerm = function(index, term) {
+
+       delete $scope.formData.term.refid;
+       delete $scope.formData.term.partition;
+       delete $scope.formData.term.code10;
+       delete $scope.formData.term.cfCode10;
+       delete $scope.formData.term.status;
+    //    delete $scope.formData.term;
+
+
+    };
       $scope.selectUcumRow = function(index, ucum) {
         $scope.ucumIsExpanded[index] = !$scope.ucumIsExpanded[index];
     };

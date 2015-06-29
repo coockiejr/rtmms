@@ -5,6 +5,7 @@ module.exports = function(app, qs, async, _) {
     var HRosetta = require('./../models/hrosetta');
     var Unit = require('./../models/unit');
     var UnitGroup = require('./../models/unitGroup');
+    var Ucum =require('./../models/ucum');
 
     var columnNumberSearch = ['term.code10', 'term.cfCode10', 'term.partition'];
 
@@ -157,7 +158,22 @@ module.exports = function(app, qs, async, _) {
         });
     });
 
+       app.get('/api/unitrefids', function(req, res,next) {
+       var filter = req.query.filter;
+        var limit = req.query.limit;
 
+       queryUnits=Unit.find();
+       if(filter){
+        queryUnits=queryUnits.where('term.refid').regex(new RegExp(filter,'i'));
+       }
+       if(limit){
+        queryUnits.limit(limit);
+       }
+       queryUnits.exec(function(err,units){
+        if(err) { return next(err); }
+        res.json(units);
+       });
+    });
 
     app.get('/api/unitsandunitgroups', function(req, res) {
         var filter = req.query.filter;
@@ -360,6 +376,23 @@ module.exports = function(app, qs, async, _) {
         });
     });
 
+    // get ucums
+    app.get('/api/ucums', function(req, res,next) {
+        var limit = req.query.limit;
+        var filter=req.query.filter;
+        queryUcums=Ucum.find();
+        if(filter){
+            queryUcums=queryUcums.where('value').regex(new RegExp(filter,'i'));
+        }
+        if(limit){
+            queryUcums.limit(limit);
+        }
+        queryUcums.exec(function(err,ucums){
+            if(err) { return next(err); }
+            res.json(ucums);
+        });
+       
+    });
 
     // route middleware to make sure a user is logged in
     function isLoggedIn(req, res, next) {

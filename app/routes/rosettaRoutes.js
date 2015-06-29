@@ -304,6 +304,23 @@ module.exports = function(app, qs, async, _) {
         });
     });
 
+    app.get('/api/rosettarefids', function(req, res,next) {
+       var filter = req.query.filter;
+        var limit = req.query.limit;
+
+       queryRosettas=Rosetta.find();
+       if(filter){
+        queryRosettas=queryRosettas.where('term.refid').regex(new RegExp(filter,'i'));
+       }
+       if(limit){
+        queryRosettas.limit(limit);
+       }
+       queryRosettas.exec(function(err,rosettas){
+        if(err) { return next(err); }
+        res.json(rosettas);
+       });
+    });
+
     // get rosetta tags
     app.get('/api/rosettatags', function(req, res) {
         var q = req.query.query;

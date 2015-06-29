@@ -308,6 +308,22 @@ app.filter('EnumsAsString', function() {
     };
 });
 
+app.filter('UcumsAsString', function() {
+    return function(ucums) {
+        if(ucums){
+            var res = '';
+
+            ucums.forEach(function(u) {
+                
+                if (u.value) {
+                    res += u.value + ', ';
+                }
+            });
+            res = res.slice(0, -2);
+            return res;
+        }
+    };
+});
 
 
 
@@ -413,19 +429,36 @@ app.filter('showUnitRefidOrGroupName',['$filter', function($filter) {
 }]);
 
 
-app.filter('showUcumId',['$filter', function($filter) {
-    return function(u) { //unit or unit Group
+app.filter('showUcumValue',['$filter', function($filter) {
+    return function(u) { 
         res ='';
-        if (u.ucums !== undefined) { //unit
+        if (u.value !== undefined) { //unit
             //console.log(u.ucums);
         
-                res +='<span>'+$filter('UcumsAsStringFromUnit')(u) +'</span>';
+                res +='<span>'+u.value +'</span>';
            
         }
        
         return res;
     };
 }]);
+
+
+
+app.filter('showRosettaRefid',['$filter', function($filter) {
+    return function(r) { 
+        res ='';
+        if (r.term.refid !== undefined) { //unit
+            //console.log(u.ucums);
+        
+                res +='<div>'+r.term.refid +'</div>';
+           
+        }
+        return res;
+    };
+}]);
+
+
 
 app.filter('showEnumInfoOrGroupName', function() {
     return function(e) { //enum or enum Group

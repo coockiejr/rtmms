@@ -73,6 +73,15 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
             });
     };
     
+    factory.getRosettaRefids = function(params) {
+        return Restangular.all('rosettarefids').getList(params).then(
+            function(refids) {
+                return refids;
+            },
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
     //get rosetta tags
     factory.getRosettaTags = function(params) {
         return Restangular.all('rosettatags').getList(params).then(

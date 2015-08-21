@@ -1,24 +1,27 @@
 <div class="container">
 
     <div class="page-header text-center">
-        <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+        <h1><span class="glyphicon glyphicon-user"></span> Profile Page</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
     </div>
 
-    <div class="row">
+    <div class="row text-center">
 
         <!-- LOCAL INFORMATION -->
-        <div class="col-sm-6">
-            <div class="well">
-                <h3><span class="fa fa-user"></span> Local</h3> 
+        <div class="col-sm-4 col-sm-offset-4" align="center">
+            <div class="well" ng-init="getUsers()">
+               
                     <p>
-                        <strong>id</strong>: {{user._id}}<br>
+                        <strong>Username</strong>: {{user.username}}<br>
                         <strong>email</strong>: {{user.email}}<br>
-                        <strong>password</strong>: {{user.password}}<br>
-                        <span ng-show="user.role"><strong>role</strong>: {{user.role}}</span>
+                        <strong>First Name</strong> {{user.firstName}}<br>
+                        <strong>Last Name</strong>: {{user.lastName}}<br>
+                        <strong>User Type</strong>: {{user.userTypes.usertype}}</span>
                     </p>
 
             </div>
+            <a ng-click="showPassModal(user)"  class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-pencil" ></span>Edit Password</a>
+            <a ng-click="showProfileModal(user)"  class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-pencil" ></span>Edit General information</a>
         </div>
 
     </div>

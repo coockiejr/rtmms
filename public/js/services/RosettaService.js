@@ -37,9 +37,10 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
                 console.log('Error: ' + res.status);
             });
     };
-
+   
     //create a Rosetta
     factory.createRosetta = function(rosetta) {
+        console.log(rosetta);
         return Rosetta.post(rosetta).then(
             function(rosetta) {},
             function(res) {
@@ -49,7 +50,7 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
 
     //edit a Rosetta
     factory.editRosetta = function(rosetta) {
-         rosetta.put();
+        rosetta.put();
     };
 
     //delete a Rosetta
@@ -72,7 +73,7 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
                 console.log('Error: ' + res.status);
             });
     };
-    
+
     factory.getRosettaRefids = function(params) {
         return Restangular.all('rosettarefids').getList(params).then(
             function(refids) {
@@ -92,6 +93,8 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
                 console.log('Error: ' + res.status);
             });
     };
+
+
     // =====================================
     // Rosetta MODALS ======================
     // =====================================
@@ -133,6 +136,90 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
                 return null;
             });
         }
+    };
+
+    factory.showAssignRefidModal = function(rosetta) {
+        if (Rosetta) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/refidAssignModal.tpl.html',
+                controller: 'RefidModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    rosetta: function() {
+                        return rosetta;
+                    }
+                }
+            });
+
+            return modalInstance.result.then(function(rosetta) {
+                factory.editRosetta(rosetta);
+            }, function() {
+                return null;
+            });
+        }
+    };
+
+    factory.showReadyRefidModal = function(rosetta) {
+        if (Rosetta) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/refidModal.tpl.html',
+                controller: 'RefidModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    rosetta: function() {
+                        return rosetta;
+                    }
+                }
+            });
+
+            return modalInstance.result.then(function(rosetta) {
+                factory.editRosetta(rosetta);
+            }, function() {
+                return null;
+            });
+        }
+    };
+
+    factory.showRegisterRefidModal = function(rosetta) {
+        if (Rosetta) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/refidRegisterModal.tpl.html',
+                controller: 'RefidModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    rosetta: function() {
+                        return rosetta;
+                    }
+                }
+            });
+
+            return modalInstance.result.then(function(rosetta) {
+                factory.editRosetta(rosetta);
+            }, function() {
+                return null;
+            });
+        }
+    };
+    // =====================================
+    // Cooment MODALS ======================
+    // =====================================
+
+    factory.showAddCommentModal = function(rosetta) {
+        var modalInstance = $modal.open({
+            templateUrl: 'views/templates/modals/commentModal.tpl.html',
+            controller: 'CommentModalInstanceController',
+            size: 'lg',
+            resolve: {
+                rosetta: false
+            }
+        });
+
+        return modalInstance.result.then(function(rosetta) {
+            factory.editRosetta(rosetta);
+            return rosetta;
+        }, function() {
+            return null;
+        });
     };
 
     return factory;

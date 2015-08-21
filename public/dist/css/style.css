@@ -7109,6 +7109,15 @@ footer {
 .red {
   color: #FF0010;
 }
+.green {
+  color: #00FF00;
+}
+.blue {
+  color: #0000FF;
+}
+.orange {
+  color: #FF8C00;
+}
 .transparent {
   color: transparent;
 }

@@ -15,6 +15,7 @@ module.exports = function(app, qs, async, _) {
         var sort = req.query.sort;
         var limit = req.query.limit;
         var skip = req.query.skip;
+        var Status = req.query.status;
 
         query = Unit.find();
         queryCount = Unit.find();
@@ -49,6 +50,10 @@ module.exports = function(app, qs, async, _) {
 
         if (limit) {
             query = query.limit(req.query.limit);
+        }
+        if (Status) {
+            query = query.where("term.status").equals(Status);
+            queryCount = queryCount.where("term.status").equals(Status);
         }
 
         query.exec(function(err, units) {

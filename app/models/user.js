@@ -1,18 +1,33 @@
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
+var bcrypt = require('bcrypt-nodejs');
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
-    username     : String,
-    password     : String,
-    firstName    : String,
-    lastName     : String,
-    email        : String,
-    userType     : {
-        id : Number
-    } ,
-    vendorId :String,
-    enabldc:Number,
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    firstName: String,
+    lastName: String,
+    userTypes: {
+        id: Number,
+        usertype: String
+    },
+    contributingOrganization:String,
+    userStat: String,
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
+    enabldc: Number,
     createdAt: Date,
     updatedAt: Date
 });
@@ -26,7 +41,7 @@ userSchema.pre('save', function(next, done) {
     }
     this.updatedAt = Date.now();
 
-    this.updateCategory();
+    //this.updateCategory();
     next();
 });
 
@@ -37,6 +52,7 @@ userSchema.methods.generateHash = function(password) {
 
 // checking if password is valid
 userSchema.methods.validPassword = function(password) {
+   
     return bcrypt.compareSync(password, this.password);
 };
 

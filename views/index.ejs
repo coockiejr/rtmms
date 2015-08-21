@@ -14,10 +14,9 @@
 
 		<!-- HEADER -->
 		<nav class="navbar navbar-default" >
-			<% if (user && user.role === 'admin') { %>
+			<% if (user && user.userTypes.id === 4) { %>
 				<ul class="nav navbar-nav" >
 					<li ng-class="{active: $state.includes('/')}"><a ui-sref="/">Home</a></li>
-					<li ng-class="{active: $state.includes('/myRosetta')}"><a ui-sref="/myRosetta">My Rosetta</a></li>
 					<li ng-class="{active: $state.includes('/rosetta')}"><a ui-sref="/rosetta">Rosetta</a></li>
 					<li ng-class="{active: $state.includes('/hRtm')}"><a ui-sref="/hRtm">hRTM</a></li>
 					<li class="dropdown" dropdown on-toggle="toggled(open)">
@@ -38,10 +37,11 @@
 				<ul class="nav navbar-nav" style="float: right">
 					<li ng-class="{active: ($state.includes('/profile'))}" class="dropdown" dropdown on-toggle="toggled(open)">
 				  	    <a href class="dropdown-toggle" dropdown-toggle>
-				        <%= user.email %> <span class="caret"></span>
+				        <%= user.username %> <span class="caret"></span>
 				      </a>
 				      <ul class="dropdown-menu">
 				        <li><a ui-sref="/profile">Profile</a></li>
+				        <li><a ui-sref="/users">Users</a></li>
 				        <li><a href="/logout">Logout</a></li>
 				      </ul>
 				    </li>
@@ -49,8 +49,17 @@
 			<%}else{ %>
 				<ul class="nav navbar-nav" >
 					<li ng-class="{active: $state.includes('/')}"><a ui-sref="/">Home</a></li>
-					<li ng-class="{active: $state.includes('/myRosetta')}"><a ui-sref="/myRosetta">My Rosetta</a></li>
-					<li ng-class="{active: $state.includes('/rosetta')}"><a ui-sref="/rosetta">Rosetta</a></li>
+					<% if (user && ( user.userTypes.id === 1 ) ) { %>
+					<li  ng-class="{active: $state.includes('/myRosetta')}"><a ui-sref="/myRosetta">My Rosetta </a></li>
+
+					<%} %>
+					<% if (user && ( user.userTypes.id === 3 ) ) { %>
+					<li  ng-class="{active: $state.includes('/coRosetta')}"><a ui-sref="/coRosetta">Contributing Organization Rosetta</a></li>
+					<li  ng-class="{active: $state.includes('/co')}"><a ui-sref="/co">Contributing Organization </a></li>
+					<li  ng-class="{active: $state.includes('/termApproval')}"><a ui-sref="/termApproval">Term Approval </a></li>
+					<li  ng-class="{active: $state.includes('/x73')}"><a ui-sref="/x73">X73 </a></li>
+					<%} %>
+					<li ng-class="{active: $state.includes('/rosetta')}"><a ui-sref="/rosetta">Rosetta</a>{{user}}</li>
 					<li ng-class="{active: $state.includes('/hRtm')}"><a ui-sref="/hRtm">hRTM</a></li>
 					<li class="dropdown" dropdown on-toggle="toggled(open)">
 				  	    <a href class="dropdown-toggle" dropdown-toggle>Units<span class="caret"></span></a>
@@ -68,7 +77,24 @@
 				    </li>
 				</ul>
 				<ul class="nav navbar-nav" style="float: right" >
-					<li ng-class="{active: $state.includes('/login')}"><a ui-sref="/login">Login</a></li>
+					
+					<% if (user) { %>
+						<ul class="nav navbar-nav" style="float: right">
+					<li ng-class="{active: ($state.includes('/profile'))}" class="dropdown" dropdown on-toggle="toggled(open)">
+				  	    <a href class="dropdown-toggle" dropdown-toggle>
+				        <%= user.username %> <span class="caret"></span>
+				      </a>
+				      <ul class="dropdown-menu">
+				        <li><a ui-sref="/profile">Profile</a></li>
+				        <li><a href="/logout">Logout</a></li>
+				      </ul>
+				    </li>
+				</ul>
+					<% }else{ %>
+						<li ng-class="{active: $state.includes('/login')}"><a ui-sref="/login">Login</a></li>
+						<li ng-class="{active: $state.includes('/signup')}"><a ui-sref="/signup">Sign Up</a></li>
+					<%}%>
+
 				</ul>
 			<%}%>	
 		</nav>

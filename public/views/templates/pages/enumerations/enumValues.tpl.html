@@ -1,7 +1,7 @@
 <div class="jumbotron ">
     <div class="row button-row ">
-        <button type="submit" class="btn btn-primary" ng-click="showAddEnumModal()">Add</button>
-        <button ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showEditEnumModal(selectedEntity)">Edit</button>
+        <button ng-show="authService.isCOLoggedIn()" type="submit" class="btn btn-primary" ng-click="showAddEnumModal()">Add</button>
+        <button ng-show="authService.isCOLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showEditEnumModal(selectedEntity)">Edit</button>
     </div>
     <div class="row">
         <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>

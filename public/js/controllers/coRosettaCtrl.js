@@ -1,9 +1,17 @@
-angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'AuthService', 'RosettaService', 'dialogs', 'uiGridConstants', function($scope, AuthService, RosettaService, dialogs, uiGridConstants) {
+angular.module('rtmms.authentication').controller('CoRosettaController', ['$scope', 'AuthService', 'RosettaService', 'dialogs', 'uiGridConstants', function($scope, AuthService, RosettaService, dialogs, uiGridConstants) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
         $scope.user = user;
     });
+
+    $scope.user = AuthService.isLoggedIn();
+    $scope.vendor = function() {
+        paginationOptions.contributingOrganization = $scope.co;
+        getPage();
+    };
+
+
 
 
     var paginationOptions = {
@@ -11,6 +19,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         pageSize: 25,
         sort: null,
         filters: null,
+        contributingOrganization: ''
     };
 
     $scope.gridOptions = {
@@ -30,7 +39,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
             name: 'groups',
             field: 'groups',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
-        },{
+        }, {
             name: 'refid',
             field: 'term.refid',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
@@ -88,6 +97,9 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
             name: 'code10',
             field: 'term.code10'
         }, {
+            name: 'contributingOrganization',
+            field: 'contributingOrganization'
+        }, {
             name: 'vendorDescription',
             field: 'vendorDescription'
         }, {
@@ -141,16 +153,21 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
             });
         }
     };
-
     var getPage = function() {
-        RosettaService.getRosettas({
+
+        RosettaService.getMyRosettas({
             limit: paginationOptions.pageSize,
             skip: (paginationOptions.pageNumber - 1) * paginationOptions.pageSize,
             filters: paginationOptions.filters,
-            sort: paginationOptions.sort
+            sort: paginationOptions.sort,
+            contributingOrganization: paginationOptions.contributingOrganization
         }).then(function(result) {
             if (result !== null) {
+
+
                 $scope.gridOptions.data = result.rosettas;
+                console.log($scope.gridOptions.data);
+
                 $scope.gridOptions.totalItems = result.totalItems;
             }
         });
@@ -159,9 +176,27 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
     getPage();
 
 
-    $scope.showAddCommentModal = function(rosetta) {
-        RosettaService.showAddCommentModal(rosetta).then(function() {
+    $scope.getCOs = function() {
 
+        AuthService.getCOs().then(function(cos) {
+            $scope.cos = cos;
+        });
+    };
+
+    $scope.approve = function(rosetta) {
+        if (rosetta.term.status === undefined) {
+            rosetta.term.status = "proposed";
+        }
+
+        RosettaService.editRosetta(rosetta);
+
+
+    };
+    $scope.showAddRosettaModal = function() {
+        RosettaService.showAddRosettaModal().then(function(rosetta) {
+            if (rosetta !== null) {
+                $scope.gridOptions.data.unshift(rosetta);
+            }
         });
     };
 
@@ -171,91 +206,146 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         });
     };
 
+
+
+
 }]);
 
 
-angular.module('rtmms.rosetta').controller('CommentModalInstanceController', ['$scope', '$modalInstance', 'Restangular', 'rosetta', 'RosettaService', 'UnitService', 'AuthService', function($scope, $modalInstance, Restangular, rosetta, RosettaService, UnitService, AuthService) {
+angular.module('rtmms.authentication').controller('CoController', ['$scope', 'AuthService', 'RosettaService', 'dialogs', 'uiGridConstants', function($scope, AuthService, RosettaService, dialogs, uiGridConstants) {
 
-
-
-
-    var formDataInitial;
-    $scope.user = AuthService.isLoggedIn();
-    $scope.constraintType = 'units';
-    
-    //console.log($scope.user);
-
-    UnitService.getUnitsAndUnitGroups().then(function(unitsAndUnitGroups) {
-        $scope.unitsAndUnitGroups = unitsAndUnitGroups;
+    $scope.authService = AuthService;
+    $scope.$watch('authService.isLoggedIn()', function(user) {
+        $scope.user = user;
     });
 
-     $scope.formData.comments.push({
-            author : {
-                _id:$scope.user._id,
-                name : $scope.user.username
-            },
-            text:$scope.comment,
-            data:''
-        });
-        console("here");
-        console.log($scope.formData.comments);
-
-    $scope.$watch('tags', function() {
-
-        $scope.formData.tags = _.flatten(_.map($scope.tags, _.values));
-    }, true);
-
-
-    $scope.editmode = false;
-    if (rosetta) {
-        $scope.comments = rosetta.comments;
-        $scope.formData = rosetta;
-
-        $scope.formData.comments.push({
-            author : {
-                _id:$scope.user._id,
-                name : $scope.user.username
-            },
-            text:$scope.comment,
-            data:''
-        });
-        console("here");
-        console.log($scope.formData.comments);
-       
-        formDataInitial = Restangular.copy(rosetta);
-        $scope.editmode = true;
-
-       
-
-    } else {
-        $scope.formData = {};
-        $scope.editmode = false;
-    }
+    $scope.user = AuthService.isLoggedIn();
+    $scope.vendor = function() {
+        paginationOptions.contributingOrganization = $scope.co;
+        getPage();
+    };
 
 
 
-    $scope.addRosetta = function() {
-        console.log($scope.formrosetta.$invalid);
-        if ($scope.formrosetta.$invalid) {
-            return;
+
+    var paginationOptions = {
+        pageNumber: 1,
+        pageSize: 25,
+        sort: null,
+        filters: null,
+        contributingOrganization: ''
+    };
+
+    $scope.gridOptions = {
+        enableFiltering: true,
+        enableColumnResizing: true,
+        paginationPageSizes: [25, 50, 75, 100],
+        paginationPageSize: 25,
+        useExternalPagination: true,
+        useExternalSorting: true,
+        useExternalFiltering: true,
+        enableGridMenu: true,
+        enableRowSelection: true,
+        multiSelect: false,
+        enableSelectAll: false,
+        selectionRowHeaderWidth: 35,
+        columnDefs: [{
+            name: 'contributingOrganization',
+            field: 'contributingOrganization',
+        }],
+        onRegisterApi: function(gridApi) {
+            $scope.gridApi = gridApi;
+            $scope.gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
+                if (sortColumns.length === 0) {
+                    paginationOptions.sort = null;
+                } else {
+                    paginationOptions.sort = {
+                        column: sortColumns[0].colDef.field,
+                        value: sortColumns[0].sort.direction
+                    };
+                }
+                getPage();
+            });
+
+            gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
+                paginationOptions.pageNumber = newPage;
+                paginationOptions.pageSize = pageSize;
+                getPage();
+            });
+
+            gridApi.core.on.filterChanged($scope, function() {
+                var grid = this.grid;
+                paginationOptions.filters = [];
+                angular.forEach(grid.columns, function(value, key) {
+                    if (value.filters[0].term) {
+                        paginationOptions.filters.push({
+                            column: value.colDef.field,
+                            value: value.filters[0].term
+                        });
+                    }
+                });
+                getPage();
+            });
+
+
+            gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+                if (row.isSelected) {
+                    $scope.selectedEntity = row.entity;
+                } else {
+                    $scope.selectedEntity = null;
+                }
+            });
         }
-        RosettaService.createRosetta($scope.formData);
-        $modalInstance.dismiss('add');
+    };
+    var getPage = function() {
+
+        RosettaService.getMyRosettas({
+            limit: paginationOptions.pageSize,
+            skip: (paginationOptions.pageNumber - 1) * paginationOptions.pageSize,
+            filters: paginationOptions.filters,
+            sort: paginationOptions.sort,
+            contributingOrganization: paginationOptions.contributingOrganization
+        }).then(function(result) {
+            if (result !== null) {
+                $scope.gridOptions.data = result.rosettas;
+                console.log($scope.gridOptions.data);
+
+                $scope.gridOptions.totalItems = result.totalItems;
+            }
+        });
 
     };
+    getPage();
 
-    $scope.editRosetta = function() {
-        console.log($scope.formData);
-        $modalInstance.close($scope.formData);
+
+    $scope.getCOs = function() {
+
+        AuthService.getCOs().then(function(cos) {
+            $scope.cos = cos;
+        });
     };
-   
 
-    $scope.cancel = function() {
+    $scope.approve = function(rosetta) {
+        rosetta.term.status = "proposed";
+        console.log(rosetta);
+        RosettaService.editRosetta(rosetta);
 
-        $scope.formData = formDataInitial;
 
-        $modalInstance.dismiss('cancel');
     };
+    $scope.showAddRosettaModal = function() {
+        RosettaService.showAddRosettaModal().then(function(rosetta) {
+            if (rosetta !== null) {
+                $scope.gridOptions.data.unshift(rosetta);
+            }
+        });
+    };
+
+    $scope.showEditRosettaModal = function(rosetta) {
+        RosettaService.showEditRosettaModal(rosetta).then(function() {
+
+        });
+    };
+
 
 
 

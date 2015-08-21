@@ -1,15 +1,14 @@
 @import "variables.less";
-
 body {
     padding-top: 10px;
     color: #000000;
 }
+
 footer {
     color: #606568;
     padding-bottom: 15px;
     font-size: 0.7em;
 }
-
 
 .logo {
     background: #021A4C;
@@ -22,10 +21,9 @@ footer {
         font-size: 40px;
     }
     >h1 >a {
-    text-decoration: none;
+        text-decoration: none;
     }
 }
-
 
 @media (max-width: 350px) {
     .logo >h1 {
@@ -33,14 +31,15 @@ footer {
         color: red;
     }
 }
+
 @media (min-width: 351px) and (max-width: 445px) {
     .logo >h1 {
         font-size: 30px;
     }
 }
 
-.containerOptions{
-    min-width:800px;
+.containerOptions {
+    min-width: 800px;
 }
 
 .container-fluid .jumbotron {
@@ -52,6 +51,7 @@ footer {
     padding-left: 20px;
     padding-right: 20px;
 }
+
 .detailscontainer {
     padding-left: 5px;
     padding-bottom: 5px;
@@ -62,99 +62,133 @@ footer {
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
+
 .selected-class-name {
     border-width: 2px;
     border-color: #9C1138;
     margin-bottom: 0px;
 }
+
 .list-group-item {
     color: #606568;
 }
+
 .list-group-item-male {
     background-color: #d9edf7;
     color: #31708f;
 }
+
 .list-group-item-female {
     background-color: #F4D7E7;
     color: #8E3163;
 }
+
 .tracksurface {
     background: #AD757F;
 }
+
 .xcsurface {
     background: #84CC97;
 }
+
 .roadsurface {
     background: #8AB5DB;
 }
+
 .ultrasurface {
     background: #8C895F;
 }
+
 .othersurface {
     background: #F3F78C;
 }
+
 .timediff {
     color: red;
 }
+
 .black {
     color: #4D5153;
 }
+
 .red {
     color: #FF0010;
+}
+
+.green {
+    color: #00FF00;
+}
+
+.blue {
+    color: #0000FF;
+}
+.orange {
+    color: #FF8C00;
 }
 .transparent {
     color: transparent;
 }
-.left{
+
+.left {
     text-align: left;
 }
-.center{
+
+.center {
     text-align: center;
 }
-.right{
+
+.right {
     text-align: right;
 }
-
 
 .resultlistheader {
     border-bottom: thick solid;
     color: #006699;
 }
+
 .resultlistrow {
     padding-top: 3px;
     padding-bottom: 3px;
 }
+
 .pblistrow {
     padding-top: 1px;
     padding-bottom: 1px;
     border: 0px;
 }
+
 .listheader {
     font-weight: bold;
 }
+
 .bold {
     font-weight: bold;
 }
-.italic{
+
+.italic {
     font-style: italic;
 }
+
 .tooltip-inner {
     text-align: left;
     max-width: 500px;
 }
+
 .hoverhand {
     cursor: pointer;
     cursor: hand;
 }
+
 .introtext {
     line-height: 1.1;
 }
+
 .center {
     text-align: center;
 }
 
 .grid {
-    font-size:@font-size-small;
+    font-size: @font-size-small;
     &.rosetta-grid {
         height: 600px;
     }
@@ -175,17 +209,12 @@ footer {
     }
 }
 
-
-
-
-.button-row{
-    padding-bottom:5px;
+.button-row {
+    padding-bottom: 5px;
 }
 
-
-
-.formField{
-    margin:2px;
+.formField {
+    margin: 2px;
     padding: 5px;
     border-width: 1px;
     border-style: solid;
@@ -193,17 +222,14 @@ footer {
     background-color: #EAF1FF;
 }
 
-.listdetail{
+.listdetail {
     font-style: italic;
     padding-left: 5px;
 }
 
-
 .formrosetta {
-
-    label{
-        margin-bottom:0px;
-
+    label {
+        margin-bottom: 0px;
         &.choice:before {
             line-height: 2.5em;
             position: absolute;
@@ -215,22 +241,19 @@ footer {
             width: 2.5em;
             background: #D1D3D4;
         }
-        &.choice.active:before{
+        &.choice.active:before {
             line-height: 2.5em;
-            content:'\2714';
+            content: '\2714';
             color: #9CE2AE;
             background-color: #4DCB6D;
         }
-        &.choice:hover:before{
+        &.choice:hover:before {
             line-height: 2.5em;
-            content:'\2714';
+            content: '\2714';
             color: #C2C2C2;
         }
-
-        
     }
-
-    .groupInfo{
+    .groupInfo {
         &.formField::before {
             position: relative;
             font-size: 12px;
@@ -238,11 +261,10 @@ footer {
             color: @brand-rtmms-blue;
             text-transform: uppercase;
             letter-spacing: 1px;
-            content: "Group Information:";          
+            content: "Group Information:";
         }
     }
-
-    .vendorInfo{
+    .vendorInfo {
         &.formField::before {
             position: relative;
             font-size: 12px;
@@ -250,11 +272,10 @@ footer {
             color: @brand-rtmms-blue;
             text-transform: uppercase;
             letter-spacing: 1px;
-            content: "Vendor Parameter Information:";          
+            content: "Vendor Parameter Information:";
         }
     }
-
-     .unitInfo{
+    .unitInfo {
         &.formField::before {
             position: relative;
             font-size: 12px;
@@ -262,10 +283,10 @@ footer {
             color: @brand-rtmms-blue;
             text-transform: uppercase;
             letter-spacing: 1px;
-            content: "Unit Information:";          
+            content: "Unit Information:";
         }
     }
-    .enumInfo{
+    .enumInfo {
         &.formField::before {
             position: relative;
             font-size: 12px;
@@ -273,10 +294,9 @@ footer {
             color: @brand-rtmms-blue;
             text-transform: uppercase;
             letter-spacing: 1px;
-            content: "Enum Information:";          
+            content: "Enum Information:";
         }
     }
-
     .termInfo {
         &.formField::before {
             position: relative;
@@ -287,27 +307,23 @@ footer {
             letter-spacing: 1px;
             content: "Term Information:";
         }
-
-        .refid-choice-btn-group{
-            float:right;
-            width:100%;
-            vertical-align:  baseline;
-            label{
-                width:50%;
+        .refid-choice-btn-group {
+            float: right;
+            width: 100%;
+            vertical-align: baseline;
+            label {
+                width: 50%;
                 margin-left: 0px;
             }
         }
-
-        .row{
+        .row {
             margin-right: 0px;
             .col-sm-4 {
                 padding-right: 0px;
             }
         }
-       
-   }
-
-    .constraintsInfo{
+    }
+    .constraintsInfo {
         &.formField::before {
             position: relative;
             font-size: 12px;
@@ -317,8 +333,8 @@ footer {
             letter-spacing: 1px;
             content: "Co-constraints Information:";
         }
-   }
-    .ucumInfo{
+    }
+    .ucumInfo {
         &.formField::before {
             position: relative;
             font-size: 12px;
@@ -328,80 +344,72 @@ footer {
             letter-spacing: 1px;
             content: "Ucum Information:";
         }
-   }
-   .miscInfo {
-       &.formField::before {
-           position: relative;
-           font-size: 12px;
-           font-weight: 700;
-           color: @brand-rtmms-blue;
-           text-transform: uppercase;
-           letter-spacing: 1px;
-           content: "Miscellaneous Information:";
-       }
-   }
-
+    }
+    .miscInfo {
+        &.formField::before {
+            position: relative;
+            font-size: 12px;
+            font-weight: 700;
+            color: @brand-rtmms-blue;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            content: "Miscellaneous Information:";
+        }
+    }
     .unitenums {
         padding-left: 20px;
-        .choice-btn-group{
-            width:100%;
-            vertical-align:  baseline;
-            label{
-                width:50%;
+        .choice-btn-group {
+            width: 100%;
+            vertical-align: baseline;
+            label {
+                width: 50%;
                 margin-left: 0px;
             }
         }
-
-        .unitsFields{
+        .unitsFields {
             overflow-y: scroll;
             height: 340px;
             .unitlist.formField::before {
-                    position: relative;
-                    font-size: 12px;
-                    font-weight: 700;
-                    color: @brand-rtmms-blue;
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
-                    content: "Units";
-                
+                position: relative;
+                font-size: 12px;
+                font-weight: 700;
+                color: @brand-rtmms-blue;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                content: "Units";
             }
             .unitGrouplist.formField::before {
-                    position: relative;
-                    font-size: 12px;
-                    font-weight: 700;
-                    color: @brand-rtmms-blue;
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
-                    content: "Unit Groups";
-                    
-            }        
+                position: relative;
+                font-size: 12px;
+                font-weight: 700;
+                color: @brand-rtmms-blue;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                content: "Unit Groups";
+            }
         }
-
-        .enumsFields{
+        .enumsFields {
             overflow-y: scroll;
             height: 340px;
             .enumlist.formField::before {
-                    position: relative;
-                    font-size: 12px;
-                    font-weight: 700;
-                    color: @brand-rtmms-blue;
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
-                    content: "Enumeration Values";
-                
+                position: relative;
+                font-size: 12px;
+                font-weight: 700;
+                color: @brand-rtmms-blue;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                content: "Enumeration Values";
             }
             .enumGrouplist.formField::before {
-                    position: relative;
-                    font-size: 12px;
-                    font-weight: 700;
-                    color: @brand-rtmms-blue;
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
-                    content: "Enumeration Groups";
-            }        
+                position: relative;
+                font-size: 12px;
+                font-weight: 700;
+                color: @brand-rtmms-blue;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                content: "Enumeration Groups";
+            }
         }
-
-
         table {
             margin-bottom: 0px;
             &.levelOne {
@@ -410,13 +418,11 @@ footer {
             &.levelTwo {
                 margin-top: 5px;
             }
-
             &.super-table-striped {
                 > tbody:nth-of-type(odd) > tr:nth-of-type(odd) {
                     background-color: @table-bg-accent;
                 }
             }
-
             th {
                 padding: 0px;
             }
@@ -425,37 +431,29 @@ footer {
             }
         }
     }
-
     .ucums {
         padding-left: 20px;
-        .choice-btn-group{
-            width:100%;
-            vertical-align:  baseline;
-            label{
-                width:50%;
+        .choice-btn-group {
+            width: 100%;
+            vertical-align: baseline;
+            label {
+                width: 50%;
                 margin-left: 0px;
             }
         }
-
-        .ucumsFields{
+        .ucumsFields {
             overflow-y: scroll;
             height: 340px;
             .ucumlist.formField::before {
-                    position: relative;
-                    font-size: 12px;
-                    font-weight: 700;
-                    color: @brand-rtmms-blue;
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
-                    content: "Ucums";
-                
+                position: relative;
+                font-size: 12px;
+                font-weight: 700;
+                color: @brand-rtmms-blue;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                content: "Ucums";
             }
-                
         }
-
-        
-
-
         table {
             margin-bottom: 0px;
             &.levelOne {
@@ -464,13 +462,11 @@ footer {
             &.levelTwo {
                 margin-top: 5px;
             }
-
             &.super-table-striped {
                 > tbody:nth-of-type(odd) > tr:nth-of-type(odd) {
                     background-color: @table-bg-accent;
                 }
             }
-
             th {
                 padding: 0px;
             }
@@ -480,5 +476,3 @@ footer {
         }
     }
 }
-
-

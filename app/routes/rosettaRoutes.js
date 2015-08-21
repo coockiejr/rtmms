@@ -1,4 +1,6 @@
-module.exports = function(app, qs, async, _) {
+module.exports = function(app, qs, passport, async, _) {
+
+
 
 
     var Rosetta = require('./../models/rosetta');
@@ -7,7 +9,8 @@ module.exports = function(app, qs, async, _) {
     var UnitGroup = require('./../models/unitGroup');
     var Enum = require('./../models/enum');
     var EnumGroup = require('./../models/enumGroup');
-
+    var js2xmlparser = require('js2xmlparser');
+    var fs = require('fs');
     var columnNumberSearch = ['term.code10', 'term.cfCode10', 'term.partition'];
 
     //get all rosetta
@@ -47,7 +50,7 @@ module.exports = function(app, qs, async, _) {
                     }, {
                         "enumGroups.groupName": new RegExp(f.value, 'i')
                     }]);
-                     queryCount = queryCount.or([{
+                    queryCount = queryCount.or([{
                         "enums.refid": new RegExp(f.value, 'i')
                     }, {
                         "enums.token": new RegExp(f.value, 'i')
@@ -116,7 +119,8 @@ module.exports = function(app, qs, async, _) {
         var sort = req.query.sort;
         var limit = req.query.limit;
         var skip = req.query.skip;
-
+        var contributingOrganization = req.query.contributingOrganization;
+        var Status = req.query.status;
         query = Rosetta.find();
         queryCount = Rosetta.find();
         if (filters) {
@@ -147,7 +151,7 @@ module.exports = function(app, qs, async, _) {
                     }, {
                         "enumGroups.groupName": new RegExp(f.value, 'i')
                     }]);
-                     queryCount = queryCount.or([{
+                    queryCount = queryCount.or([{
                         "enums.refid": new RegExp(f.value, 'i')
                     }, {
                         "enums.token": new RegExp(f.value, 'i')
@@ -194,10 +198,16 @@ module.exports = function(app, qs, async, _) {
         }
 
 
-        //gets rosettas of one vendor (Philips)
+        //gets rosettas of a specific vendor 
+        if (contributingOrganization) {
+            query = query.where("contributingOrganization").equals(contributingOrganization);
+            queryCount = queryCount.where("contributingOrganization").equals(contributingOrganization);
+        }
+        if (Status) {
+            query = query.where("term.status").equals(Status);
+            queryCount = queryCount.where("term.status").equals(Status);
+        }
 
-        query=query.where("contributingOrganization").regex(new RegExp("Philips",'i'));
-        queryCount=queryCount.where("contributingOrganization").regex(new RegExp("Philips",'i'));
 
 
 
@@ -211,11 +221,129 @@ module.exports = function(app, qs, async, _) {
             queryCount.count().exec(function(error, count) {
                 res.json({
                     totalItems: count,
-                    rosettas: rosettas
+                    rosettas: rosettas,
                 }); // return all members in JSON format
+                /* console.log(JSON.parse(JSON.stringify(rosettas)));
+
+                test = rosettas[0].term;
+                console.log(limit);
+                rosettas = {
+                    terms: rosettas
+                };
+                var options = {
+                    arrayMap: {
+                        terms: "term",
+                        groups: "groupName",
+                        unitGroups: "unitGroup",
+                        units: "unit",
+                        ucums: "ucum",
+                        comments: "comment",
+                        tags: "tag",
+                        enumGroups: "enumGroup",
+                        enums: "enum",
+
+                    }
+                };
+                fs.writeFile('test.xml', js2xmlparser("rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
+                    //res.download('test.xml');
+                    if (err) {
+                        return console.log(err);
+                    }
+                    console.log("file saved");
+                });
+
+
+*/
+
             });
 
         });
+    });
+
+
+    app.get('/api/download/:rosetta_id', function(req, res, next) {
+
+        Rosetta.findOne({
+            _id: req.params.rosetta_id
+        }, function(err, rosetta) {
+            if (err)
+                res.send(err);
+
+            if (rosetta) {
+                console.log(req.params);
+                rosettas = {
+                    terms: rosetta
+                };
+                var options = {
+                    arrayMap: {
+                        terms: "term",
+                        groups: "groupName",
+                        unitGroups: "unitGroup",
+                        units: "unit",
+                        ucums: "ucum",
+                        comments: "comment",
+                        tags: "tag",
+                        enumGroups: "enumGroup",
+                        enums: "enum",
+
+                    }
+                };
+                fs.writeFile('test.xml', js2xmlparser("rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
+                    //res.download('test.xml');
+                    if (err) {
+                        return console.log(err);
+                    }
+                    console.log("file saved");
+                });
+                res.end('finish');
+            }
+
+
+        });
+
+
+
+
+    });
+
+    app.get('api/down', function(req, res, next) {
+        console.log(Rosetta.find(null));
+        
+        /*
+        var query = Rosetta.find(null);
+        query.exec(function(err, ros) {
+            console.log("here");
+            rosetta = ros;
+        }).then(function() {
+            console.log("req.params");
+            rosettas = {
+                terms: rosetta
+            };
+            var options = {
+                arrayMap: {
+                    terms: "term",
+                    groups: "groupName",
+                    unitGroups: "unitGroup",
+                    units: "unit",
+                    ucums: "ucum",
+                    comments: "comment",
+                    tags: "tag",
+                    enumGroups: "enumGroup",
+                    enums: "enum",
+
+                }
+            };
+            fs.writeFile('test1.xml', js2xmlparser("rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
+                //res.download('test.xml');
+                if (err) {
+                    return console.log(err);
+                }
+                console.log("file saved");
+                res.end('finish');
+            });
+            return;
+        });
+*/
     });
 
     // get a rosetta
@@ -235,34 +363,39 @@ module.exports = function(app, qs, async, _) {
     });
 
     // create rosetta 
-    app.post('/api/rosettas', isAdminLoggedIn, function(req, res,next) {
-//        console.log(req.body);
-    
-    var query=Rosetta.find(null);
-    query.sort({_id:-1}).exec(function(err,ros){
-       max=ros[0]._id;
-     
+    app.post('/api/rosettas', function(req, res, next) {
+        //        console.log(req.body);
 
-    }).then(function(){
-            var rosetta=new Rosetta(req.body);
-            rosetta._id=max+1;
-            rosetta.save(function(err,rosetta){
-            if(err) {return next(err)}
-            res.json(201,rosetta)
+        var query = Rosetta.find(null);
+        query.sort({
+            _id: -1
+        }).exec(function(err, ros) {
+            max = ros[0]._id;
+
+
+        }).then(function() {
+            var rosetta = new Rosetta(req.body);
+            rosetta._id = max + 1;
+            rosetta.save(function(err, rosetta) {
+                if (err) {
+                    return next(err)
+                }
+                res.json(201, rosetta)
             });
             return;
 
-    });
-       
+        });
+
     });
 
+
     //update a rosetta term
-    app.put('/api/rosettas/:rosetta_id', isAdminLoggedIn, function(req, res) {
+    app.put('/api/myrosettas/:rosetta_id', isCOLoggedIn, function(req, res) {
         Rosetta.findOneAndUpdate({
             _id: req.params.rosetta_id
         }, req.body, function(err) {
             if (!err) {
-                
+
                 res.end('{"success" : "Rosetta updated successfully", "status" : 200}');
             } else {
                 console.log(err);
@@ -274,7 +407,7 @@ module.exports = function(app, qs, async, _) {
 
 
     // delete a rosetta
-    app.delete('/api/rosettas/:rosetta_id', isAdminLoggedIn, function(req, res) {
+    app.delete('/api/rosettas/:rosetta_id', isSDOLoggedIn, function(req, res) {
         Rosetta.remove({
             _id: req.params.rosetta_id
         }, function(err, rosetta) {
@@ -304,21 +437,23 @@ module.exports = function(app, qs, async, _) {
         });
     });
 
-    app.get('/api/rosettarefids', function(req, res,next) {
-       var filter = req.query.filter;
+    app.get('/api/rosettarefids', function(req, res, next) {
+        var filter = req.query.filter;
         var limit = req.query.limit;
 
-       queryRosettas=Rosetta.find();
-       if(filter){
-        queryRosettas=queryRosettas.where('term.refid').regex(new RegExp(filter,'i'));
-       }
-       if(limit){
-        queryRosettas.limit(limit);
-       }
-       queryRosettas.exec(function(err,rosettas){
-        if(err) { return next(err); }
-        res.json(rosettas);
-       });
+        queryRosettas = Rosetta.find();
+        if (filter) {
+            queryRosettas = queryRosettas.where('term.refid').regex(new RegExp(filter, 'i'));
+        }
+        if (limit) {
+            queryRosettas.limit(limit);
+        }
+        queryRosettas.exec(function(err, rosettas) {
+            if (err) {
+                return next(err);
+            }
+            res.json(rosettas);
+        });
     });
 
     // get rosetta tags
@@ -339,6 +474,12 @@ module.exports = function(app, qs, async, _) {
         });
     });
 
+    function downXml(object) {
+        console.log("XML");
+        jstoxml.toXML(JSON.parse(JSON.stringify(object)));
+
+    }
+
 
     // route middleware to make sure a user is logged in
     function isLoggedIn(req, res, next) {
@@ -353,9 +494,34 @@ module.exports = function(app, qs, async, _) {
     // route middleware to make sure a user is logged in and an admin
     function isAdminLoggedIn(req, res, next) {
         // if user is authenticated in the session and has an admin role, carry on 
-        // if (req.isAuthenticated() && req.user.role === 'admin') {
-        if (true) {
-            return next();
+        if (req.isAuthenticated() && req.user.userTypes.id === 4) {
+            if (true) {
+                return next();
+            }
+        }
+        // if they aren't redirect them to the home page
+        res.status(401).send("insufficient privileges");
+    }
+
+    function isCOLoggedIn(req, res, next) {
+        // if user is authenticated in the session and has an admin role, carry on 
+        console.log(req.user);
+        if (req.isAuthenticated() && (req.user.userTypes.id === 1 || req.user.userTypes.id === 3)) {
+            if (true) {
+                return next();
+            }
+        }
+        // if they aren't redirect them to the home page
+        res.status(401).send("insufficient privileges");
+    }
+
+    function isSDOLoggedIn(req, res, next) {
+        // if user is authenticated in the session and has an admin role, carry on 
+        console.log(req.user);
+        if (req.isAuthenticated() && req.user.userTypes.id === 3) {
+            if (true) {
+                return next();
+            }
         }
         // if they aren't redirect them to the home page
         res.status(401).send("insufficient privileges");

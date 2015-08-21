@@ -1,0 +1,41 @@
+<div class="modal-header">
+    <h3 class="modal-title">Edit User</h3>
+</div>
+<div class="modal-body">
+    <form name="formUserForm">
+        <div class="form-group has-feedback">
+            <label class="control-label">User Name</label>
+            <input type="text" class="form-control " name="username" ng-model="formUser.username" ng-minlength="3" ng-maxlength="8" required>
+            <span ng-show="!formUserForm.username.$error.minlength && !formUserForm.username.$error.maxlength " class="glyphicon glyphicon-ok  form-control-feedback " aria-hidden="true"></span>
+            <span ng-show="formUserForm.username.$error.minlength || formUserForm.username.$error.maxlength " class="glyphicon glyphicon-remove  form-control-feedback " aria-hidden="true"></span>
+            <p ng-show="formUserForm.username.$error.minlength">Username is too short.</p>
+            <p ng-show="formUserForm.username.$error.maxlength">Username is too long.</p>
+        </div>
+        
+        <div class="form-group has-feedback">
+            <label class="control-label">Email</label>
+            <input type="email" name="email" class="form-control" ng-model="formUser.email">
+            <span ng-show="!formUserForm.email.$invalid && formUserForm.email.$pristine " class="glyphicon glyphicon-ok  form-control-feedback " aria-hidden="true"></span>
+            <span ng-show="formUserForm.email.$invalid && !formUserForm.email.$pristine " class="glyphicon glyphicon-remove  form-control-feedback " aria-hidden="true"></span>
+            <p ng-show="formUserForm.email.$invalid && !formUserForm.email.$pristine" class="help-block">Enter a valid email.</p>
+        </div>
+        <div class="form-group ">
+            <label class="control-label">First Name</label>
+            <input type="text" name="firstname" class="form-control" ng-model="formUser.firstName">
+        </div>
+        <div class="form-group ">
+            <label class="control-label">Last Name</label>
+            <input type="text" name="lastname" class="form-control" ng-model="formUser.lastName">
+        </div>
+        <div  class="form-group" >
+            <label>User Type</label>
+            <input class="form-control" ng-model="formUser.userTypes.usertype" disabled>
+                
+        </div>
+    </form>
+<div class="modal-footer">
+    <!-- createMember() WILL CREATE NEW Members -->
+    <button ng-show="!formUserForm.$invalid"  type="submit" class="btn btn-primary" ng-click="editUser()" >Edit User</button>
+    <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+</div>
+</div>

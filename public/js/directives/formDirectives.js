@@ -1,5 +1,35 @@
 var app = angular.module('rtmms');
 
+app.directive('ngMatch', ['$parse', function($parse) {
+    return {
+        restrict: 'A',
+        require: "ngModel",
+
+        link: function(scope, element, attrs, ctrl) {
+            var directiveId = 'ngMatch';
+            if (!ctrl) return;
+            if (!attrs[directiveId]) return;
+
+            var firstPassword = $parse(attrs[directiveId]);
+
+            var validator = function(value) {
+                var temp = firstPassword(scope),
+                    v = value === temp;
+                ctrl.$setValidity('match', v);
+
+                return value;
+            };
+
+            ctrl.$parsers.unshift(validator);
+            ctrl.$formatters.push(validator);
+            attrs.$observe(directiveId, function() {
+                validator(ctrl.$viewValue);
+            });
+        }
+    };
+}]);
+
+
 app.directive('onlyDigitsForMinSec', function() {
     return {
         require: 'ngModel',
@@ -65,3 +95,19 @@ app.directive("memberselector", function() {
         }
     };
 });
+
+app.directive('ngConfirmClick', [
+    function() {
+        return {
+            link: function(scope, element, attr) {
+                var msg = attr.ngConfirmClick || "Are you sure?";
+                var clickAction = attr.confirmedClick;
+                element.bind('click', function(event) {
+                    if (window.confirm(msg)) {
+                        scope.$eval(clickAction);
+                    }
+                });
+            }
+        };
+    }
+]);

@@ -1,0 +1,15 @@
+<div class="jumbotron">
+    <div class="row" ng-init="getCOs()">
+        <label>Choose a Contributing Organization</label>
+        <select class="form-control" ng-model="co" ng-change="vendor()">
+            <option ng-repeat="co in cos" value="{{co}}"> {{co}}</option>
+        </select>
+    </div>
+    <div class="row button-row ">
+        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="showAddCOModal()">Add a CO</button>
+        <button ng-show="authService.isLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showEditCOModal(selectedEntity)">Edit CO</button>
+    </div>
+    <div class="row">
+        <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
+    </div>
+</div>

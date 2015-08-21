@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <h3 class="modal-title">Edit Password</h3>
+</div>
+<div class="modal-body">
+    <form name="formUserForm">
+       
+        <div class="form-group" >
+            <label>New Password</label>
+            <input type="password" id="password" class="form-control" name="password" ng-model="formUser.password" ng-minlength="8" ng-maxlength="20" ng-pattern="/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])/" required>
+            <span ng-show="formUserForm.password.$error.minlength || formUserForm.password.$error.maxlength ">Passwords must be between 8 and 20 characters.</span>
+            <span ng-show="formUserForm.password.$error.pattern">Must contain one lower &amp; uppercase letter, and one non-alpha character (a number or a symbol.)</span>
+        </div>
+        <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" class="form-control" ng-class="{'has-error':!formUserForm.password_c.$valid}" name="password_c" ng-model="password_c" ng-match="formUser.password" required>
+            <span ng-show="formUserForm.password_c.$error.required && formUserForm.password_c.$dirty">Please confirm your password.</span>
+            <span ng-show="formUserForm.password_c.$error.match">Passwords don't match.</span>
+        </div>
+        
+        
+    </form>
+<div class="modal-footer">
+    <!-- createMember() WILL CREATE NEW Members -->
+    <button ng-show="!formUserForm.$invalid"  type="submit" class="btn btn-primary" ng-click="editUser()" >Submit</button>
+    <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+</div>
+</div>

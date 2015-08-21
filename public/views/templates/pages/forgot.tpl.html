@@ -1,0 +1,21 @@
+<form name="emailForm">    
+        <div class="group">      
+          <input type="email" name="to" ng-model="email.to" ng-required="true">
+          <label>To</label>
+        </div>
+        <div>      
+          <input type="email" name="from" ng-model="email.from" ng-required="true">
+          <label>From</label>
+        </div>
+        <div>      
+          <input type="text" name="subject" ng-model="email.subject" ng-required="true">
+          <label>Subject</label>
+        </div>
+        <div>      
+            <textarea ng-model="email.text" name="text" placeholder="Enter Text Here.."></textarea>
+        </div>
+
+        <button id="emailSubmitBn" type="submit" ng-click="forgot()">
+            Submit
+        </button>
+    </form>

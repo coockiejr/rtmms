@@ -18,6 +18,10 @@
                 </div>
                 <div class="row">
                     <div class="vendorInfo formField">
+                        <div class="form-group-sm" >
+                            <label class="text-left">Vendor:</label>
+                            <input type="text" name="contributingOrganization" ng-init="user.contributingOrganization" class="form-control  text-left" ng-model="formData.contributingOrganization" disabled>
+                        </div>
                         <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorDescription.$invalid && !formrosetta.vendorDescription.$pristine}">
                             <label class="text-left">Vendor Description:</label>
                             <input type="text" name="vendorDescription" class="form-control  text-left" ng-model="formData.vendorDescription" ng-required="true">
@@ -41,23 +45,16 @@
                                 <label class="choice btn btn-primary" ng-model="refidType " btn-radio="'new'" uncheckable>Propose new term</label>
                                 <label class="choice btn btn-primary" ng-model="refidType" btn-radio="'existing'" uncheckable>Map existing term</label>
                             </div>
-                         
                             <div class="form-group-sm">
-                                <div ng-show="refidType=='existing'" rosetta-refid-picker refids="formData.term" limit="5" ></div>
-                                 
-
-
+                                <div ng-show="refidType=='existing'" rosetta-refid-picker refids="formData.term" limit="5"></div>
                                 <div ng-show="refidType=='new'">
                                     <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.term.refid.$invalid && !formrosetta.term.refid.$pristine}">
                                         <label class="text-left">Refid:</label>
-                                        <input   type="text" name="refid" class="form-control  text-left" ng-model="formData.term.refid" ng-required="true">
+                                        <input type="text" name="refid" class="form-control  text-left" ng-model="formData.term.refid" ng-pattern="/MDCX_/" ng-required="true">
+                                        <p ng-show="formrosetta.refid.$error.pattern">Refid must start with MDCX_</p>
                                     </div>
                                 </div>
                             </div>
-
-
-
-
                             <div class="row">
                                 <div class="col-sm-4">
                                     <label class="text-left">Partition #:</label>
@@ -67,9 +64,9 @@
                                     <label class="text-left">Code10:</label>
                                     <input ng-init="code10=formData.term.code10" type="text" only-digits name="code10" class="form-control  text-left" ng-model="formData.term.code10" value="code10" disabled>
                                 </div>
-                                <div class="col-sm-4">  
+                                <div class="col-sm-4">
                                     <label class="text-left">CF_Code10:</label>
-                                    <input ng-init="cfCode10=formData.term.cfCode10"  type="text" only-digits name="cfCode10" class="form-control  text-left" ng-model="formData.term.cfCode10" value="cfCode10" disabled>
+                                    <input ng-init="cfCode10=formData.term.cfCode10" type="text" only-digits name="cfCode10" class="form-control  text-left" ng-model="formData.term.cfCode10" value="cfCode10" disabled>
                                 </div>
                             </div>
                         </div>

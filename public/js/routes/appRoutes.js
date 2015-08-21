@@ -21,9 +21,37 @@ angular.module('appRoutes', []).config(function($stateProvider, $urlRouterProvid
             url: "/profile",
             templateUrl: "views/templates/pages/profile.tpl.html",
             controller: 'ProfileController'
+        }).state('/users', {
+            url: "/users",
+            templateUrl: "views/templates/pages/users.tpl.html",
+            controller: 'UsersController'
+        }).state('/forgot', {
+            url: "/forgot",
+            templateUrl: "views/templates/pages/forgot.tpl.html",
+            controller: 'ForgotController'
+        }).state('/contact', {
+            url: "/contact",
+            templateUrl: "views/templates/pages/contact.tpl.html",
+            controller: 'ContactController'
+        }).state('/co', {
+            url: "/co",
+            templateUrl: "views/templates/pages/co.tpl.html",
+            controller: 'CoController'
+        }).state('/termApproval', {
+            url: "/termApproval",
+            templateUrl: "views/templates/pages/termApproval.tpl.html",
+            controller: 'TermApprovalController'
+        }).state('/x73', {
+            url: "/x73",
+            templateUrl: "views/templates/pages/x73.tpl.html",
+            controller: 'X73Controller'
+        }).state('/coRosetta', {
+            url: "/coRosetta",
+            templateUrl: "views/templates/pages/coRosetta.tpl.html",
+            controller: 'CoRosettaController'
         }).state('/myRosetta', {
             url: "/myRosetta",
-            templateUrl: "views/templates/pages/rosetta.tpl.html",
+            templateUrl: "views/templates/pages/myRosetta.tpl.html",
             controller: 'MyRosettaController'
         }).state('/rosetta', {
             url: "/rosetta",
@@ -36,7 +64,7 @@ angular.module('appRoutes', []).config(function($stateProvider, $urlRouterProvid
         }).state('/units', {
             url: "/units",
             templateUrl: "views/templates/pages/units/units.tpl.html",
-            controller: 'UnitController'
+            controller: 'UnitController',
         }).state('/unitGroups', {
             url: "/unitGroups",
             templateUrl: "views/templates/pages/units/unitGroups.tpl.html",
@@ -51,4 +79,5 @@ angular.module('appRoutes', []).config(function($stateProvider, $urlRouterProvid
             controller: 'EnumGroupController'
         });
 
+    
 });

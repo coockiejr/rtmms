@@ -1,0 +1,20 @@
+<div class="jumbotron " ng-init="proposedTerms()">
+    <div class="row button-row ">
+        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-class="{active: state==='proposed'}" ng-click="proposedTerms()">Proposed Terms Table</button>
+        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-class="{active: state==='ready'}" ng-click="approvedTerms()">Ready Terms Table</button>
+        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-class="{active: state==='mapped'}" ng-click="mappedTerms()">Mapped terms</button>
+        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-class="{active: state==='proposedU'}" ng-click="proposedUnits()">Proposed units</button>
+        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-click="showEditRosettaModal(selectedEntity)">Proposed enumerations</button>
+    </div>
+    <div class="row button-row ">
+        <button ng-show="authService.isLoggedIn() && state==='proposed' " class="btn btn-rtmms" ng-click="showAssignRefidModal(selectedEntity)">Assign REFID</button>
+        <button ng-show="authService.isLoggedIn() && (state==='ready' || state==='mapped') " class="btn btn-rtmms" ng-click="showReadyRefidModal(selectedEntity)">Edit REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='ready'" class="btn btn-rtmms" ng-click="showRegisterRefidModal(selectedEntity)">Register REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='mapped' " type="submit" class="btn btn-primary" ng-click="approveMap(selectedEntity)">Approve Mapping</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" class="btn btn-primary" ng-click="showEditUnitModal(selectedEntity)">Edit Unit</button>
+    </div>
+    <div class="row">
+        <div ng-show="state==='proposed' || state==='ready'  || state==='mapped' " ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
+        <div ng-show="state==='proposedU'" ui-grid="gridOptions1" ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-module.exports = function(mongoose) {
+module.exports = function(mongoose,backup) {
     //mongod --config c:/mongodb/mongodb.conf
     // if (process.env.OPENSHIFT_MONGODB_DB_URL) {
     //     url: process.env.OPENSHIFT_MONGODB_DB_URL + 'rtmms'; // connect to our database
@@ -15,4 +15,5 @@ module.exports = function(mongoose) {
     } else {
         mongoose.connect('mongodb://127.0.0.1:27017/rtmms',options); // connect to our database
     }
+    
 }

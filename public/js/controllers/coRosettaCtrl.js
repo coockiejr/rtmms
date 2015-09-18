@@ -183,7 +183,7 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
         });
     };
 
-    $scope.approve = function(rosetta) {
+    $scope.propose = function(rosetta) {
         if (rosetta.term.status === undefined) {
             rosetta.term.status = "proposed";
         }

@@ -2,16 +2,81 @@ module.exports = function(app, qs, passport, async) {
     var UserTypes = require('./../models/userTypes');
     var Users = require('./../models/user');
     var Rosetta = require('./../models/rosetta');
-
     var crypto = require('crypto');
     var bcrypt = require('bcrypt-nodejs');
     var nodemailer = require("nodemailer");
 
     var express = require('express');
+    var schedule = require('node-schedule');
+    var backup = require('mongodb-backup');
+    var restore = require('mongodb-restore');
+    var fs = require('fs');
     // =====================================
     // LOGIN ===============================
     // =====================================
-    // show the login form
+    // database backup
+    app.post('/api/backup/:par', function(req, res) {
+        if (req.params.par === "now") {
+            root = './backup/backup' + Date.now();
+
+            var path = './backup/backup.txt';
+            backup({
+                uri: 'mongodb://ismail:ismail@127.0.0.1:27017/rtmms', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
+                root: root, // write files into this dir
+
+            });
+
+
+
+
+            fs.appendFile('./backup/backup.txt', root + ',', function(err) {
+                if (err) {
+                    throw 'error opening file: ' + err;
+                }
+            });
+
+            res.send("Backup successful");
+
+
+
+        } else if (req.params.par === "week") {
+            schedule.scheduleJob('* * * * *', function() {
+                backup({
+                    uri: 'mongodb://ismail:ismail@127.0.0.1:27017/rtmms', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
+                    root: './backup/backup' + Date.now(), // write files into this dir
+
+                });
+            });
+            res.send("Backup successful");
+
+        }
+
+    });
+    app.post('/api/restore', function(req, res) {
+        console.log(req.body[0]);
+        if (req.body[0] !== undefined) {
+            root = req.body[0] + '/rtmms';
+            restore({
+                uri: 'mongodb://ismail:ismail@127.0.0.1:27017/rtmms', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
+                root: root
+            });
+            res.send("Restore successful");
+        } else {
+            
+            res.send("Please select a backup");
+        }
+
+
+
+    });
+    app.get('/api/readFile', function(req, res) {
+
+        text = fs.readFileSync('./backup/backup.txt', 'utf8');
+
+        res.json(text);
+
+    });
+
     app.get('/api/login', function(req, res) {
         // render the page and pass in any flash data if it exists
         res.send({
@@ -113,7 +178,6 @@ module.exports = function(app, qs, passport, async) {
             if (err) {
                 res.send(err)
             }
-            console.log(cos);
             res.json(cos);
         });
     });
@@ -162,7 +226,7 @@ module.exports = function(app, qs, passport, async) {
             if (err) {
                 return next(err);
             }
-           
+
 
             res.json(users);
             return;

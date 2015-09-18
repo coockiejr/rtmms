@@ -9,6 +9,7 @@ var osport = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
 var port = process.env.PORT || 8080;
 var mongoose = require('mongoose');
+var backup = require('mongodb-backup');
 var passport = require('passport');
 var flash = require('connect-flash');
 
@@ -28,7 +29,6 @@ var nodemailer = require("nodemailer");
 var qs = require('querystring');
 
 var configDB = require('./config/db.js')(mongoose);
-
 // configuration ===============================================================
 // mongoose.connect(configDB.url); // connect to our database
 // if (process.env.OPENSHIFT_MONGODB_DB_URL) {

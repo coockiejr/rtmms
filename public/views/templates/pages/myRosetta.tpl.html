@@ -2,14 +2,10 @@
     <div class="row button-row ">
         <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="showAddRosettaModal()">Add</button>
         <button ng-show="authService.isLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showEditRosettaModal(selectedEntity)">Edit</button>
-        <button class="btn btn-rtmms glyphicon glyphicon-download-alt" ng-click="download(selectedEntity)"></button>
-        <li class="dropdown" dropdown on-toggle="toggled(open)">
-            <a href class="dropdown-toggle" dropdown-toggle>download<span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li ng-click="down()">Download all</li>
-                <li ng-click="download(selectedEntity)"> Download selected</li>
-            </ul>
-        </li>
+        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="propose(selectedEntity)">Propose</button>
+        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downHTML()">DownloadHTML</button>
+        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downXML()">DownloadXML</button>
+        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downCSV()">DownloadCSV</button>
     </div>
     <div class="row">
         <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>

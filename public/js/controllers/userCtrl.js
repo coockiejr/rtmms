@@ -1,4 +1,4 @@
-angular.module('rtmms.authentication').controller('UsersController', ['$scope', '$http', '$state', 'AuthService', function($scope, $http, $state, AuthService) {
+angular.module('rtmms.authentication').controller('UsersController', ['$scope', '$http', '$location', '$state', 'AuthService', function($scope, $http, $location, $state, AuthService) {
 
 
 
@@ -27,6 +27,31 @@ angular.module('rtmms.authentication').controller('UsersController', ['$scope', 
         AuthService.editUser(user);
 
     };
+    $scope.backupNow = function() {
+
+        $http.post('/api/backup/now').then(function(res) {});
+    };
+    $scope.backupWeek = function() {
+
+        $http.post('/api/backup/week').then(function(res) {});
+    };
+    $scope.restore = function() {
+
+        $http.post('/api/restore/',$scope.backups.selected).then(function(res) {});
+    };
+
+
+    $http.get('/api/readFile').then(function(res) {
+
+        $scope.backups = {
+            selected: null,
+            available: res.data.split(","),
+        };
+        //console.log($scope.backups.available);
+        //$scope.backups = res.data.split(",");
+    });
+
+   
 
     $scope.showEditUserModal = function(user) {
 
@@ -37,6 +62,8 @@ angular.module('rtmms.authentication').controller('UsersController', ['$scope', 
 
         AuthService.showAddUserModal(user).then(function(user) {});
     };
+
+
 
 
 }]);

@@ -5,6 +5,7 @@
 	<link rel="stylesheet" href="dist/css/style.min.css">
 	<link rel="stylesheet" href="libs/angular-dialog-service/dist/dialogs.min.css">
 	<script src="dist/js/app.min.js"></script> 
+	<script src="libs/file-saver.js/FileSaver.js"></script> 
 </head>
 <body ng-controller="MainController">
 	<div class="container-fluid">
@@ -37,7 +38,7 @@
 				<ul class="nav navbar-nav" style="float: right">
 					<li ng-class="{active: ($state.includes('/profile'))}" class="dropdown" dropdown on-toggle="toggled(open)">
 				  	    <a href class="dropdown-toggle" dropdown-toggle>
-				        <%= user.username %> <span class="caret"></span>
+				        <%= user.username %> (<%= user.userTypes.usertype %>)<span class="caret"></span>
 				      </a>
 				      <ul class="dropdown-menu">
 				        <li><a ui-sref="/profile">Profile</a></li>
@@ -82,7 +83,7 @@
 						<ul class="nav navbar-nav" style="float: right">
 					<li ng-class="{active: ($state.includes('/profile'))}" class="dropdown" dropdown on-toggle="toggled(open)">
 				  	    <a href class="dropdown-toggle" dropdown-toggle>
-				        <%= user.username %> <span class="caret"></span>
+				        <%= user.username %> (<%= user.userTypes.usertype %>)<span class="caret"></span>
 				      </a>
 				      <ul class="dropdown-menu">
 				        <li><a ui-sref="/profile">Profile</a></li>

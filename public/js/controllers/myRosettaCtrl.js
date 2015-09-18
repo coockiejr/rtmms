@@ -184,20 +184,44 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
 
         });
     };
+    $scope.propose = function(rosetta) {
+        if (rosetta.term.status === undefined) {
+            rosetta.term.status = "proposed";
+        }
+
+        RosettaService.editRosetta(rosetta);
+
+
+    };
 
     $scope.download=function(rosetta){
        
         $http.get('/api/download/'+rosetta._id).then(function(res){
-
+            window.location = "test.xml";
         });
     };
-     $scope.down=function(){
+     $scope.downHTML=function(){
        
-        $http.get('/api/down').then(function(res){
-            console.log(rosetta);
+        $http.get('/api/download/allHTML').then(function(res){
+            var blob = new Blob([res.data], {type: "text/plain;charset=utf-8"});
+            saveAs(blob,"rosetta_terms.html");
         });
     };
-
+     $scope.downXML=function(){
+       
+        $http.get('/api/download/allXML').then(function(res){
+            console.log(res.data);
+            var blob = new Blob([res.data], {type: "text/plain;charset=utf-8"});
+            saveAs(blob,"rosetta_terms.xml");
+        });
+    };
+    $scope.downCSV=function(){
+       
+        $http.get('/api/download/allCSV').then(function(res){
+            var blob = new Blob([res.data], {type: "text/plain;charset=utf-8"});
+            saveAs(blob,"rosetta_terms.csv");
+        });
+    };
 }]);
 
 angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$scope', '$modalInstance', 'Restangular', 'rosetta', 'RosettaService', 'UnitService', 'AuthService', function($scope, $modalInstance, Restangular, rosetta, RosettaService, UnitService, AuthService) {

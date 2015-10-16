@@ -6,6 +6,8 @@ module.exports = function(app, qs, passport, async, _) {
     var Rosetta = require('./../models/rosetta');
     var HRosetta = require('./../models/hrosetta');
     var Unit = require('./../models/unit');
+    var Co = require('./../models/contributingOrg');
+
     var UnitGroup = require('./../models/unitGroup');
     var Enum = require('./../models/enum');
     var EnumGroup = require('./../models/enumGroup');
@@ -122,6 +124,7 @@ module.exports = function(app, qs, passport, async, _) {
         var skip = req.query.skip;
         var contributingOrganization = req.query.contributingOrganization;
         var Status = req.query.status;
+        var partition = req.query.partition;
         query = Rosetta.find();
         queryCount = Rosetta.find();
         if (filters) {
@@ -201,19 +204,115 @@ module.exports = function(app, qs, passport, async, _) {
 
         //gets rosettas of a specific vendor 
         if (contributingOrganization) {
-            query = query.where("contributingOrganization").equals(contributingOrganization);
-            queryCount = queryCount.where("contributingOrganization").equals(contributingOrganization);
+            query = query.where("contributingOrganization.name").equals(contributingOrganization);
+            queryCount = queryCount.where("contributingOrganization.name").equals(contributingOrganization);
         }
         if (Status) {
             query = query.where("term.status").equals(Status);
             queryCount = queryCount.where("term.status").equals(Status);
         }
+        if (partition) {
+            query = query.where("term.partition").equals(partition);
+            // queryCount = queryCount.where("term.partition").equals(partition);
+            query.sort('-term.code10').exec(function(err, ros) {
+                if (ros[0] !== undefined && ros[0].term !== undefined && ros[0].term.code10 !== undefined) {
+                    max = ros[0].term.code10;
+
+                } else {
+                    res.send("This partition does not exist");
+                }
+
+
+            }).then(function() {
+
+                nextPart = {
+
+                    next: max + 1
+                };
+                console.log("partition=" + nextPart.next);
+                res.json(nextPart);
+
+            });
+        } else {
+            query.exec(function(err, rosettas) {
+                // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                if (err) {
+                    res.send(err)
+                }
+
+                queryCount.count().exec(function(error, count) {
+                    console.log("myrooosetta");
+                    res.json({
+                        totalItems: count,
+                        rosettas: rosettas,
+                    }); // return all members in JSON format
+
+
+
+                });
+
+            });
+        }
 
 
 
 
 
-        query.exec(function(err, rosettas) {
+
+
+    });
+    app.get('/api/cos', function(req, res) {
+        var filters = req.query.filters;
+        var sort = req.query.sort;
+        var limit = req.query.limit;
+        var skip = req.query.skip;
+        query = Co.find();
+        queryCount = Co.find();
+        if (filters) {
+            if (typeof filters === 'string') {
+                filters = [filters];
+            }
+            filters.forEach(function(f) {
+                f = JSON.parse(f);
+                if (columnNumberSearch.indexOf(f.column) !== -1) {
+                    query = query.where(f.column).equals(f.value);
+                    queryCount = queryCount.where(f.column).equals(f.value);
+                } else {
+                    query = query.where(f.column).regex(new RegExp(f.value, 'i'));
+                    queryCount = queryCount.where(f.column).regex(new RegExp(f.value, 'i'));
+                }
+
+            });
+
+        }
+
+
+
+        if (sort) {
+            sort = JSON.parse(sort);
+            sortQ = {};
+            sortQ[sort.column] = sort.value;
+            query = query.sort(sortQ);
+        }
+
+        if (skip) {
+            query = query.skip(req.query.skip);
+        }
+
+
+
+        if (limit) {
+            query = query.limit(req.query.limit);
+        }
+
+
+        //gets rosettas of a specific vendor 
+
+
+
+
+
+        query.exec(function(err, cos) {
             // if there is an error retrieving, send the error. nothing after res.send(err) will execute
             if (err) {
                 res.send(err)
@@ -222,45 +321,82 @@ module.exports = function(app, qs, passport, async, _) {
             queryCount.count().exec(function(error, count) {
                 res.json({
                     totalItems: count,
-                    rosettas: rosettas,
+                    cos: cos,
                 }); // return all members in JSON format
-                /* console.log(JSON.parse(JSON.stringify(rosettas)));
-
-                test = rosettas[0].term;
-                console.log(limit);
-                rosettas = {
-                    terms: rosettas
-                };
-                var options = {
-                    arrayMap: {
-                        terms: "term",
-                        groups: "groupName",
-                        unitGroups: "unitGroup",
-                        units: "unit",
-                        ucums: "ucum",
-                        comments: "comment",
-                        tags: "tag",
-                        enumGroups: "enumGroup",
-                        enums: "enum",
-
-                    }
-                };
-                fs.writeFile('test.xml', js2xmlparser("rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
-                    //res.download('test.xml');
-                    if (err) {
-                        return console.log(err);
-                    }
-                    console.log("file saved");
-                });
 
 
-*/
+
+
 
             });
 
         });
     });
 
+
+    app.post('/api/addCo/:name', function(req, res, next) {
+        //console.log(req.body);
+
+        var q = req.query.query;
+        query = Co.distinct('name');
+        query.exec(function(err, cos) {
+            coName = {
+                name: req.params.name
+            };
+
+            if (cos.indexOf(coName.name) != -1) {
+
+                res.send(coName.name + " already exists, please select it from the CO list.");
+                return;
+                //next();
+
+            } else {
+                var co = new Co(coName);
+                co.save(function(err, co) {
+                    if (err) {
+                        return next(err)
+                    }
+                    res.json(201, co)
+                });
+            }
+
+        });
+        /* var co=new CO(coName);
+         co.save(function(err,co){
+             if(err){
+                 return next(err)
+             }
+             res.json(201,co)
+         });
+         console.log(co);
+         */
+    });
+    app.put('/api/cos/:co_id', isCOLoggedIn, function(req, res) {
+        var q = req.query.query;
+        query = Co.distinct('name');
+        query.exec(function(err, cos) {
+            if (cos.indexOf(req.body.name) != -1) {
+
+                res.send(req.body.name + " already exists, please select it from the list above.");
+
+            } else {
+                Co.findOneAndUpdate({
+                    _id: req.params.co_id
+                }, req.body, function(err) {
+                    if (!err) {
+
+                        res.end('{"success" : "CO updated successfully", "status" : 200}');
+                    } else {
+                        console.log(err);
+                        res.send(err);
+                    }
+                });
+            }
+
+        });
+
+
+    });
 
     app.get('/api/download/:par', function(req, res, next) {
 
@@ -312,10 +448,10 @@ module.exports = function(app, qs, passport, async, _) {
                         unitsCFCode = '';
                         ucum = '';
                         for (j = 0; j < rosetta[i].units.length; j++) {
-                            
+
                             unitsRef = rosetta[i].units[j].term.refid + ' ' + unitsRef;
-                            unitsCode = rosetta[i].units[j].term.code10+' '+unitsCode;
-                            unitsCFCode = rosetta[i].units[j].term.cfCode10+' '+unitsCFCode;
+                            unitsCode = rosetta[i].units[j].term.code10 + ' ' + unitsCode;
+                            unitsCFCode = rosetta[i].units[j].term.cfCode10 + ' ' + unitsCFCode;
 
                             if (rosetta[i].units[j].ucums !== undefined) {
 
@@ -373,11 +509,11 @@ module.exports = function(app, qs, passport, async, _) {
                         'Display Name': rosetta[i].displayName,
                         Vendor_UOM: rosetta[i].vendorUom,
                         UOM_MDC: unitsRef,
-                        UCODE10:unitsCode,
-                        CF_UCODE10:unitsCFCode,
+                        UCODE10: unitsCode,
+                        CF_UCODE10: unitsCFCode,
                         UOM_UCUM: ucum,
                         Enum_Values: enumsRef,
-                        'Contributing Organization': rosetta[i].contributingOrganization,
+                        'Contributing Organization': rosetta[i].contributingOrganization.name,
                         Vendor_VMD: rosetta[i].vendorVmd,
                         Tags: tags
                     };
@@ -396,7 +532,7 @@ module.exports = function(app, qs, passport, async, _) {
                     var html = '<html><head></head><body><h2>Rosetta terms</h2><table border="1"><tbody><tr bgcolor="#FFCC00"><th>#</th><th>Group</th><th>REFID</th><th>Systematic Name</th><th>Common Term</th><th>Acronym</th><th>Term Description</th><th>Part</th><th>CODE10</th><th>CF_CODE10</th><th>Description</th><th>Display Name</th><th>UOM_MDC</th><th>UCODE10</th><th>CF_UCODE10</th><th>UCUM</th><th>Vendor UOM</th><th>Enum_Values</th><th>Contributing Organization</th><th>Vendor VMD</th><th>Tags</th></tr>';
                     for (i = 0; i < rosettas.length; i++) {
                         html = html + '<tr>';
-                        html = html + "<td>" + (i+1) + "</td>";
+                        html = html + "<td>" + (i + 1) + "</td>";
                         html = html + "<td>" + rosettas[i].Group + "</td>";
                         html = html + "<td>" + rosettas[i].REFID + "</td>";
                         html = html + "<td>" + rosettas[i]["Systematic Name"] + "</td>";
@@ -414,7 +550,7 @@ module.exports = function(app, qs, passport, async, _) {
                         html = html + "<td>" + rosettas[i].UOM_UCUM + "</td>";
                         html = html + "<td>" + rosettas[i].Vendor_UOM + "</td>";
                         html = html + "<td>" + rosettas[i].Enum_Values + "</td>";
-                        html = html + "<td>" + rosettas[i]["Contributing Organization"] + "</td>";
+                        html = html + "<td>" + rosettas[i]["Contributing Organization"].name + "</td>";
                         html = html + "<td>" + rosettas[i].Vendor_VMD + "</td>";
                         html = html + "<td>" + rosettas[i].Tags + "</td>";
 
@@ -447,7 +583,6 @@ module.exports = function(app, qs, passport, async, _) {
                     res.send(err);
 
                 if (rosetta) {
-                    console.log(req.params);
                     rosettas = {
                         terms: rosetta
                     };
@@ -564,7 +699,20 @@ module.exports = function(app, qs, passport, async, _) {
         });
 
     });
+    app.put('/api/rosettas/:rosetta_id', isCOLoggedIn, function(req, res) {
+        Rosetta.findOneAndUpdate({
+            _id: req.params.rosetta_id
+        }, req.body, function(err) {
+            if (!err) {
 
+                res.end('{"success" : "Rosetta updated successfully", "status" : 200}');
+            } else {
+                console.log(err);
+                res.send(err);
+            }
+        });
+
+    });
 
     //update a rosetta term
     app.put('/api/myrosettas/:rosetta_id', isCOLoggedIn, function(req, res) {
@@ -681,8 +829,8 @@ module.exports = function(app, qs, passport, async, _) {
     }
 
     function isCOLoggedIn(req, res, next) {
-        // if user is authenticated in the session and has an admin role, carry on 
-        console.log(req.user);
+        // if user is authenticated in the session and has an Co role, carry on 
+
         if (req.isAuthenticated() && (req.user.userTypes.id === 1 || req.user.userTypes.id === 3)) {
             if (true) {
                 return next();
@@ -693,8 +841,8 @@ module.exports = function(app, qs, passport, async, _) {
     }
 
     function isSDOLoggedIn(req, res, next) {
-        // if user is authenticated in the session and has an admin role, carry on 
-        console.log(req.user);
+        // if user is authenticated in the session and has an SDO role, carry on 
+
         if (req.isAuthenticated() && req.user.userTypes.id === 3) {
             if (true) {
                 return next();

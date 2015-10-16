@@ -30,9 +30,10 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
             name: 'groups',
             field: 'groups',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
-        },{
+        }, {
             name: 'refid',
             field: 'term.refid',
+            cellTemplate: '<div class="ui-grid-cell-contents" data-toggle="tooltip" data-placement="top" title={{row.entity.term.status}}><span>{{row.entity.term.refid}}</span></div>',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
 
                 if (row.entity.term !== undefined) {
@@ -43,8 +44,11 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
                     if (row.entity.term.status === "proposed") {
                         return 'blue';
                     }
-                    if (row.entity.term.status === "ready") {
+                    if (row.entity.term.status === "registered") {
                         return 'green';
+                    }
+                    if (row.entity.term.status === "unregistered") {
+                        return 'purple';
                     }
                     if (row.entity.term.status === "mapped") {
                         return 'orange';
@@ -87,6 +91,9 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         }, {
             name: 'code10',
             field: 'term.code10'
+        }, {
+            name: 'contributingOrganization',
+            field: 'contributingOrganization.name'
         }, {
             name: 'vendorDescription',
             field: 'vendorDescription'
@@ -165,11 +172,6 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         });
     };
 
-    $scope.showEditRosettaModal = function(rosetta) {
-        RosettaService.showEditRosettaModal(rosetta).then(function() {
-
-        });
-    };
 
 }]);
 
@@ -181,56 +183,69 @@ angular.module('rtmms.rosetta').controller('CommentModalInstanceController', ['$
 
     var formDataInitial;
     $scope.user = AuthService.isLoggedIn();
-    $scope.constraintType = 'units';
-    
+
     //console.log($scope.user);
 
-    UnitService.getUnitsAndUnitGroups().then(function(unitsAndUnitGroups) {
-        $scope.unitsAndUnitGroups = unitsAndUnitGroups;
-    });
 
-     $scope.formData.comments.push({
-            author : {
-                _id:$scope.user._id,
-                name : $scope.user.username
-            },
-            text:$scope.comment,
-            data:''
-        });
-        console("here");
-        console.log($scope.formData.comments);
-
-    $scope.$watch('tags', function() {
-
-        $scope.formData.tags = _.flatten(_.map($scope.tags, _.values));
-    }, true);
+    /*
+         $scope.formData.comments.push({
+                author : {
+                    _id:$scope.user._id,
+                    name : $scope.user.username
+                },
+                text:$scope.comment,
+                data:''
+            });
+            console("here");
+            console.log($scope.formData.comments);
+    */
 
 
-    $scope.editmode = false;
+    /*
+        if (rosetta) {
+            console.log(rosetta);
+            $scope.comments = rosetta.comments;
+            $scope.formData = rosetta;
+
+            $scope.formData.comments.push({
+                author: {
+                    _id: $scope.user._id,
+                    name: $scope.user.username
+                },
+                text: $scope.comment,
+                date: Date.now()
+            });
+            console.log($scope.formData.comments);
+
+            formDataInitial = Restangular.copy(rosetta);
+
+
+
+        } else {
+            $scope.formData = {};
+        }
+
+    */
+
     if (rosetta) {
         $scope.comments = rosetta.comments;
-        $scope.formData = rosetta;
 
-        $scope.formData.comments.push({
-            author : {
-                _id:$scope.user._id,
-                name : $scope.user.username
-            },
-            text:$scope.comment,
-            data:''
-        });
-        console("here");
-        console.log($scope.formData.comments);
-       
-        formDataInitial = Restangular.copy(rosetta);
-        $scope.editmode = true;
-
-       
-
-    } else {
-        $scope.formData = {};
-        $scope.editmode = false;
     }
+
+    $scope.addComment = function() {
+
+        var comment = {
+            author: {
+                _id: $scope.user._id,
+                name: $scope.user.username
+            },
+            text: $scope.comment,
+            date: Date.now()
+        };
+        rosetta.comments.push(comment);
+        $scope.comment = '';
+        RosettaService.editRosetta(rosetta);
+    };
 
 
 
@@ -248,7 +263,7 @@ angular.module('rtmms.rosetta').controller('CommentModalInstanceController', ['$
         console.log($scope.formData);
         $modalInstance.close($scope.formData);
     };
-   
+
 
     $scope.cancel = function() {
 

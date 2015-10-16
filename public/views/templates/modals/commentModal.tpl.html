@@ -1,11 +1,10 @@
 <div class="modal-header">
     <h3 ng-show="!editmode" class="modal-title">General comments</h3>
-    <h3 ng-show="editmode" class="modal-title">Edit User</h3>
 </div>
 <div class="modal-body">
-    <form name="commentForm" >
+    <form name="commentForm">
         <div ng-repeat="comment in comments">
-            {{comment.text}} -- {{comment.author}} -- {{comment.date}}
+            {{comment.text}} -- by {{comment.author.name}} ({{user.contributingOrganization.name}}) -- {{comment.date| date:"MMM d, y h:mm a '(GMT' Z)"}} 
         </div>
         <div class="form-group">
             <label>Leave Comment</label>
@@ -15,6 +14,6 @@
 </div>
 <div class="modal-footer">
     <!-- createMember() WILL CREATE NEW Members -->
-    <button ng-show="!editmode && !formUserForm.$invalid" type="submit" class="btn btn-primary" ng-click="editRosetta()">Add comment</button>
+    <button ng-show="!editmode && !formUserForm.$invalid" type="submit" class="btn btn-primary" ng-click="addComment()">Add comment</button>
     <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
 </div>

@@ -3,6 +3,7 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
     var factory = {};
     var Rosetta = Restangular.all('rosettas');
     var MyRosetta = Restangular.all('myrosettas');
+    var Co = Restangular.all('cos');
 
     // =====================================
     // Rosetta API CALLS ===================
@@ -27,6 +28,24 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
             return result;
         });
     };
+    factory.getCos = function(params) {
+        return Co.customGET("", params).then(function(result) {
+            if (result.cos) {
+                Restangular.restangularizeCollection(null, result.cos, 'cos');
+            }
+            return result;
+        });
+    };
+    factory.createCo = function(co) {
+        return Co.post('/api/addCo/' + co).then(
+            function(co) {},
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
+     factory.editCo = function(co) {
+        co.put();
+    };
     //retrieve a Rosetta by id
     factory.getRosetta = function(id) {
         return Restangular.one('rosettas', id).get().then(
@@ -37,7 +56,7 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
                 console.log('Error: ' + res.status);
             });
     };
-   
+
     //create a Rosetta
     factory.createRosetta = function(rosetta) {
         console.log(rosetta);
@@ -131,7 +150,45 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
             });
 
             return modalInstance.result.then(function(rosetta) {
+                console.log(rosetta);
                 factory.editRosetta(rosetta);
+            }, function() {
+                return null;
+            });
+        }
+    };
+    factory.showAddCOModal = function() {
+        var modalInstance = $modal.open({
+            templateUrl: 'views/templates/modals/coModal.tpl.html',
+            controller: 'CoModalInstanceController',
+            size: 'lg',
+            resolve: {
+                co: false
+            }
+        });
+
+        return modalInstance.result.then(function(co) {
+            factory.createCo(co);
+            return co;
+        }, function() {
+            return null;
+        });
+    };
+    factory.showEditCOModal = function(co) {
+        if (Co) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/coModal.tpl.html',
+                controller: 'CoModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    co: function() {
+                        return co;
+                    }
+                }
+            });
+
+            return modalInstance.result.then(function(co) {
+                factory.editCo(co);
             }, function() {
                 return null;
             });
@@ -200,26 +257,31 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
             });
         }
     };
-    // =====================================
-    // Cooment MODALS ======================
+    // ====================================
+    // Comment MODALS ======================
     // =====================================
 
+    
     factory.showAddCommentModal = function(rosetta) {
-        var modalInstance = $modal.open({
-            templateUrl: 'views/templates/modals/commentModal.tpl.html',
-            controller: 'CommentModalInstanceController',
-            size: 'lg',
-            resolve: {
-                rosetta: false
-            }
-        });
+        if (Rosetta) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/commentModal.tpl.html',
+                controller: 'CommentModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    rosetta: function() {
+                        return rosetta;
+                    }
+                }
+            });
 
-        return modalInstance.result.then(function(rosetta) {
-            factory.editRosetta(rosetta);
-            return rosetta;
-        }, function() {
-            return null;
-        });
+            return modalInstance.result.then(function(rosetta) {
+                console.log(rosetta);
+                factory.editRosetta(rosetta);
+            }, function() {
+                return null;
+            });
+        }
     };
 
     return factory;

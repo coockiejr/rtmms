@@ -7,7 +7,9 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
 
     $scope.user = AuthService.isLoggedIn();
     $scope.vendor = function() {
-        paginationOptions.contributingOrganization = $scope.co;
+        var org = JSON.parse($scope.co);
+        paginationOptions.contributingOrganization = org.name;
+
         getPage();
     };
 
@@ -38,22 +40,27 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
         columnDefs: [{
             name: 'groups',
             field: 'groups',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents" ><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }, {
             name: 'refid',
             field: 'term.refid',
+            cellTemplate: '<div class="ui-grid-cell-contents" data-toggle="tooltip" data-placement="top" title={{row.entity.term.status}}><span>{{row.entity.term.refid}}</span></div>',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
 
                 if (row.entity.term !== undefined) {
                     if (row.entity.term.status === undefined) {
+
 
                         return 'red';
                     }
                     if (row.entity.term.status === "proposed") {
                         return 'blue';
                     }
-                    if (row.entity.term.status === "ready") {
+                     if (row.entity.term.status === "registered") {
                         return 'green';
+                    }
+                    if (row.entity.term.status === "unregistered") {
+                        return 'purple';
                     }
                     if (row.entity.term.status === "mapped") {
                         return 'orange';
@@ -98,7 +105,7 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
             field: 'term.code10'
         }, {
             name: 'contributingOrganization',
-            field: 'contributingOrganization'
+            field: 'contributingOrganization.name'
         }, {
             name: 'vendorDescription',
             field: 'vendorDescription'
@@ -166,7 +173,6 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
 
 
                 $scope.gridOptions.data = result.rosettas;
-                console.log($scope.gridOptions.data);
 
                 $scope.gridOptions.totalItems = result.totalItems;
             }
@@ -178,8 +184,17 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
 
     $scope.getCOs = function() {
 
-        AuthService.getCOs().then(function(cos) {
-            $scope.cos = cos;
+
+        RosettaService.getCos({
+            limit: paginationOptions.pageSize,
+            skip: (paginationOptions.pageNumber - 1) * paginationOptions.pageSize,
+            filters: paginationOptions.filters,
+            sort: paginationOptions.sort,
+        }).then(function(result) {
+            if (result !== null) {
+                $scope.cos = result.cos;
+
+            }
         });
     };
 
@@ -212,7 +227,7 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
 }]);
 
 
-angular.module('rtmms.authentication').controller('CoController', ['$scope', 'AuthService', 'RosettaService', 'dialogs', 'uiGridConstants', function($scope, AuthService, RosettaService, dialogs, uiGridConstants) {
+angular.module('rtmms.rosetta').controller('CoController', ['$scope','$http', 'AuthService', 'RosettaService', 'dialogs', 'uiGridConstants', function($scope, $http, AuthService, RosettaService, dialogs, uiGridConstants) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -250,8 +265,8 @@ angular.module('rtmms.authentication').controller('CoController', ['$scope', 'Au
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name: 'contributingOrganization',
-            field: 'contributingOrganization',
+            name: 'name',
+            field: 'name',
         }],
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;
@@ -299,16 +314,14 @@ angular.module('rtmms.authentication').controller('CoController', ['$scope', 'Au
     };
     var getPage = function() {
 
-        RosettaService.getMyRosettas({
+        RosettaService.getCos({
             limit: paginationOptions.pageSize,
             skip: (paginationOptions.pageNumber - 1) * paginationOptions.pageSize,
             filters: paginationOptions.filters,
             sort: paginationOptions.sort,
-            contributingOrganization: paginationOptions.contributingOrganization
         }).then(function(result) {
             if (result !== null) {
-                $scope.gridOptions.data = result.rosettas;
-                console.log($scope.gridOptions.data);
+                $scope.gridOptions.data = result.cos;
 
                 $scope.gridOptions.totalItems = result.totalItems;
             }
@@ -320,33 +333,94 @@ angular.module('rtmms.authentication').controller('CoController', ['$scope', 'Au
 
     $scope.getCOs = function() {
 
-        AuthService.getCOs().then(function(cos) {
-            $scope.cos = cos;
+
+        RosettaService.getCos({
+            limit: paginationOptions.pageSize,
+            skip: (paginationOptions.pageNumber - 1) * paginationOptions.pageSize,
+            filters: paginationOptions.filters,
+            sort: paginationOptions.sort,
+        }).then(function(result) {
+            if (result !== null) {
+
+                $scope.cos = result.cos;
+            }
         });
     };
-
     $scope.approve = function(rosetta) {
         rosetta.term.status = "proposed";
-        console.log(rosetta);
         RosettaService.editRosetta(rosetta);
 
 
     };
-    $scope.showAddRosettaModal = function() {
-        RosettaService.showAddRosettaModal().then(function(rosetta) {
-            if (rosetta !== null) {
-                $scope.gridOptions.data.unshift(rosetta);
+    $scope.showAddCOModal = function() {
+        RosettaService.showAddCOModal().then(function(co) {
+            if (co !== null) {
+                $scope.gridOptions.data.unshift(co);
             }
         });
     };
 
-    $scope.showEditRosettaModal = function(rosetta) {
-        RosettaService.showEditRosettaModal(rosetta).then(function() {
+    $scope.showEditCOModal = function(co) {
+       // console.log(co);
+        RosettaService.showEditCOModal(co).then(function() {
+            
+
 
         });
+    };
+
+   
+
+
+
+}]);
+
+angular.module('rtmms.rosetta').controller('CoModalInstanceController', ['$scope','$modalInstance','$http','co', 'AuthService', 'RosettaService', 'dialogs', 'uiGridConstants', function($scope, $modalInstance, $http,co, AuthService, RosettaService, dialogs, uiGridConstants) {
+
+    $scope.authService = AuthService;
+    $scope.$watch('authService.isLoggedIn()', function(user) {
+        $scope.user = user;
+    });
+
+    $scope.user = AuthService.isLoggedIn();
+   // console.log(co);
+    $scope.editmode = false;
+    if(co){
+        $scope.org=co;
+        //$scope.Co=$scope.org.name;
+        $scope.editmode=true;
+    } else {
+        $scope.org={};
+        //$scope.Co='';
+        $scope.editmode=false;
+    }
+ 
+
+  
+
+    $scope.addCo = function() {
+       
+        //$scope.formData.term.status="proposed";
+        $http.post('/api/addCo/' + $scope.Co).then(function(res) {
+           $scope.message=res.data;
+        });
+        
+        $modalInstance.dismiss('add');
+
+    };
+     $scope.editCo = function() {
+        $modalInstance.close($scope.org);
+        //$scope.formData.term.status="proposed";
+      // $http.put('/api/cos/'+$scope.Co,"test");
+        
+        //$modalInstance.dismiss('add');
+
     };
 
 
 
 
 }]);
+
+
+

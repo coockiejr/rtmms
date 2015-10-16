@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 ng-show="editmode" class="modal-title">Assign Refid</h3>
+    <h3  class="modal-title">Register Refid</h3>
 </div>
 <div class="modal-body">
     <form class="formrosetta" name="formrosetta">
@@ -17,7 +17,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" ng-show="formData.term.status==='ready'">
+                            <div class="row" >
                                 <div class="col-sm-4">
                                     <label class="text-left">Partition #:</label>
                                     <input ng-init="partition=formData.term.partition" type="text" only-digits name="partition" class="form-control  text-left" ng-model="formData.term.partition" value="partition" >
@@ -28,7 +28,11 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <label class="text-left">CF_Code10:</label>
-                                    <input ng-init="cfCode10=formData.term.cfCode10" type="text" only-digits name="cfCode10" class="form-control  text-left" ng-model="formData.term.cfCode10" value="cfCode10" >
+                                    <input ng-init="cfCode10=formData.term.cfCode10" type="text" only-digits name="cfCode10" class="form-control  text-left" ng-model="formData.term.cfCode10" value="cfCode10" disabled >
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="text-left">Next available Code10:</label>
+                                    <input  type="text" only-digits name="AvCode10" class="form-control  text-left" ng-model="avCode10" value="AvCode10" disabled >
                                 </div>
                                 <div class="col-sm-4">
                                     <label class="text-left">systematic Name:</label>
@@ -56,6 +60,6 @@
 </div>
 <div class="modal-footer">
     <!-- createMember() WILL CREATE NEW Members -->
-    <button ng-show="editmode" type="submit" class="btn btn-primary" ng-click="editRosetta()">Edit Refid</button>
+    <button type="submit" class="btn btn-primary" ng-click="registerRefid()">Register Refid</button>
     <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
 </div>

@@ -29,7 +29,29 @@ angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope'
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
         }, {
             name: 'refid',
-            field: 'term.refid'
+            field: 'term.refid',
+            cellTemplate: '<div class="ui-grid-cell-contents" data-toggle="tooltip" data-placement="top" title={{row.entity.term.status}}><span>{{row.entity.term.refid}}</span></div>',
+            cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
+
+                if (row.entity.term !== undefined) {
+                    if (row.entity.term.status === undefined) {
+
+                        return 'red';
+                    }
+                    if (row.entity.term.status === "proposed") {
+                        return 'blue';
+                    }
+                    if (row.entity.term.status === "registered") {
+                        return 'green';
+                    }
+                    if (row.entity.term.status === "unregistered") {
+                        return 'purple';
+                    }
+                    if (row.entity.term.status === "mapped") {
+                        return 'orange';
+                    }
+                }
+            }
         }, {
             name: 'cfCode10',
             field: 'term.cfCode10'

@@ -23,7 +23,10 @@ var userSchema = mongoose.Schema({
         id: Number,
         usertype: String
     },
-    contributingOrganization:String,
+    contributingOrganization: {
+        _id:Number,
+        name:String
+    },
     userStat: String,
     resetPasswordToken: String,
     resetPasswordExpires: Date,
@@ -52,7 +55,7 @@ userSchema.methods.generateHash = function(password) {
 
 // checking if password is valid
 userSchema.methods.validPassword = function(password) {
-   
+
     return bcrypt.compareSync(password, this.password);
 };
 

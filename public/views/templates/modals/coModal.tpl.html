@@ -1,5 +1,7 @@
 <div class="modal-header">
-    <h3 ng-show="editmode" class="modal-title">Assign Refid</h3>
+   
+    <h3 ng-show="!editmode" class="modal-title">Add a CO </h3>
+    <h3 ng-show="editmode" class="modal-title">Edit a CO </h3>
 </div>
 <div class="modal-body">
     <form class="formrosetta" name="formrosetta">
@@ -11,9 +13,9 @@
                             <div class="form-group-sm">
                                 <div>
                                     <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.term.refid.$invalid && !formrosetta.term.refid.$pristine}">
-                                        <label class="text-left">Refid:</label>
-                                        <input type="text" name="refid" class="form-control  text-left" ng-model="formData.term.refid" ng-pattern="/MDC_/" ng-required="true">
-                                        <p ng-show="formrosetta.refid.$error.pattern">Refid must start with MDC_</p>
+                                        <label class="text-left">Name:</label>
+                                        <input type="text"  class="form-control  text-left" ng-model="org.name"  ng-required="true">
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -27,6 +29,7 @@
 </div>
 <div class="modal-footer">
     <!-- createMember() WILL CREATE NEW Members -->
-    <button ng-show="editmode" type="submit" class="btn btn-primary" ng-click="assignRefid()">Assign Refid</button>
+    <button ng-show="!editmode" type="submit" class="btn btn-primary" ng-click="addCo()">Add CO</button>
+     <button ng-show="editmode" type="submit" class="btn btn-primary" ng-click="editCo()">Edit CO</button>
     <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
 </div>

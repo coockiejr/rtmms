@@ -11,10 +11,10 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
         $scope.state = "proposed";
         getPage();
     };
-    $scope.approvedTerms = function() {
-        paginationOptions.Status = "ready";
+    $scope.readyTerms = function() {
+        // paginationOptions.Status = "unregistered";
         $scope.state = "ready";
-        getPage();
+        getPage0();
     };
     $scope.mappedTerms = function() {
         paginationOptions.Status = "mapped";
@@ -26,17 +26,35 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
         $scope.state = "proposedU";
         getPage();
     };
-    $scope.approveMap = function(rosetta) {
+    $scope.approve = function(rosetta) {
         if (rosetta.term.status !== undefined) {
-            rosetta.term.status = "approved";
+            if (rosetta.term.status == "registered") {
+                rosetta.term.status = "approved";
+                RosettaService.editRosetta(rosetta);
+            } else if (rosetta.term.status == "unregistered") {
+                alert("Please register the refid before approving the term");
+
+            } else if (rosetta.term.status == "mapped") {
+                rosetta.term.status = "approved";
+                RosettaService.editRosetta(rosetta);
+            }
+
+
         }
 
-        RosettaService.editRosetta(rosetta);
+
 
 
     };
 
     var paginationOptions = {
+        pageNumber: 1,
+        pageSize: 25,
+        sort: null,
+        filters: null,
+        Status: ''
+    };
+    var paginationOptions0 = {
         pageNumber: 1,
         pageSize: 25,
         sort: null,
@@ -64,6 +82,7 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
         }, {
             name: 'refid',
             field: 'term.refid',
+            cellTemplate: '<div class="ui-grid-cell-contents" data-toggle="tooltip" data-placement="top" title={{row.entity.term.status}}><span>{{row.entity.term.refid}}</span></div>',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
 
                 if (row.entity.term !== undefined) {
@@ -74,8 +93,11 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
                     if (row.entity.term.status === "proposed") {
                         return 'blue';
                     }
-                    if (row.entity.term.status === "ready") {
+                    if (row.entity.term.status === "registered") {
                         return 'green';
+                    }
+                    if (row.entity.term.status === "unregistered") {
+                        return 'purple';
                     }
                     if (row.entity.term.status === "mapped") {
                         return 'orange';
@@ -120,7 +142,7 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
             field: 'term.code10'
         }, {
             name: 'contributingOrganization',
-            field: 'contributingOrganization'
+            field: 'contributingOrganization.name'
         }, {
             name: 'vendorDescription',
             field: 'vendorDescription'
@@ -134,35 +156,76 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;
             $scope.gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
-                if (sortColumns.length === 0) {
-                    paginationOptions.sort = null;
+
+
+
+
+                if ($scope.state == 'ready') {
+                    if (sortColumns.length === 0) {
+                        paginationOptions0.sort = null;
+                    } else {
+                        paginationOptions0.sort = {
+                            column: sortColumns[0].colDef.field,
+                            value: sortColumns[0].sort.direction
+                        };
+                    }
+                    getPage0();
                 } else {
-                    paginationOptions.sort = {
-                        column: sortColumns[0].colDef.field,
-                        value: sortColumns[0].sort.direction
-                    };
+                    if (sortColumns.length === 0) {
+                        paginationOptions.sort = null;
+                    } else {
+                        paginationOptions.sort = {
+                            column: sortColumns[0].colDef.field,
+                            value: sortColumns[0].sort.direction
+                        };
+                    }
+                    getPage();
+
                 }
-                getPage();
             });
 
             gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
-                paginationOptions.pageNumber = newPage;
-                paginationOptions.pageSize = pageSize;
-                getPage();
+
+                if ($scope.state == 'ready') {
+                    paginationOptions0.pageNumber = newPage;
+                    paginationOptions0.pageSize = pageSize;
+                    getPage0();
+                } else {
+                    paginationOptions.pageNumber = newPage;
+                    paginationOptions.pageSize = pageSize;
+                    getPage();
+
+                }
             });
 
             gridApi.core.on.filterChanged($scope, function() {
                 var grid = this.grid;
-                paginationOptions.filters = [];
-                angular.forEach(grid.columns, function(value, key) {
-                    if (value.filters[0].term) {
-                        paginationOptions.filters.push({
-                            column: value.colDef.field,
-                            value: value.filters[0].term
-                        });
-                    }
-                });
-                getPage();
+                if ($scope.state == 'ready') {
+
+                    paginationOptions0.filters = [];
+                    angular.forEach(grid.columns, function(value, key) {
+                        if (value.filters[0].term) {
+                            paginationOptions0.filters.push({
+                                column: value.colDef.field,
+                                value: value.filters[0].term
+                            });
+                        }
+                    });
+                    getPage0();
+                } else {
+
+                    paginationOptions.filters = [];
+                    angular.forEach(grid.columns, function(value, key) {
+                        if (value.filters[0].term) {
+                            paginationOptions.filters.push({
+                                column: value.colDef.field,
+                                value: value.filters[0].term
+                            });
+                        }
+                    });
+                    getPage();
+
+                }
             });
             $scope.test = [];
 
@@ -195,7 +258,49 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
         });
 
     };
-    getPage();
+    if ($scope.state == 'ready') {
+        getPage0();
+    } else {
+        getPage();
+
+    }
+
+
+    var getPage0 = function() {
+
+        RosettaService.getMyRosettas({
+            limit: paginationOptions0.pageSize,
+            skip: (paginationOptions0.pageNumber - 1) * paginationOptions0.pageSize,
+            filters: paginationOptions0.filters,
+            sort: paginationOptions0.sort,
+            status: "unregistered"
+        }).then(function(result) {
+            if (result !== null) {
+
+
+                unregistered = result.rosettas;
+                unregisteredCount = result.totalItems;
+                RosettaService.getMyRosettas({
+                    limit: paginationOptions0.pageSize,
+                    skip: (paginationOptions0.pageNumber - 1) * paginationOptions0.pageSize,
+                    filters: paginationOptions0.filters,
+                    sort: paginationOptions0.sort,
+                    status: "registered"
+                }).then(function(result) {
+                    if (result !== null) {
+
+
+                        $scope.gridOptions.data = result.rosettas.concat(unregistered);
+                        $scope.gridOptions.totalItems = result.totalItems + unregisteredCount;
+
+                    }
+                });
+            }
+        });
+
+    };
+    //    getPage0();
+
 
     $scope.gridOptions1 = {
         enableFiltering: true,
@@ -214,9 +319,10 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
             name: 'unitGroups',
             field: 'unitGroups',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.unitGroups | EnumOrUnitGroupsAsString }}</span></div>'
-        },{
+        }, {
             name: 'refid',
             field: 'term.refid',
+            cellTemplate: '<div class="ui-grid-cell-contents" data-toggle="tooltip" data-placement="top" title={{row.entity.term.status}}><span>{{row.entity.term.refid}}</span></div>',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
 
                 if (row.entity.term !== undefined) {
@@ -227,7 +333,10 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
                     if (row.entity.term.status === "proposed") {
                         return 'blue';
                     }
-                    if (row.entity.term.status === "ready") {
+                    if (row.entity.term.status === "unregistered") {
+                        return 'purple';
+                    }
+                    if (row.entity.term.status === "registered") {
                         return 'green';
                     }
                     if (row.entity.term.status === "mapped") {
@@ -387,24 +496,56 @@ angular.module('rtmms.rosetta').controller('RefidModalInstanceController', ['$sc
     }, true);
 
 
-    $scope.editmode = false;
+
     if (rosetta) {
         $scope.formData = rosetta;
-
-        $scope.formData.term.refid = $scope.formData.term.refid.replace("MDCX", "MDC");
         formDataInitial = Restangular.copy(rosetta);
-        $scope.editmode = true;
+        if (rosetta.term.status == "proposed") {
+            if ($scope.formData.term.refid !== undefined) {
+                $scope.formData.term.refid = $scope.formData.term.refid.replace("MDCX", "MDC");
+            } else {
+                console.log("Empty REFID");
+            }
+        } else if (rosetta.term.status == "unregistered" || rosetta.term.status == "registered") {
+            $scope.$watch('formData.term.partition', function() {
+                console.log("partition=" + $scope.formData.term.partition);
+                if ($scope.formData.term.partition !== undefined) {
+                    RosettaService.getMyRosettas({
+                        partition: $scope.formData.term.partition
+                    }).then(function(res) {
+                        if(res.next===undefined){
+                            alert(res);
+                        } else {
+                            $scope.avCode10=res.next;
+                            $scope.formData.term.cfCode10=$scope.formData.term.partition * Math.pow(2,16)+$scope.formData.term.code10;
+                        }
+
+                        
+                       
+                    });
+                }
+
+
+
+
+
+            }, true);
+        }
+
+
+
+
 
 
     }
 
 
-    $scope.editRosetta = function() {
+    $scope.assignRefid = function() {
         console.log("here");
         if ($scope.formrosetta.$invalid) {
             return;
         }
-        $scope.formData.term.status = "ready";
+        $scope.formData.term.status = "unregistered";
         //$scope.formData.term.status = "approved";
         $modalInstance.close($scope.formData);
     };
@@ -412,10 +553,12 @@ angular.module('rtmms.rosetta').controller('RefidModalInstanceController', ['$sc
         if ($scope.formrosetta.$invalid) {
             return;
         }
-        $scope.formData.term.status = "approved";
+
+        $scope.formData.term.status = "registered";
         //$scope.formData.term.status = "approved";
         $modalInstance.close($scope.formData);
     };
+
 
     $scope.cancel = function() {
 

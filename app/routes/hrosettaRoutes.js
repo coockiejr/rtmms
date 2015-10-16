@@ -10,9 +10,8 @@ module.exports = function(app, qs, async, _) {
 
     var columnNumberSearch = ['term.code10', 'term.cfCode10', 'term.partition'];
 
-
-
     app.get('/api/hrosettas', function(req, res) {
+        console.log("one");
 
         var filters = req.query.filters;
         var sort = req.query.sort;
@@ -35,7 +34,7 @@ module.exports = function(app, qs, async, _) {
                     }, {
                         "unitGroups.groupName": new RegExp(f.value, 'i')
                     }]);
-                     queryCount = queryCount.or([{
+                    queryCount = queryCount.or([{
                         "units.refid": new RegExp(f.value, 'i')
                     }, {
                         "unitGroups.groupName": new RegExp(f.value, 'i')
@@ -111,6 +110,7 @@ module.exports = function(app, qs, async, _) {
 
     //update all rosetta
     app.get('/api/updatehrosettas', function(req, res) {
+        console.log("two");
         var filters = req.query.filters;
         var sort = req.query.sort;
         var limit = req.query.limit;
@@ -146,12 +146,15 @@ module.exports = function(app, qs, async, _) {
 
             fetchRosettas = function(refid, callback) {
                 query = Rosetta.find();
-                query = query.where('term.refid').equals(refid);
+                //query = query.where('term.refid').equals(refid);
+                query.and({'term.refid':refid},{'term.partition':{$exists:true}});
+
                 query.exec(function(err, rosettas) {
                     if (err) {
                         callback(err);
                     }
                     findRes[refid] = rosettas;
+                    console.log(rosettas);
 
                     callback(null);
                 });
@@ -191,6 +194,9 @@ module.exports = function(app, qs, async, _) {
                         };
                         if (findRes[refid][0].term.partition !== undefined) {
                             hros.term.partition = findRes[refid][0].term.partition
+                        };
+                        if (findRes[refid][0].term.status !== undefined) {
+                            hros.term.status = findRes[refid][0].term.status
                         };
                         if (findRes[refid][0].term.systematicName !== undefined) {
                             hros.term.systematicName = findRes[refid][0].term.systematicName

@@ -1,4 +1,4 @@
-angular.module('rtmms.authentication').controller('SignUpController', ['$scope', '$http', '$state', 'AuthService', function($scope, $http, $state, AuthService) {
+angular.module('rtmms.authentication').controller('SignUpController', ['$scope', '$http', '$state', 'RosettaService', 'AuthService', function($scope, $http, $state, RosettaService, AuthService) {
     $scope.newCo = true;
     $scope.newCo = function() {
         $scope.newCo = !$scope.newCo;
@@ -26,9 +26,31 @@ angular.module('rtmms.authentication').controller('SignUpController', ['$scope',
 
     };
 
+
     $scope.getCOs = function() {
-        AuthService.getCOs().then(function(cos) {
-            $scope.cos = cos;
+
+        orgs = [];
+        RosettaService.getCos({}).then(function(result) {
+            if (result !== null) {
+
+                for (i = 0; i < result.cos.length; i++) {
+                    orgs[i] = {
+                        _id: result.cos[i]._id,
+                        name: result.cos[i].name
+
+                    };
+                }
+                $scope.cos = orgs;
+            }
+        });
+    };
+    $scope.addCo = function() {
+        //  console.log($scope.user.contributingOrganization);
+        $http.post('/api/addCo/' + $scope.Co).then(function(res) {
+            
+            $scope.message=res.data;
+            $scope.getCOs();
+            $scope.Co="";
         });
     };
 

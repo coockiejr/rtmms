@@ -14,7 +14,7 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
         pageSize: 25,
         sort: null,
         filters: null,
-        contributingOrganization: $scope.user.contributingOrganization
+        contributingOrganization: $scope.user.contributingOrganization.name
     };
 
     $scope.gridOptions = {
@@ -37,6 +37,7 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
         },{
             name: 'refid',
             field: 'term.refid',
+            cellTemplate: '<div class="ui-grid-cell-contents" data-toggle="tooltip" data-placement="top" title={{row.entity.term.status}}><span>{{row.entity.term.refid}}</span></div>',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
 
                 if (row.entity.term !== undefined) {
@@ -47,8 +48,11 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
                     if (row.entity.term.status === "proposed") {
                         return 'blue';
                     }
-                    if (row.entity.term.status === "ready") {
+                      if (row.entity.term.status === "registered") {
                         return 'green';
+                    }
+                    if (row.entity.term.status === "unregistered") {
+                        return 'purple';
                     }
                     if (row.entity.term.status === "mapped") {
                         return 'orange';
@@ -93,7 +97,7 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
             field: 'term.code10'
         }, {
             name: 'contributingOrganization',
-            field: 'contributingOrganization'
+            field: 'contributingOrganization.name'
         }, {
             name: 'vendorDescription',
             field: 'vendorDescription'
@@ -316,7 +320,7 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
 
     } else {
         $scope.formData = {};
-        $scope.formData.contributingOrganization = $scope.user.contributingOrganization;
+        $scope.formData.contributingOrganization = $scope.user.contributingOrganization.name;
         console.log($scope.formData);
         $scope.editmode = false;
     }

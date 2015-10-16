@@ -1,6 +1,7 @@
 module.exports = function(app, qs, passport, async) {
     var UserTypes = require('./../models/userTypes');
     var Users = require('./../models/user');
+    var CO = require('./../models/contributingOrg');
     var Rosetta = require('./../models/rosetta');
     var crypto = require('crypto');
     var bcrypt = require('bcrypt-nodejs');
@@ -62,7 +63,7 @@ module.exports = function(app, qs, passport, async) {
             });
             res.send("Restore successful");
         } else {
-            
+
             res.send("Please select a backup");
         }
 
@@ -171,16 +172,7 @@ module.exports = function(app, qs, passport, async) {
     });
 
 
-    app.get('/api/cos', function(req, res) {
-        var q = req.query.query;
-        query = Rosetta.distinct('contributingOrganization').sort();
-        query.exec(function(err, cos) {
-            if (err) {
-                res.send(err)
-            }
-            res.json(cos);
-        });
-    });
+    
 
 
     // =====================================

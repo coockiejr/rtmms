@@ -2,7 +2,7 @@
     <div class="row" ng-init="getCOs()">
         <label>Choose a Contributing Organization</label>
         <select class="form-control" ng-model="co" ng-change="vendor()">
-            <option ng-repeat="co in cos" value="{{co}}"> {{co}}</option>
+            <option ng-repeat="co in cos" value="{{co}}"> {{co.name}}</option>
         </select>
     </div>
     <div class="row button-row ">

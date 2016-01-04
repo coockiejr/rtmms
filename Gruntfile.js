@@ -19,8 +19,9 @@ module.exports = function(grunt) {
             build: {
                 files: {
                     'public/dist/js/app.min.js': [
-                        'public/libs/jquery/dist/jquery.js',
+                        
                         'public/libs/angular/angular.js',
+                        'public/libs/jquery/dist/jquery.js',
                         'public/libs/angular-bootstrap/ui-bootstrap-tpls.js',
                         'public/libs/angular-loading-bar/build/loading-bar.js',
                         'public/libs/angular-sanitize/angular-sanitize.js',
@@ -35,6 +36,8 @@ module.exports = function(grunt) {
                         'public/libs/angular-ui-grid/ui-grid.js',
                         'public/libs/ng-tags-input/ng-tags-input.js',
                         'public/libs/angular-bootstrap-toggle-switch/angular-toggle-switch.min.js',
+                        'public/libs/nsPopover/src/nsPopover.js',
+                        'public/libs/ngdropover/src/dropover.js',
                         'public/js/**/*.js',
                         'public/js/*.js'
                     ]
@@ -50,6 +53,7 @@ module.exports = function(grunt) {
                     'public/dist/css/style.css': [
                     'public/css/less/*.less',
                     'public/css/less/toggle-switch/angular-toggle-switch-bootstrap-3.less',
+                    'public/libs/nsPopover/less/ns-popover.less',
                     ]
                 }
             }

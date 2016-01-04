@@ -229,7 +229,6 @@ module.exports = function(app, qs, passport, async, _) {
 
                     next: max + 1
                 };
-                console.log("partition=" + nextPart.next);
                 res.json(nextPart);
 
             });
@@ -241,7 +240,6 @@ module.exports = function(app, qs, passport, async, _) {
                 }
 
                 queryCount.count().exec(function(error, count) {
-                    console.log("myrooosetta");
                     res.json({
                         totalItems: count,
                         rosettas: rosettas,
@@ -398,7 +396,7 @@ module.exports = function(app, qs, passport, async, _) {
 
     });
 
-    app.get('/api/download/:par', function(req, res, next) {
+    app.get('/api/downloadR/:par', function(req, res, next) {
 
         if (req.params.par === "allXML") {
             var query = Rosetta.find(null);
@@ -546,7 +544,7 @@ module.exports = function(app, qs, passport, async, _) {
                         html = html + "<td>" + rosettas[i]["Display Name"] + "</td>";
                         html = html + "<td>" + rosettas[i].UOM_MDC + "</td>";
                         html = html + "<td>" + rosettas[i].UCODE10 + "</td>";
-                        html = html + "<td>" + rosettas[i].CF_CODE10 + "</td>";
+                        html = html + "<td>" + rosettas[i].CF_UCODE10 + "</td>";
                         html = html + "<td>" + rosettas[i].UOM_UCUM + "</td>";
                         html = html + "<td>" + rosettas[i].Vendor_UOM + "</td>";
                         html = html + "<td>" + rosettas[i].Enum_Values + "</td>";
@@ -699,7 +697,7 @@ module.exports = function(app, qs, passport, async, _) {
         });
 
     });
-    app.put('/api/rosettas/:rosetta_id', isCOLoggedIn, function(req, res) {
+    app.put('/api/rosettas/:rosetta_id', isSCRLoggedIn, function(req, res) {
         Rosetta.findOneAndUpdate({
             _id: req.params.rosetta_id
         }, req.body, function(err) {
@@ -829,7 +827,7 @@ module.exports = function(app, qs, passport, async, _) {
     }
 
     function isCOLoggedIn(req, res, next) {
-        // if user is authenticated in the session and has an Co role, carry on 
+        // if user is authenticated in the session and has an Co role, or a vendor role carry on 
 
         if (req.isAuthenticated() && (req.user.userTypes.id === 1 || req.user.userTypes.id === 3)) {
             if (true) {
@@ -844,6 +842,28 @@ module.exports = function(app, qs, passport, async, _) {
         // if user is authenticated in the session and has an SDO role, carry on 
 
         if (req.isAuthenticated() && req.user.userTypes.id === 3) {
+            if (true) {
+                return next();
+            }
+        }
+        // if they aren't redirect them to the home page
+        res.status(401).send("insufficient privileges");
+    }
+    function isRevLoggedIn(req, res, next) {
+        // if user is authenticated in the session and has an SDO role, carry on 
+
+        if (req.isAuthenticated() && req.user.userTypes.id === 2) {
+            if (true) {
+                return next();
+            }
+        }
+        // if they aren't redirect them to the home page
+        res.status(401).send("insufficient privileges");
+    }
+    function isSCRLoggedIn(req, res, next) {
+        // if user is authenticated in the session and has an SDO role, carry on 
+
+        if (req.isAuthenticated() && (req.user.userTypes.id === 1 || req.user.userTypes.id === 2 || req.user.userTypes.id === 3)) {
             if (true) {
                 return next();
             }

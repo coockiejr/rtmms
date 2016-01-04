@@ -4,18 +4,211 @@
         <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-class="{active: state==='ready'}" ng-click="readyTerms()">Ready Terms Table</button>
         <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-class="{active: state==='mapped'}" ng-click="mappedTerms()">Mapped terms</button>
         <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-class="{active: state==='proposedU'}" ng-click="proposedUnits()">Proposed units</button>
-        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-click="showEditRosettaModal(selectedEntity)">Proposed enumerations</button>
+        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-click="proposedEnums()">Proposed enumerations</button>
     </div>
     <div class="row button-row ">
-        <button ng-show="authService.isLoggedIn() && state==='proposed' " class="btn btn-rtmms" ng-click="showAssignRefidModal(selectedEntity)">Assign REFID</button>
-        <button ng-show="authService.isLoggedIn() && (state==='ready' || state==='mapped') " class="btn btn-rtmms" ng-click="showReadyRefidModal(selectedEntity)">Register REFID</button>
-        <button ng-show="authService.isLoggedIn() && state==='ready'" class="btn btn-rtmms" ng-click="approve(selectedEntity)">Approve REFID</button>
-        <button ng-show="authService.isLoggedIn() && state==='mapped' " type="submit" class="btn btn-primary" ng-click="approve(selectedEntity)">Approve Mapping</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposed' " ng-disabled="selectedEntity.term.status !== 'proposed'" class="btn btn-rtmms" ng-click="showAssignRefidModal(selectedEntity)">Assign REFID</button>
+        <button ng-show="authService.isLoggedIn() && (state==='ready') " ng-disabled="selectedEntity.term.status !== 'unregistered' && selectedEntity.term.status !== 'registered'" class="btn btn-rtmms" ng-click="showReadyRefidModal(selectedEntity)">Register REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='ready'" ng-disabled="selectedEntity.term.status !== 'registered'" class="btn btn-rtmms" ng-click="approve(selectedEntity)">Approve REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='mapped' " type="submit" ng-disabled="selectedEntity.term.status !== 'rMapped'" class="btn btn-primary" ng-click="approve(selectedEntity)">Approve Mapping</button>
+        <button ng-show="authService.isLoggedIn() && (state==='mapped') " ng-disabled="selectedEntity.term.status !== 'rMapped'" class="btn btn-rtmms" ng-click="showReadyRefidModal(selectedEntity)">Register REFID</button>
         <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" class="btn btn-primary" ng-click="showEditUnitModal(selectedEntity)">Edit Unit</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" ng-disabled="selectedEntity.term.status !== 'proposed'" class="btn btn-primary" ng-click="showUAssignRefidModal(selectedEntity)">Assign REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" class="btn btn-primary" ng-disabled="selectedEntity.term.status !== 'unregistered' && selectedEntity.term.status !== 'registered'" ng-click="showUReadyRefidModal(selectedEntity)">Register REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" class="btn btn-primary" ng-disabled="selectedEntity.term.status !== 'registered'" ng-click="approve(selectedEntity)">Approve Unit</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" ng-disabled="selectedEntity.term.status !== 'rMapped'" class="btn btn-primary" ng-click="approve(selectedEntity)">Approve Mapping</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" class="btn btn-primary" ng-click="showEditEnumModal(selectedEntity)">Edit Enum</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" ng-disabled="selectedEntity.term.status !== 'proposed'" class="btn btn-primary" ng-click="showEAssignRefidModal(selectedEntity)">Assign REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" class="btn btn-primary" ng-disabled="selectedEntity.term.status !== 'unregistered' && selectedEntity.term.status !== 'registered'" ng-click="showEReadyRefidModal(selectedEntity)">Register REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" class="btn btn-primary" ng-disabled="selectedEntity.term.status !== 'registered'" ng-click="approve(selectedEntity)">Approve Enum</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" ng-disabled="selectedEntity.term.status !== 'rMapped'" class="btn btn-primary" ng-click="approve(selectedEntity)">Approve Mapping</button>
     </div>
-    <div class="row">
-        <div ng-show="state==='proposed' || state==='ready'  || state==='mapped' " ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
-        <div ng-show="state==='proposedU'" ui-grid="gridOptions1" ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
+    <div class="row" ng-show="state==='proposed' || state==='ready'  || state==='mapped' ">
+        <div  ui-grid="gridOptions" ui-grid-selection  ui-grid-auto-resize ui-grid-pagination class="grid rosetta-grid"></div>
     </div>
-    
+    <div class="row" ng-show="state==='proposedU'">
+        <div  ui-grid="gridOptions1" ui-grid-selection ui-grid-auto-resize ui-grid-pagination class="grid units-grid"></div>
+    </div>
+    <div class="row" ng-show="state==='proposedE'">
+        <div  ui-grid="gridOptions2" ui-grid-selection ui-grid-auto-resize ui-grid-pagination class="grid enums-grid"></div>
+    </div>
 </div>
+<script type="text/ng-template" id="popoverR">
+    <div class="triangle"></div>
+    <div><b>Groups</b>:
+        <table border="1" align="center">
+            <tr ng-repeat="groups in row.entity.groups">
+                <td>
+                    {{groups}}
+                    <br>
+                </td>
+            </tr>
+        </table>
+        <br><b>REFID</b>: {{row.entity.term.refid}}
+        <br><b>PART</b>: {{row.entity.term.partition}}
+        <br><b>CODE10</b>: {{row.entity.term.code10}}
+        <br><b>CF_CODE10</b>: {{row.entity.term.cfCode10}}
+        <br><b>Display Name</b>: {{row.entity.displayName}}
+        <br><b>Contributing Organization</b>: {{row.entity.contributingOrganization.name}}
+        <br><b>Vendor_UOM</b>: {{row.entity.vendorUom}}
+        <br><b>Vendor_VMD</b>: {{row.entity.vendorVmd}}
+        <br><b>Systematic Name</b>: {{row.entity.term.systematicName}}
+        <br><b>Common Term</b>: {{row.entity.commonTerm}}
+        <br><b>Acronym</b>: {{row.entity.term.acronym}}
+        <br><b>Term Description</b>: {{row.entity.term.termDescription}}
+        <br><b ng-show="row.entity.units.length">Units:</b>
+        <table ng-show="row.entity.units.length" border="1" align="center">
+            <tr>
+                <th>UOM_MDC_REFID</th>
+                <th>UCODE10</th>
+                <th>CF_UCODE10</th>
+                <th>UOM_UCUM</th>
+            </tr>
+            <tr ng-repeat="unit in row.entity.units">
+                <td>
+                    {{unit.term.refid}} 
+                </td>
+                <td>
+                    {{unit.term.code10}}
+                </td>
+                <td>
+                    {{unit.term.cfCode10}}
+                </td>
+                <td >
+                    <div ng-repeat="ucum in unit.ucums">
+                    {{ucum.ucum}}
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <br><b ng-show="row.entity.enumGroups.length">Enum Group:</b>
+        <table ng-show="row.entity.enumGroups.length" border="1" align="center">
+            <tr>
+                <th>Enum values</th>
+                
+            </tr>
+            <tr ng-repeat="enum in row.entity.enumGroups">
+                <td>
+                    {{enum.groupName}} 
+                </td>
+               
+            </tr>
+        </table>
+        <br><b ng-show="row.entity.enums.length">Enums:</b>
+        <table ng-show="row.entity.enums.length" border="1" align="center">
+            <tr>
+                <th>Enum values</th>
+                <th>ECODE10</th>
+                <th>CF_ECODE10</th>
+                <th>Token</th>
+            </tr>
+            <tr ng-repeat="enum in row.entity.enums">
+                <td>
+                    {{enum.term.refid}} 
+                </td>
+                <td>
+                    {{enum.term.code10}}
+                </td>
+                <td>
+                    {{enum.term.cfCode10}}
+                </td>
+                <td >
+                    
+                    {{enum.token}}
+                    
+                </td>
+            </tr>
+        </table>
+        <br><b>Tags:</b>
+        <div ng-repeat="tag in row.entity.tags">
+            {{tag}}
+            <br>
+        </div>
+        <br><b>Comments</b>:
+        <div ng-repeat="comment in row.entity.comments">
+            {{comment.text}} -- by {{comment.author.name}} ({{comment.author.co}}) -- {{comment.date| date:"MMM d, y h:mm a '(GMT' Z)"}}
+            <br>
+        </div>
+        <br><b>Status</b>:{{row.entity.term.status}}
+    </div>
+</script>
+<script type="text/ng-template" id="popoverU">
+    <div class="triangle"></div>
+    <div><b>Unit Groups</b>:
+        <table border="1" align="center">
+            <tr ng-repeat="groups in row.entity.unitGroups">
+                <td>
+                    {{groups.groupName}}
+                    <br>
+                </td>
+            </tr>
+        </table>
+        <br><b>REFID</b>: {{row.entity.term.refid}}
+        <br><b>UCODE10</b>: {{row.entity.term.code10}}
+        <br><b>CF_UCODE10</b>: {{row.entity.term.cfCode10}}
+        <br><b>UPART</b>: {{row.entity.term.partition}}
+        <br><b>Unit of Measure</b>: {{row.entity.unitOfMeasure}}
+        <br><b>Ucums:</b>
+        <table border="1" align="center">
+            <tr ng-repeat="ucum in row.entity.ucums">
+                <td>
+                    {{ucum.value}}
+                    <br>
+                </td>
+            </tr>
+        </table>
+        <br><b>Systematic Name</b>: {{row.entity.term.systematicName}}
+        <br><b>Common Term</b>: {{row.entity.commonTerm}}
+        <br><b>Acronym</b>: {{row.entity.term.acronym}}
+        <br><b>Term Description</b>: {{row.entity.term.termDescription}}
+        <br><b>Dimension</b>: {{row.entity.dimension}}
+        <br><b>Dim</b>: {{row.entity.dim}}
+        <br><b>DimC</b>: {{row.entity.dimC}}
+        <br><b>Symbol</b>: {{row.entity.symbol}}
+        <br><b>Tags:</b>
+        <div ng-repeat="tag in row.entity.tags">
+            {{tag}}
+            <br>
+        </div>
+        <br><b>Comments</b>:
+        <div ng-repeat="comment in row.entity.comments">
+            {{comment.text}} -- by {{comment.author.name}} ({{comment.author.co}}) -- {{comment.date| date:"MMM d, y h:mm a '(GMT' Z)"}}
+            <br>
+        </div>
+        <br><b>Status</b>:{{row.entity.term.status}}
+    </div>
+</script>
+<script type="text/ng-template" id="popoverE">
+    <div class="triangle"></div>
+    <div><b>Enum Groups</b>:
+        <table border="1" align="center">
+            <tr ng-repeat="groups in row.entity.enumGroups">
+                <td>
+                    {{groups.groupName}}
+                    <br>
+                </td>
+            </tr>
+        </table>
+        <br><b>REFID</b>: {{row.entity.term.refid}}
+        <br><b>ECODE10</b>: {{row.entity.term.code10}}
+        <br><b>CF_ECODE10</b>: {{row.entity.term.cfCode10}}
+        <br><b>EPART</b>: {{row.entity.term.partition}}
+        <br><b> Description</b>: {{row.entity.description}}
+        <br><b>Token</b>: {{row.entity.token}}
+        <br><b>Systematic Name</b>: {{row.entity.term.systematicName}}
+        <br><b>Common Term</b>: {{row.entity.commonTerm}}
+        <br><b>Acronym</b>: {{row.entity.term.acronym}}
+        <br><b>Term Description</b>: {{row.entity.term.termDescription}}
+        <br><b>Tags:</b>
+        <div ng-repeat="tag in row.entity.tags">
+            {{tag}}
+            <br>
+        </div>
+        <br><b>Comments</b>:
+        <div ng-repeat="comment in row.entity.comments">
+            {{comment.text}} -- by {{comment.author.name}} ({{comment.author.co}}) -- {{comment.date| date:"MMM d, y h:mm a '(GMT' Z)"}}
+            <br>
+        </div>
+        <br><b>Status</b>:{{row.entity.term.status}}
+    </div>
+</script>

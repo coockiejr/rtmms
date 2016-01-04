@@ -1,3 +1,4 @@
 <div class="jumbotron ">
-    <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid enumgroups-grid"></div>
+    <div ng-show="authService.isCOLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid enumgroups-grid"></div>
+    <div ng-show="!authService.isCOLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns  ui-grid-pagination class="grid enumgroups-grid"></div>
 </div>

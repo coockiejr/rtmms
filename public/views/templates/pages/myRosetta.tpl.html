@@ -2,7 +2,8 @@
     <div class="row button-row ">
         <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="showAddRosettaModal()">Add</button>
         <button ng-show="authService.isLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showEditRosettaModal(selectedEntity)">Edit</button>
-        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="propose(selectedEntity)">Propose</button>
+        <button ng-show="authService.isLoggedIn() " ng-disabled="selectedEntity.term.refid === undefined || selectedEntity.term.status !== undefined" type="submit" class="btn btn-primary" ng-click="propose(selectedEntity)">Propose</button>
+        <button ng-show="authService.isLoggedIn()" ng-disabled="selectedEntity.term.status !== 'pMapped'" type="submit" class="btn btn-primary" ng-click="proposeMap(selectedEntity)">Propose Mapping</button>
         <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downHTML()">DownloadHTML</button>
         <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downXML()">DownloadXML</button>
         <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downCSV()">DownloadCSV</button>

@@ -1,9 +1,10 @@
-angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope', 'AuthService', 'HRosettaService', 'dialogs', 'uiGridConstants', function($scope, AuthService, HRosettaService, dialogs, uiGridConstants) {
+angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope', '$http', 'AuthService', 'HRosettaService', 'dialogs', 'uiGridConstants', function($scope, $http, AuthService, HRosettaService, dialogs, uiGridConstants) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
         $scope.user = user;
     });
+
 
 
 
@@ -126,7 +127,6 @@ angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope'
 
         }
     };
-
     var getPage = function() {
         HRosettaService.getHRosettas({
             limit: paginationOptions.pageSize,
@@ -144,6 +144,27 @@ angular.module('rtmms.hRtm').controller('HarmonizedRosettaController', ['$scope'
 
 
     getPage();
+    $http.get('/api/updatehrosettas').then(function(res) {
+        var getPage = function() {
+            HRosettaService.getHRosettas({
+                limit: paginationOptions.pageSize,
+                skip: (paginationOptions.pageNumber - 1) * paginationOptions.pageSize,
+                filters: paginationOptions.filters,
+                sort: paginationOptions.sort
+            }).then(function(result) {
+                if (result !== null) {
+                    $scope.gridOptions.data = result.hrosettas;
+                    $scope.gridOptions.totalItems = result.totalItems;
+                }
+            });
+
+        };
+
+
+        getPage();
+    });
+
+
 
 }]);
 

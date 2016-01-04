@@ -37,7 +37,7 @@ angular.module('rtmms.authentication').controller('UsersController', ['$scope', 
     };
     $scope.restore = function() {
 
-        $http.post('/api/restore/',$scope.backups.selected).then(function(res) {});
+        $http.post('/api/restore/', $scope.backups.selected).then(function(res) {});
     };
 
 
@@ -46,12 +46,13 @@ angular.module('rtmms.authentication').controller('UsersController', ['$scope', 
         $scope.backups = {
             selected: null,
             available: res.data.split(","),
+            //  time:available.split("_"),
         };
-        //console.log($scope.backups.available);
+
         //$scope.backups = res.data.split(",");
     });
 
-   
+
 
     $scope.showEditUserModal = function(user) {
 
@@ -69,7 +70,7 @@ angular.module('rtmms.authentication').controller('UsersController', ['$scope', 
 }]);
 
 
-angular.module('rtmms.authentication').controller('UsersModalInstanceController', ['$scope', '$modalInstance', 'Restangular', 'user', 'AuthService', function($scope, $modalInstance, Restangular, user, AuthService) {
+angular.module('rtmms.authentication').controller('UsersModalInstanceController', ['$scope', '$modalInstance', 'Restangular', 'user', 'AuthService','RosettaService', function($scope, $modalInstance, Restangular, user, AuthService,RosettaService) {
     $scope.isAdmin = true;
     var formUserInitial;
     $scope.editmode = false;
@@ -84,15 +85,25 @@ angular.module('rtmms.authentication').controller('UsersModalInstanceController'
 
     };
     $scope.getCOs = function() {
-        AuthService.getCOs().then(function(cos) {
-            $scope.cos = cos;
+
+        orgs = [];
+        RosettaService.getCos({}).then(function(result) {
+            if (result !== null) {
+
+                for (i = 0; i < result.cos.length; i++) {
+                    orgs[i] = {
+                        _id: result.cos[i]._id,
+                        name: result.cos[i].name
+
+                    };
+                }
+                $scope.cos = orgs;
+            }
         });
     };
 
     if (user) {
-
         $scope.formUser = user;
-
         formUserInitial = Restangular.copy(user);
         $scope.editmode = true;
     } else {
@@ -106,7 +117,6 @@ angular.module('rtmms.authentication').controller('UsersModalInstanceController'
         $modalInstance.close($scope.formUser);
     };
     $scope.addUser = function() {
-
         AuthService.createUser($scope.formUser);
         $modalInstance.dismiss('add');
 

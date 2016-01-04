@@ -24,7 +24,6 @@ var userSchema = mongoose.Schema({
         usertype: String
     },
     contributingOrganization: {
-        _id:Number,
         name:String
     },
     userStat: String,

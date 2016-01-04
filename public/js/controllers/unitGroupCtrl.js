@@ -4,7 +4,7 @@ angular.module('rtmms.unit').controller('UnitGroupController', ['$scope', 'AuthS
     $scope.$watch('authService.isLoggedIn()', function(user) {
         $scope.user = user;
     });
-    
+
     var paginationOptions = {
         pageNumber: 1,
         pageSize: 25,
@@ -66,14 +66,16 @@ angular.module('rtmms.unit').controller('UnitGroupController', ['$scope', 'AuthS
                 getPage();
             });
 
+            if (gridApi.selection !== undefined) {
+                gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+                    if (row.isSelected) {
+                        $scope.selectedEntity = row.entity;
+                    } else {
+                        $scope.selectedEntity = null;
+                    }
+                });
+            }
 
-            gridApi.selection.on.rowSelectionChanged($scope, function(row) {
-                if (row.isSelected) {
-                    $scope.selectedEntity = row.entity;
-                } else {
-                    $scope.selectedEntity = null;
-                }
-            });
         }
     };
 

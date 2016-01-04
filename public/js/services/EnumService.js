@@ -179,6 +179,75 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
         }
     };
 
+    factory.showAssignRefidModal = function(enumValue) {
+        if (Enum) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/refidAssignModal.tpl.html',
+                controller: 'ERefidModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    enumValue: function() {
+                        return enumValue;
+                    }
+                }
+            });
+
+            return modalInstance.result.then(function(enumValue) {
+                factory.editEnum(enumValue);
+            }, function() {
+                return null;
+            });
+        }
+    };
+
+    factory.showReadyRefidModal = function(enumValue) {
+        if (Enum) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/refidModal.tpl.html',
+                controller: 'ERefidModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    enumValue: function() {
+                        return enumValue;
+                    }
+                }
+            });
+
+            return modalInstance.result.then(function(enumValue) {
+                factory.editEnum(enumValue);
+            }, function() {
+                return null;
+            });
+        }
+    };
+
+    // ====================================
+    // Comment MODALS ======================
+    // =====================================
+
+    
+    factory.showAddCommentModal = function(enumValue) {
+        if (Enum) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/commentModal.tpl.html',
+                controller: 'EnumCommentModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    enumValue: function() {
+                        return enumValue;
+                    }
+                }
+            });
+
+            return modalInstance.result.then(function(enumValue) {
+                factory.editEnum(enumValue);
+            }, function() {
+                return null;
+            });
+        }
+    };
+
+
     return factory;
 
 }]);

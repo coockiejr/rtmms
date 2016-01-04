@@ -41,7 +41,7 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
 
                 if (row.entity.term !== undefined) {
-                    if (row.entity.term.status === undefined) {
+                    if (row.entity.term.status === undefined||row.entity.term.status ==="pMapped") {
 
                         return 'red';
                     }
@@ -54,7 +54,7 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
                     if (row.entity.term.status === "unregistered") {
                         return 'purple';
                     }
-                    if (row.entity.term.status === "mapped") {
+                    if (row.entity.term.status === "rMapped") {
                         return 'orange';
                     }
                 }
@@ -191,6 +191,19 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
     $scope.propose = function(rosetta) {
         if (rosetta.term.status === undefined) {
             rosetta.term.status = "proposed";
+        } else {
+            alert("Please select a term with a new refid");
+        }
+
+        RosettaService.editRosetta(rosetta);
+
+
+    };
+     $scope.proposeMap = function(rosetta) {
+        if (rosetta.term.status === "pMapped") {
+            rosetta.term.status = "rMapped";
+        } else {
+            alert("Please select a term with mapped refid");
         }
 
         RosettaService.editRosetta(rosetta);
@@ -200,28 +213,27 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
 
     $scope.download=function(rosetta){
        
-        $http.get('/api/download/'+rosetta._id).then(function(res){
+        $http.get('/api/downloadR/'+rosetta._id).then(function(res){
             window.location = "test.xml";
         });
     };
      $scope.downHTML=function(){
        
-        $http.get('/api/download/allHTML').then(function(res){
+        $http.get('/api/downloadR/allHTML').then(function(res){
             var blob = new Blob([res.data], {type: "text/plain;charset=utf-8"});
             saveAs(blob,"rosetta_terms.html");
         });
     };
      $scope.downXML=function(){
        
-        $http.get('/api/download/allXML').then(function(res){
-            console.log(res.data);
+        $http.get('/api/downloadR/allXML').then(function(res){
             var blob = new Blob([res.data], {type: "text/plain;charset=utf-8"});
             saveAs(blob,"rosetta_terms.xml");
         });
     };
     $scope.downCSV=function(){
        
-        $http.get('/api/download/allCSV').then(function(res){
+        $http.get('/api/downloadR/allCSV').then(function(res){
             var blob = new Blob([res.data], {type: "text/plain;charset=utf-8"});
             saveAs(blob,"rosetta_terms.csv");
         });
@@ -288,7 +300,7 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
         if ($scope.refidType === 'existing') {
             $scope.formrosetta.$invalid = false;
             if ($scope.formData.term.status !== undefined) {
-                $scope.formData.term.status = "mapped";
+                $scope.formData.term.status = "pMapped";
 
             }
         }
@@ -320,7 +332,10 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
 
     } else {
         $scope.formData = {};
-        $scope.formData.contributingOrganization = $scope.user.contributingOrganization.name;
+        $scope.formData.contributingOrganization ={
+            _id:$scope.user.contributingOrganization._id,
+            name: $scope.user.contributingOrganization.name
+        };
         console.log($scope.formData);
         $scope.editmode = false;
     }
@@ -328,7 +343,6 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
 
 
     $scope.addRosetta = function() {
-        console.log($scope.formrosetta.$invalid);
         if ($scope.formrosetta.$invalid) {
             return;
         }

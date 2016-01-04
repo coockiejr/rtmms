@@ -1,5 +1,11 @@
 var app = angular.module('rtmms');
 
+app.filter('unsafe', ['$sce', function($sce) {
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    };
+}]);
+
 app.filter('secondsToTimeStringLong', function() {
     return function(sec) {
         var hours = Math.floor((sec % 86400) / 3600);
@@ -50,7 +56,12 @@ app.filter('secondsToTimeString', function() {
 
     };
 });
-
+app.filter('split', function() {
+    return function(input, splitChar, splitIndex) {
+        // do some bounds checking here to ensure it has that index
+        return input.split(splitChar)[splitIndex];
+    };
+});
 
 
 
@@ -271,13 +282,16 @@ app.filter('resultSuperFilter', function(query) {
 
 app.filter('ArrayAsString', function() {
     return function(input) {
-        return input.join(', ');
+        if (input !== undefined) {
+            return input.join(', ');
+        }
+
     };
 });
 
 app.filter('UnitsAsString', function() {
     return function(units) {
-        if(units){
+        if (units) {
             var res = '';
             units.forEach(function(u) {
                 res += u.term.refid + ', ';
@@ -291,7 +305,7 @@ app.filter('UnitsAsString', function() {
 
 app.filter('EnumsAsString', function() {
     return function(enums) {
-        if(enums){
+        if (enums) {
             var res = '';
 
             enums.forEach(function(e) {
@@ -310,11 +324,11 @@ app.filter('EnumsAsString', function() {
 
 app.filter('UcumsAsString', function() {
     return function(ucums) {
-        if(ucums){
+        if (ucums) {
             var res = '';
 
             ucums.forEach(function(u) {
-                
+
                 if (u.value) {
                     res += u.value + ', ';
                 }
@@ -329,19 +343,19 @@ app.filter('UcumsAsString', function() {
 
 app.filter('EnumOrUnitGroupsAsString', function() {
     return function(groups) {
-        if(groups){
+        if (groups) {
             //console.log(groups);
             var res = '';
             if (groups !== undefined) {
                 groups.forEach(function(eg) {
-                   // console.log(eg);
-                   if(eg.groupName!==undefined){
+                    // console.log(eg);
+                    if (eg.groupName !== undefined) {
                         res += eg.groupName + ', ';
-                   } 
+                    }
                 });
                 res = res.slice(0, -2);
             }
-                     //   console.log("res");
+            //   console.log("res");
 
             return res;
         }
@@ -351,37 +365,37 @@ app.filter('EnumOrUnitGroupsAsString', function() {
 
 app.filter('UcumsAsStringFromRosetta', function() {
     return function(rosetta) {
-       // console.log(rosetta);
-       
-            
-            var res = [];
-            if(rosetta.units){
-                rosetta.units.forEach(function(u) {
+        // console.log(rosetta);
+
+
+        var res = [];
+        if (rosetta.units) {
+            rosetta.units.forEach(function(u) {
+                u.ucums.forEach(function(ucum) {
+                    if (ucum !== null) {
+                        res.push(ucum.ucum);
+
+                    }
+                });
+            });
+        }
+
+        if (rosetta.unitGroups) {
+
+            rosetta.unitGroups.forEach(function(ug) {
+                ug.units.forEach(function(u) {
                     u.ucums.forEach(function(ucum) {
-                        if(ucum!==null){
+                        if (ucum !== null) {
                             res.push(ucum.ucum);
 
                         }
                     });
                 });
-            }
+            });
+        }
+        res = _.uniq(res);
+        return res.join(', ');
 
-            if(rosetta.unitGroups){
-
-                rosetta.unitGroups.forEach(function(ug) {
-                    ug.units.forEach(function(u) {
-                        u.ucums.forEach(function(ucum) {
-                             if(ucum!==null){
-                                res.push(ucum.ucum);
-
-                            }
-                        });
-                    });
-                });
-            }
-            res = _.uniq(res);
-            return res.join(', ');
-        
     };
 });
 
@@ -390,69 +404,69 @@ app.filter('UcumsAsStringFromRosetta', function() {
 
 app.filter('UcumsAsStringFromUnit', function() {
     return function(unit) {
-       // console.log(unit);
+        // console.log(unit);
 
-            var res = [];
-            if(unit.ucums){
-                unit.ucums.forEach(function(ucum) {
-                    if(ucum!==null){
-                       // console.log(ucum.ucum);
+        var res = [];
+        if (unit.ucums) {
+            unit.ucums.forEach(function(ucum) {
+                if (ucum !== null) {
+                    // console.log(ucum.ucum);
                     res.push(ucum.ucum);
-                    }
-                });
-            }
+                }
+            });
+        }
         res = _.uniq(res);
         return res.join(', ');
-        
+
     };
 });
 
 
-app.filter('showUnitRefidOrGroupName',['$filter', function($filter) {
+app.filter('showUnitRefidOrGroupName', ['$filter', function($filter) {
     return function(u) { //unit or unit Group
-        res ='';
+        res = '';
         if (u.term !== undefined) { //unit
-            res +='<span>'+u.term.refid+'</span><div class="listdetail"><small>type: Unit</small>';
-            if (u.ucums !== undefined){
-                res +='<br><small>UCUMS: '+$filter('UcumsAsStringFromUnit')(u) +'</small>';
+            res += '<span>' + u.term.refid + '</span><div class="listdetail"><small>type: Unit</small>';
+            if (u.ucums !== undefined) {
+                res += '<br><small>UCUMS: ' + $filter('UcumsAsStringFromUnit')(u) + '</small>';
             }
-            res +='</div>';
+            res += '</div>';
         } else if (u.groupName !== undefined) { //unit group
             res += '<span class="bold">' + u.groupName + '</span><div class="listdetail"><small>type: Unit group</small>';
-            if (u.groupDescription !== undefined){
-                res +='<br><small>Description: '+u.groupDescription+'</small>';
+            if (u.groupDescription !== undefined) {
+                res += '<br><small>Description: ' + u.groupDescription + '</small>';
             }
-            res +='</div>';
-        } 
+            res += '</div>';
+        }
         return res;
     };
 }]);
 
 
-app.filter('showUcumValue',['$filter', function($filter) {
-    return function(u) { 
-        res ='';
+app.filter('showUcumValue', ['$filter', function($filter) {
+    return function(u) {
+        res = '';
         if (u.value !== undefined) { //unit
             //console.log(u.ucums);
-        
-                res +='<span>'+u.value +'</span>';
-           
+
+            res += '<span>' + u.value + '</span>';
+
         }
-       
+
         return res;
     };
 }]);
 
 
 
-app.filter('showRosettaRefid',['$filter', function($filter) {
-    return function(r) { 
-        res ='';
+app.filter('showRosettaRefid', ['$filter', function($filter) {
+    return function(r) {
+        res = '';
         if (r.term.refid !== undefined) { //unit
             //console.log(u.ucums);
-        
-                res +='<div>'+r.term.refid +'</div>';
-           
+
+            res += '<div>' + r.term.refid + '</div>';
+
         }
         return res;
     };
@@ -466,9 +480,9 @@ app.filter('showEnumInfoOrGroupName', function() {
         hasref = false;
         if ((e.term !== undefined && e.term.refid !== undefined && e.term.refid !== "") || e.token !== undefined) { //enum
             if (e.term !== undefined && e.term.refid !== undefined && e.term.refid !== "") {
-                res +='<span>'+e.term.refid;
+                res += '<span>' + e.term.refid;
                 hasref = true;
-            }      
+            }
             if (e.token !== undefined) {
                 if (hasref) {
                     res += ", " + e.token;
@@ -476,15 +490,15 @@ app.filter('showEnumInfoOrGroupName', function() {
                     res += e.token;
                 }
                 res += '</span>';
-            }        
-            res +='<div class="listdetail"><small>type: Enum</small></div>';
+            }
+            res += '<div class="listdetail"><small>type: Enum</small></div>';
         } else if (e.groupName !== undefined) { //enum group
             res += '<span class="bold">' + e.groupName + '</span><div class="listdetail"><small>type: Enum group</small>';
-            if (e.groupDescription !== undefined){
-                res +='<br><small>Description: '+e.groupDescription+'</small>';
+            if (e.groupDescription !== undefined) {
+                res += '<br><small>Description: ' + e.groupDescription + '</small>';
             }
-            res +='</div>';
-        } 
+            res += '</div>';
+        }
 
         return res;
 

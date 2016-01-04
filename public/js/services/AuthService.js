@@ -30,6 +30,12 @@ angular.module('rtmms').factory('AuthService', ['Restangular', '$modal', functio
         }
 
     };
+    factory.isRevLoggedIn = function() {
+        if (user !== undefined && (user.userTypes.id === 2)) {
+            return (user) ? user : false;
+        }
+
+    };
 
     factory.getUserTypes = function(params) {
         return Restangular.all('usertypes').getList(params).then(

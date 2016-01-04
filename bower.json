@@ -16,7 +16,9 @@
     "angular-ui-grid": "~3.0.0-rc.20",
     "ng-tags-input": "~2.2.0",
     "angular-bootstrap-toggle-switch": "~0.5.2",
-    "file-saver.js":"~1.20150507.2"
+    "file-saver.js":"~1.20150507.2",
+    "nsPopover":"~0.6.8",
+    "ngdropover":"1.0.0"
 
   },
   "resolutions": {

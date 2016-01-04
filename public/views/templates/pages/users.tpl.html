@@ -27,7 +27,7 @@ Users</h3>
                             <td>{{user.firstName}}</td>
                             <td>{{user.lastName}}</td>
                             <td>{{user.userTypes.usertype}}</td>
-                            <td>{{user.contributingOrganization}}</td>
+                            <td>{{user.contributingOrganization.name}}</td>
                             <td></td>
                             <td>
                                 <span class="glyphicon glyphicon-pencil" ng-click="showEditUserModal(user)"></span>
@@ -53,7 +53,7 @@ Backup</h3>
                 <div class="col-md-12" style="margin-top:20px">
                     <div class="col-md-offset-2 col-md-8">
                         <select class="col-md-12" name="selected" id="selected" ng-model="backups.selected" multiple>
-                            <option ng-repeat="backup in backups.available" value="{{backup}}"> {{backup}}</option>
+                            <option ng-repeat="backup in backups.available" value="{{backup}}"> {{backup |split:'_':0}} {{backup|split:'_':1| date:"MMM d, y h:mm a '(GMT' Z)"}}</option>
                         </select>
                     </div>
                     <div class="col-md-offset-2 col-md-8">

@@ -2,8 +2,49 @@
     <div class="row button-row ">
         <button ng-show="authService.isCOLoggedIn()" type="submit" class="btn btn-primary" ng-click="showAddEnumModal()">Add</button>
         <button ng-show="authService.isCOLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showEditEnumModal(selectedEntity)">Edit</button>
+        <button ng-show="authService.isCOLoggedIn() || authService.isRevLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showAddCommentModal(selectedEntity)">Comments</button>
+        <button ng-show="authService.isLoggedIn() " ng-disabled="selectedEntity.term.refid === undefined || selectedEntity.term.status !== undefined" type="submit" class="btn btn-primary" ng-click="propose(selectedEntity)">Propose</button>
+        <button ng-show="authService.isLoggedIn()" ng-disabled="selectedEntity.term.status !== 'pMapped'" type="submit" class="btn btn-primary" ng-click="proposeMap(selectedEntity)">Propose Mapping</button>
+        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downHTML()">DownloadHTML</button>
+        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downXML()">DownloadXML</button>
+        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downCSV()">DownloadCSV</button>
     </div>
     <div class="row">
-        <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
+        <div ng-show="authService.isCOLoggedIn() ||authService.isRevLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
+        <div ng-show="!authService.isCOLoggedIn() && !authService.isRevLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-pagination class="grid rosetta-grid"></div>
     </div>
 </div>
+<script type="text/ng-template" id="popover">
+    <div class="triangle"></div>
+    <div><b>Enum Groups</b>:
+        <table border="1" align="center">
+            <tr ng-repeat="groups in row.entity.enumGroups">
+                <td>
+                    {{groups.groupName}}
+                    <br>
+                </td>
+            </tr>
+        </table>
+        <br><b>REFID</b>: {{row.entity.term.refid}}
+        <br><b>ECODE10</b>: {{row.entity.term.code10}}
+        <br><b>CF_ECODE10</b>: {{row.entity.term.cfCode10}}
+        <br><b>EPART</b>: {{row.entity.term.partition}}
+        <br><b> Description</b>: {{row.entity.description}}
+        <br><b>Token</b>: {{row.entity.token}}
+        <br><b>Systematic Name</b>: {{row.entity.term.systematicName}}
+        <br><b>Common Term</b>: {{row.entity.commonTerm}}
+        <br><b>Acronym</b>: {{row.entity.term.acronym}}
+        <br><b>Term Description</b>: {{row.entity.term.termDescription}}
+        <br><b>Tags:</b>
+        <div ng-repeat="tag in row.entity.tags">
+            {{tag}}
+            <br>
+        </div>
+        <br><b>Comments</b>:
+        <div ng-repeat="comment in row.entity.comments">
+            {{comment.text}} -- by {{comment.author.name}} ({{comment.author.co}}) -- {{comment.date| date:"MMM d, y h:mm a '(GMT' Z)"}}
+            <br>
+        </div>
+        <br><b>Status</b>:{{row.entity.term.status}}
+    </div>
+</script>

@@ -55,7 +55,8 @@
                                 <div ng-show="refidType=='new'">
                                     <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.term.refid.$invalid && !formrosetta.term.refid.$pristine}">
                                         <label class="text-left">Refid:</label>
-                                        <input   type="text" name="refid" class="form-control  text-left" ng-model="formData.term.refid" ng-required="true">
+                                        <input type="text" name="refid" class="form-control  text-left" ng-model="formData.term.refid" ng-pattern="/MDCX_/" ng-required="true">
+                                        <p ng-show="formrosetta.refid.$error.pattern">Refid must start with MDCX_</p>
                                     </div>
                                 </div>
                             </div>

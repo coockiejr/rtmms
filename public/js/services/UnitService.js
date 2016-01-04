@@ -163,7 +163,7 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
             });
     };
     // =====================================
-    // Rosetta MODALS ======================
+    // Unit MODALS ======================
     // =====================================
 
      factory.showAddUnitModal = function() {
@@ -204,6 +204,77 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
             });
         }
     };
+
+    factory.showAssignRefidModal = function(unitValue) {
+        if (Unit) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/refidAssignModal.tpl.html',
+                controller: 'URefidModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    unitValue: function() {
+                        return unitValue;
+                    }
+                }
+            });
+
+            return modalInstance.result.then(function(unitValue) {
+                factory.editUnit(unitValue);
+            }, function() {
+                return null;
+            });
+        }
+    };
+
+    factory.showReadyRefidModal = function(unitValue) {
+        if (Unit) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/refidModal.tpl.html',
+                controller: 'URefidModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    unitValue: function() {
+                        return unitValue;
+                    }
+                }
+            });
+
+            return modalInstance.result.then(function(unitValue) {
+                factory.editUnit(unitValue);
+            }, function() {
+                return null;
+            });
+        }
+    };
+
+    // ====================================
+    // Comment MODALS ======================
+    // =====================================
+
+    
+    factory.showAddCommentModal = function(unitValue) {
+        console.log(unitValue);
+        if (Unit) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/commentModal.tpl.html',
+                controller: 'UnitCommentModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    unitValue: function() {
+                        return unitValue;
+                    }
+                }
+            });
+
+            return modalInstance.result.then(function(unitValue) {
+                console.log(unitValue);
+                factory.editUnit(unitValue);
+            }, function() {
+                return null;
+            });
+        }
+    };
+
     return factory;
 
 }]);

@@ -4,7 +4,7 @@
 <div class="modal-body">
     <form name="commentForm">
         <div ng-repeat="comment in comments">
-            {{comment.text}} -- by {{comment.author.name}} ({{user.contributingOrganization.name}}) -- {{comment.date| date:"MMM d, y h:mm a '(GMT' Z)"}} 
+            {{comment.text}} -- by {{comment.author.name}} ({{comment.author.co}}) -- {{comment.date| date:"MMM d, y h:mm a '(GMT' Z)"}} 
         </div>
         <div class="form-group">
             <label>Leave Comment</label>

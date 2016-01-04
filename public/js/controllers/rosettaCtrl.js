@@ -27,6 +27,10 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
+            name:'info',
+            cellTemplate:' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right" >  </button>',
+            width:50
+        },{
             name: 'groups',
             field: 'groups',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
@@ -37,7 +41,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
 
                 if (row.entity.term !== undefined) {
-                    if (row.entity.term.status === undefined) {
+                    if (row.entity.term.status === undefined||row.entity.term.status ==="pMapped") {
 
                         return 'red';
                     }
@@ -50,7 +54,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
                     if (row.entity.term.status === "unregistered") {
                         return 'purple';
                     }
-                    if (row.entity.term.status === "mapped") {
+                    if (row.entity.term.status === "rMapped") {
                         return 'orange';
                     }
                 }
@@ -138,14 +142,16 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
                 getPage();
             });
 
+            if (gridApi.selection !== undefined) {
+                gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+                    if (row.isSelected) {
+                        $scope.selectedEntity = row.entity;
+                    } else {
+                        $scope.selectedEntity = null;
+                    }
+                });
+            }
 
-            gridApi.selection.on.rowSelectionChanged($scope, function(row) {
-                if (row.isSelected) {
-                    $scope.selectedEntity = row.entity;
-                } else {
-                    $scope.selectedEntity = null;
-                }
-            });
         }
     };
 
@@ -184,48 +190,7 @@ angular.module('rtmms.rosetta').controller('CommentModalInstanceController', ['$
     var formDataInitial;
     $scope.user = AuthService.isLoggedIn();
 
-    //console.log($scope.user);
-
-
-    /*
-         $scope.formData.comments.push({
-                author : {
-                    _id:$scope.user._id,
-                    name : $scope.user.username
-                },
-                text:$scope.comment,
-                data:''
-            });
-            console("here");
-            console.log($scope.formData.comments);
-    */
-
-
-    /*
-        if (rosetta) {
-            console.log(rosetta);
-            $scope.comments = rosetta.comments;
-            $scope.formData = rosetta;
-
-            $scope.formData.comments.push({
-                author: {
-                    _id: $scope.user._id,
-                    name: $scope.user.username
-                },
-                text: $scope.comment,
-                date: Date.now()
-            });
-            console.log($scope.formData.comments);
-
-            formDataInitial = Restangular.copy(rosetta);
-
-
-
-        } else {
-            $scope.formData = {};
-        }
-
-    */
+   
 
     if (rosetta) {
         $scope.comments = rosetta.comments;
@@ -237,7 +202,8 @@ angular.module('rtmms.rosetta').controller('CommentModalInstanceController', ['$
         var comment = {
             author: {
                 _id: $scope.user._id,
-                name: $scope.user.username
+                name: $scope.user.username,
+                co:$scope.user.contributingOrganization.name
             },
             text: $scope.comment,
             date: Date.now()

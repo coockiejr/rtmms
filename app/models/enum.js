@@ -21,7 +21,8 @@ var enumSchema = mongoose.Schema({
     comments: [{
         author: {
             _id: Number,
-            name: String
+            name: String,
+            co:String
         },
         text: String,
         date: Date

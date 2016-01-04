@@ -50,7 +50,8 @@ var rosettaSchema = new mongoose.Schema({
             comments: [{
                 author: {
                     _id: Number,
-                    name: String
+                    name: String,
+                    co:String
                 },
                 text: String,
                 date: Date
@@ -94,7 +95,8 @@ var rosettaSchema = new mongoose.Schema({
         comments: [{
             author: {
                 _id: Number,
-                name: String
+                name: String,
+                co:String
             },
             text: String,
             date: Date
@@ -130,7 +132,8 @@ var rosettaSchema = new mongoose.Schema({
             comments: [{
                 author: {
                     _id: Number,
-                    name: String
+                    name: String,
+                    co:String
                 },
                 text: String,
                 date: Date
@@ -165,7 +168,8 @@ var rosettaSchema = new mongoose.Schema({
         comments: [{
             author: {
                 _id: Number,
-                name: String
+                name: String,
+                co:String
             },
             text: String,
             date: Date
@@ -181,13 +185,13 @@ var rosettaSchema = new mongoose.Schema({
     }],
     // contributingOrganization: String,
     contributingOrganization: {
-         _id: Number,
         name: String
     },
     comments: [{
         author: {
             _id: Number,
-            name: String
+            name: String,
+            co:String
         },
         text: String,
         date: Date

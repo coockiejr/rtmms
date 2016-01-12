@@ -12,3 +12,138 @@
         <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
     </div>
 </div>
+<script type="text/ng-template" id="popover">
+    <div class="triangle"></div>
+    <div class="modal-header">
+        <h3 class="modal-title">Term information</h3>
+    </div>
+    <table class="table" border="1" style="border:1px solid black;">
+        <tr>
+            <th>Groups</th>
+            <td>
+                <table>
+                    <tr ng-repeat="groups in row.entity.groups">
+                        <td>{{groups}}</td>
+                    </tr>
+                </table>
+        </tr>
+        <tr>
+            <th>REFID</th>
+            <td>{{row.entity.term.refid}}</td>
+        </tr>
+        <tr>
+            <th>PART</th>
+            <td>{{row.entity.term.partition}}</td>
+        </tr>
+        <tr>
+            <th>CODE10</th>
+            <td>{{row.entity.term.code10}}</td>
+        </tr>
+        <tr>
+            <th>CF_CODE10</th>
+            <td>{{row.entity.term.cfCode10}}</td>
+        </tr>
+        <tr>
+            <th>Display Name</th>
+            <td>{{row.entity.term.displayName}}</td>
+        </tr>
+        <tr>
+            <th>Contributing Organization</th>
+            <td>{{row.entity.contributingOrganization.name}}</td>
+        </tr>
+        <tr>
+            <th>Vendor_UOM</th>
+            <td>{{row.entity.vendorUom}}</td>
+        </tr>
+        <tr>
+            <th>Vendor_VMD</th>
+            <td>{{row.entity.vendorVmd}}</td>
+        </tr>
+        <tr>
+            <th>Systematic Name</th>
+            <td>{{row.entity.term.systematicName}}</td>
+        </tr>
+        <tr>
+            <th>Common Term</th>
+            <td>{{row.entity.term.commonTerm}}</td>
+        </tr>
+        <tr>
+            <th>Acronym</th>
+            <td>{{row.entity.term.acronym}}</td>
+        </tr>
+        <tr>
+            <th>Term Description</th>
+            <td>{{row.entity.term.termDescription}}</td>
+        </tr>
+    </table>
+    <b ng-show="row.entity.units.length">Units:</b>
+    <br>
+    <table ng-show="row.entity.units.length" class="table" border="1" style="border:1px solid black;">
+        <tr>
+            <th>UOM_MDC_REFID</th>
+            <th>UCODE10</th>
+            <th>CF_UCODE10</th>
+            <th>UOM_UCUM</th>
+        </tr>
+        <tr ng-repeat="unit in row.entity.units">
+            <td>
+                {{unit.term.refid}}
+            </td>
+            <td>
+                {{unit.term.code10}}
+            </td>
+            <td>
+                {{unit.term.cfCode10}}
+            </td>
+            <td>
+                <div ng-repeat="ucum in unit.ucums">
+                    {{ucum.ucum}}
+                </div>
+            </td>
+        </tr>
+    </table>
+    <b ng-show="row.entity.enumGroups.length">Enum Group:</b>
+    <table ng-show="row.entity.enumGroups.length" class="table" border="1" style="border:1px solid black;">
+        <tr>
+            <th>Enum values</th>
+        </tr>
+        <tr ng-repeat="enum in row.entity.enumGroups">
+            <td>
+                {{enum.groupName}}
+            </td>
+        </tr>
+    </table>
+    <b ng-show="row.entity.enums.length">Enums:</b>
+    <table ng-show="row.entity.enums.length" class="table" border="1" style="border:1px solid black;">
+        <tr>
+            <th>Enum values</th>
+            <th>ECODE10</th>
+            <th>CF_ECODE10</th>
+            <th>Token</th>
+        </tr>
+        <tr ng-repeat="enum in row.entity.enums">
+            <td>
+                {{enum.term.refid}}
+            </td>
+            <td>
+                {{enum.term.code10}}
+            </td>
+            <td>
+                {{enum.term.cfCode10}}
+            </td>
+            <td>
+                {{enum.token}}
+            </td>
+        </tr>
+    </table>
+    <button class="glyphicon glyphicon-plus" ng-click="collapse=!collapse" style="background:none; border:none;"></button><b>Comments</b>:
+    <div ng-repeat="comment in row.entity.comments">
+        <p ng-show=collapse> {{comment.text}} -- by {{comment.author.name}} ({{comment.author.co}}) -- {{comment.date| date:"MMM d, y h:mm a '(GMT' Z)"}} </p>
+    </div>
+    <br><b>Status</b>:
+    <p ng-show="row.entity.term.status==='rMapped'">Mapped ready to be approved</p>
+    <p ng-show="row.entity.term.status===undefined">New term waiting to be proposed</p>
+    <p ng-show="row.entity.term.status==='pMapped'">Mapped waiting to register Refid</p>
+    <p ng-show="row.entity.term.status!=='rMapped' && row.entity.term.status!=='pMapped'">{{row.entity.term.status}}</p>
+    
+</script>

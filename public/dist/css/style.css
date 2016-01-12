@@ -7442,6 +7442,17 @@ footer {
   overflow-y: scroll;
   overflow-x: scroll;
 }
+.tableInfo table,
+.tableInfo th,
+.tableInfo td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+.tableInfo th,
+.tableInfo td {
+  padding: 5px;
+  text-align: left;
+}
 
 .ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {
   background-color: #DFE8F6 !important;

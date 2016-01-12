@@ -16,35 +16,81 @@
 </div>
 <script type="text/ng-template" id="popover">
     <div class="triangle"></div>
-    <div><b>Enum Groups</b>:
-        <table border="1" align="center">
-            <tr ng-repeat="groups in row.entity.enumGroups">
-                <td>
-                    {{groups.groupName}}
-                    <br>
-                </td>
-            </tr>
-        </table>
-        <br><b>REFID</b>: {{row.entity.term.refid}}
-        <br><b>ECODE10</b>: {{row.entity.term.code10}}
-        <br><b>CF_ECODE10</b>: {{row.entity.term.cfCode10}}
-        <br><b>EPART</b>: {{row.entity.term.partition}}
-        <br><b> Description</b>: {{row.entity.description}}
-        <br><b>Token</b>: {{row.entity.token}}
-        <br><b>Systematic Name</b>: {{row.entity.term.systematicName}}
-        <br><b>Common Term</b>: {{row.entity.commonTerm}}
-        <br><b>Acronym</b>: {{row.entity.term.acronym}}
-        <br><b>Term Description</b>: {{row.entity.term.termDescription}}
-        <br><b>Tags:</b>
-        <div ng-repeat="tag in row.entity.tags">
-            {{tag}}
-            <br>
-        </div>
-        <br><b>Comments</b>:
-        <div ng-repeat="comment in row.entity.comments">
-            {{comment.text}} -- by {{comment.author.name}} ({{comment.author.co}}) -- {{comment.date| date:"MMM d, y h:mm a '(GMT' Z)"}}
-            <br>
-        </div>
-        <br><b>Status</b>:{{row.entity.term.status}}
+    <div class="modal-header">
+        <h3 class="modal-title">Enum information</h3>
     </div>
+    <table class="table" border="1" style="border:1px solid black;">
+        <tr>
+            <th>Enum Groups</th>
+            <td>
+                <table>
+                    <tr ng-repeat="groups in row.entity.enumGroups">
+                        <td>{{groups.groupName}}</td>
+                    </tr>
+                </table>
+        </tr>
+        <tr>
+            <th>REFID</th>
+            <td>{{row.entity.term.refid}}</td>
+        </tr>
+        <tr>
+            <th>PART</th>
+            <td>{{row.entity.term.partition}}</td>
+        </tr>
+        <tr>
+            <th>CODE10</th>
+            <td>{{row.entity.term.code10}}</td>
+        </tr>
+        <tr>
+            <th>CF_CODE10</th>
+            <td>{{row.entity.term.cfCode10}}</td>
+        </tr>
+      
+        <tr>
+            <th>Systematic Name</th>
+            <td>{{row.entity.term.systematicName}}</td>
+        </tr>
+        <tr>
+            <th>Common Term</th>
+            <td>{{row.entity.term.commonTerm}}</td>
+        </tr>
+        <tr>
+            <th>Acronym</th>
+            <td>{{row.entity.term.acronym}}</td>
+        </tr>
+        <tr>
+            <th>Term Description</th>
+            <td>{{row.entity.term.termDescription}}</td>
+        </tr>
+        <tr>
+            <th>Token</th>
+            <td>{{row.entity.token}}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{row.entity.description}}</td>
+        </tr>
+        
+       
+       
+        <tr>
+            <th>Tags</th>
+            <td>
+                <table>
+                    <tr ng-repeat="tags in row.entity.tags">
+                        <td>{{tags}}</td>
+                    </tr>
+                </table>
+        </tr>
+    </table>
+    <button class="glyphicon glyphicon-plus" ng-click="collapse=!collapse" style="background:none; border:none;"></button><b>Comments</b>:
+    <div ng-repeat="comment in row.entity.comments">
+        <p ng-show=collapse> {{comment.text}} -- by {{comment.author.name}} ({{comment.author.co}}) -- {{comment.date| date:"MMM d, y h:mm a '(GMT' Z)"}} </p>
+    </div>
+    <br><b>Status</b>:
+    <p ng-show="row.entity.term.status==='rMapped'">Mapped ready to be approved</p>
+    <p ng-show="row.entity.term.status===undefined">New term waiting to be proposed</p>
+    <p ng-show="row.entity.term.status==='pMapped'">Mapped waiting to register Refid</p>
+    <p ng-show="row.entity.term.status!=='rMapped' && row.entity.term.status!=='pMapped'">{{row.entity.term.status}}</p>
 </script>
+

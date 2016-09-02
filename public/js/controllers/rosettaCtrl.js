@@ -1,4 +1,4 @@
-angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'AuthService', 'RosettaService', 'dialogs', 'uiGridConstants', function($scope, AuthService, RosettaService, dialogs, uiGridConstants) {
+angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'AuthService', 'RosettaService', 'uiGridConstants', function($scope, AuthService, RosettaService, uiGridConstants) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -27,10 +27,10 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name:'info',
-            cellTemplate:' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
-            width:50
-        },{
+            name: 'info',
+            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+            width: 50
+        }, {
             name: 'groups',
             field: 'groups',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
@@ -41,7 +41,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
 
                 if (row.entity.term !== undefined) {
-                    if (row.entity.term.status === undefined||row.entity.term.status ==="pMapped") {
+                    if (row.entity.term.status === undefined || row.entity.term.status === "pMapped") {
 
                         return 'red';
                     }
@@ -190,7 +190,7 @@ angular.module('rtmms.rosetta').controller('CommentModalInstanceController', ['$
     var formDataInitial;
     $scope.user = AuthService.isLoggedIn();
 
-   
+
 
     if (rosetta) {
         $scope.comments = rosetta.comments;
@@ -203,7 +203,7 @@ angular.module('rtmms.rosetta').controller('CommentModalInstanceController', ['$
             author: {
                 _id: $scope.user._id,
                 name: $scope.user.username,
-                co:$scope.user.contributingOrganization.name
+                co: $scope.user.contributingOrganization.name
             },
             text: $scope.comment,
             date: Date.now()

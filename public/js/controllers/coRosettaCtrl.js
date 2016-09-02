@@ -1,4 +1,4 @@
-angular.module('rtmms.authentication').controller('CoRosettaController', ['$scope', 'AuthService', 'RosettaService', 'dialogs', 'uiGridConstants', function($scope, AuthService, RosettaService, dialogs, uiGridConstants) {
+angular.module('rtmms.authentication').controller('CoRosettaController', ['$scope', 'AuthService', 'RosettaService', 'uiGridConstants', function($scope, AuthService, RosettaService, uiGridConstants) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -38,10 +38,10 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name:'info',
-            cellTemplate:' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
-            width:50
-        },{
+            name: 'info',
+            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+            width: 50
+        }, {
             name: 'groups',
             field: 'groups',
             cellTemplate: '<div class="ui-grid-cell-contents" ><span>{{row.entity.groups | ArrayAsString }}</span></div>'
@@ -242,7 +242,7 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
 }]);
 
 
-angular.module('rtmms.rosetta').controller('CoController', ['$scope', '$http', 'AuthService', 'RosettaService', 'dialogs', 'uiGridConstants', function($scope, $http, AuthService, RosettaService, dialogs, uiGridConstants) {
+angular.module('rtmms.rosetta').controller('CoController', ['$scope', '$http', 'AuthService', 'RosettaService', 'uiGridConstants', function($scope, $http, AuthService, RosettaService, uiGridConstants) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -390,7 +390,7 @@ angular.module('rtmms.rosetta').controller('CoController', ['$scope', '$http', '
 
 }]);
 
-angular.module('rtmms.rosetta').controller('CoModalInstanceController', ['$scope', '$modalInstance', '$http', 'co', 'AuthService', 'RosettaService', 'dialogs', 'uiGridConstants', function($scope, $modalInstance, $http, co, AuthService, RosettaService, dialogs, uiGridConstants) {
+angular.module('rtmms.rosetta').controller('CoModalInstanceController', ['$scope', '$modalInstance', '$http', 'co', 'AuthService', 'RosettaService', 'uiGridConstants', function($scope, $modalInstance, $http, co, AuthService, RosettaService, uiGridConstants) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -425,7 +425,7 @@ angular.module('rtmms.rosetta').controller('CoModalInstanceController', ['$scope
 
     };
     $scope.editCo = function() {
-        $modalInstance.close($scope.org);
+        $modalInstance.close();
         //$scope.formData.term.status="proposed";
         // $http.put('/api/cos/'+$scope.Co,"test");
 

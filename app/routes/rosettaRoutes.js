@@ -22,6 +22,8 @@ module.exports = function(app, qs, passport, async, _) {
         var sort = req.query.sort;
         var limit = req.query.limit;
         var skip = req.query.skip;
+        console.log(limit);
+
 
         query = Rosetta.find();
         queryCount = Rosetta.find();
@@ -90,6 +92,7 @@ module.exports = function(app, qs, passport, async, _) {
         }
 
         if (skip) {
+
             query = query.skip(req.query.skip);
         }
 
@@ -849,6 +852,7 @@ module.exports = function(app, qs, passport, async, _) {
         // if they aren't redirect them to the home page
         res.status(401).send("insufficient privileges");
     }
+
     function isRevLoggedIn(req, res, next) {
         // if user is authenticated in the session and has an SDO role, carry on 
 
@@ -860,6 +864,7 @@ module.exports = function(app, qs, passport, async, _) {
         // if they aren't redirect them to the home page
         res.status(401).send("insufficient privileges");
     }
+
     function isSCRLoggedIn(req, res, next) {
         // if user is authenticated in the session and has an SDO role, carry on 
 

@@ -1,4 +1,4 @@
-angular.module('rtmms.unit').controller('UnitController', ['$scope', '$http', 'AuthService', 'UnitService', 'dialogs', function($scope, $http, AuthService, UnitService, dialogs) {
+angular.module('rtmms.unit').controller('UnitController', ['$scope', '$http', 'AuthService', 'UnitService', function($scope, $http, AuthService, UnitService) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -27,9 +27,9 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', '$http', 'A
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name:'info',
-            cellTemplate:' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
-            width:50
+            name: 'info',
+            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+            width: 50
         }, {
             name: 'unitGroups',
             field: 'unitGroups',
@@ -68,10 +68,10 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', '$http', 'A
         }, {
             name: 'partition',
             field: 'term.partition'
-        },{
+        }, {
             name: 'dimension',
             field: 'dimension'
-        },{
+        }, {
             name: 'dimC',
             field: 'dimC'
         }, {

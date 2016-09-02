@@ -53,7 +53,7 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
             });
     };
 
-       //get enums ans enumGroups
+    //get enums ans enumGroups
     factory.getEnumsAndEnumGroups = function(params) {
         return Restangular.all('enumsandenumgroups').getList(params).then(
             function(enumsAndEnumGroups) {
@@ -64,7 +64,7 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
             });
     };
 
-     factory.getEnumRefids = function(params) {
+    factory.getEnumRefids = function(params) {
         return Restangular.all('enumrefids').getList(params).then(
             function(refids) {
                 return refids;
@@ -125,7 +125,7 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
 
 
 
-     //get enum tags
+    //get enum tags
     factory.getEnumTags = function(params) {
         return Restangular.all('enumtags').getList(params).then(
             function(tags) {
@@ -225,7 +225,7 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
     // Comment MODALS ======================
     // =====================================
 
-    
+
     factory.showAddCommentModal = function(enumValue) {
         if (Enum) {
             var modalInstance = $modal.open({

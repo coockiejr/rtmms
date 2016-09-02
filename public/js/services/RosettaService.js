@@ -43,7 +43,7 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
                 console.log('Error: ' + res.status);
             });
     };
-     factory.editCo = function(co) {
+    factory.editCo = function(co) {
         co.put();
     };
     //retrieve a Rosetta by id
@@ -261,7 +261,7 @@ angular.module('rtmms.rosetta').factory('RosettaService', ['Restangular', '$moda
     // Comment MODALS ======================
     // =====================================
 
-    
+
     factory.showAddCommentModal = function(rosetta) {
         if (Rosetta) {
             var modalInstance = $modal.open({

@@ -18,13 +18,13 @@ module.exports = function(app, qs, passport, async) {
     // database backup
     app.post('/api/backup/:par', function(req, res) {
         if (req.params.par === "now") {
-            root = './backup/backup' +'_'+ Date.now();
+            root = './backup/backup' + '_' + Date.now();
 
             var path = './backup/backup.txt';
             backup({
                 uri: 'mongodb://ismail:ismail@127.0.0.1:27017/rtmms', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
                 root: root, // write files into this dir
-                parser:'json'
+                parser: 'json'
 
             });
 
@@ -120,6 +120,8 @@ module.exports = function(app, qs, passport, async) {
 
     app.post('/api/signup', function(req, res, next) {
         passport.authenticate('local-signup', function(err, user, info) {
+            console.log("HERe========");
+            console.log(user);
             if (err) {
                 return next(err);
             }
@@ -173,7 +175,7 @@ module.exports = function(app, qs, passport, async) {
     });
 
 
-    
+
 
 
     // =====================================
@@ -197,10 +199,10 @@ module.exports = function(app, qs, passport, async) {
                 id: JSON.parse(req.param('userTypes')).id,
                 usertype: JSON.parse(req.param('userTypes')).usertype
             };
-            user.contributingOrganization={
-                _id:JSON.parse(req.param('contributingOrganization'))._id,
-                name:JSON.parse(req.param('contributingOrganization')).name
-            };  
+            user.contributingOrganization = {
+                _id: JSON.parse(req.param('contributingOrganization'))._id,
+                name: JSON.parse(req.param('contributingOrganization')).name
+            };
             user.userStat = "warning";
             user.id = max + 1;
             user.save(function(err, user) {

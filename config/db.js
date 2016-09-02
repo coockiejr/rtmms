@@ -5,15 +5,16 @@ module.exports = function(mongoose,backup) {
     // } else {
     //     url: 'mongodb://127.0.0.1:27017/rtmms'; // connect to our database
     // }
-    var options = {
-        user:'ismail',
-        pass:'ismail'
-    };
+    // var options = {
+    //     user:'',
+    //     pass:''
+    // };
+    console.log("heeereDB");
 
     if (process.env.OPENSHIFT_MONGODB_DB_URL) {
-        mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL + 'rtmms',options);
+        mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL + 'rtmms');
     } else {
-        mongoose.connect('mongodb://127.0.0.1:27017/rtmms',options); // connect to our database
+        mongoose.connect('mongodb://127.0.0.1:27017/rtmms'); // connect to our database
     }
     
 }

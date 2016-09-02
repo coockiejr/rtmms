@@ -1,4 +1,4 @@
-var app = angular.module('rtmms', ['rtmms.admin', 'rtmms.rosetta', 'rtmms.hRtm', 'rtmms.unit', 'rtmms.enum',  'rtmms.authentication', 'restangular','nsPopover','ngDropover', 'dialogs.main', 'ui.bootstrap','ui.bootstrap.popover', 'ui.select', 'ui.grid', 'ui.grid.selection',  'ui.grid.pagination','ui.grid.resizeColumns','ui.grid.autoResize', 'ngSanitize', 'ui.router', 'appRoutes', 'angular-loading-bar', 'angularUtils.directives.dirPagination', 'angulartics', 'ngTagsInput', 'toggle-switch', 'angulartics.google.analytics']);
+var app = angular.module('rtmms', ['rtmms.admin', 'rtmms.rosetta', 'rtmms.hRtm', 'rtmms.unit', 'rtmms.enum', 'rtmms.authentication', 'restangular', 'nsPopover', 'ngDropover', 'ui.bootstrap', 'ui.bootstrap.popover', 'ui.select', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination', 'ui.grid.resizeColumns', 'ui.grid.autoResize', 'ngSanitize', 'ui.router', 'appRoutes', 'angular-loading-bar', 'angularUtils.directives.dirPagination', 'angulartics', 'ngTagsInput', 'toggle-switch', 'angulartics.google.analytics']);
 
 
 var adminModule = angular.module('rtmms.admin', []);

@@ -1,4 +1,4 @@
-angular.module('rtmms.unit').controller('UnitGroupController', ['$scope', 'AuthService', 'UnitService', 'dialogs', function($scope, AuthService, UnitService, dialogs) {
+angular.module('rtmms.unit').controller('UnitGroupController', ['$scope', 'AuthService', 'UnitService', function($scope, AuthService, UnitService) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {

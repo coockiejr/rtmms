@@ -1,10 +1,10 @@
-angular.module('rtmms').controller('HomeController', ['$scope', 'AuthService',  'dialogs', function($scope, AuthService, dialogs) {
+angular.module('rtmms').controller('HomeController', ['$scope', 'AuthService', function($scope, AuthService) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
         $scope.user = user;
     });
-    
+
 
     $scope.resultsList = [];
 
@@ -23,15 +23,15 @@ angular.module('rtmms').controller('HomeController', ['$scope', 'AuthService',  
         ResultsService.retrieveResultForEdit(result).then(function() {});
     };
 
-    $scope.removeResult = function(result) {
-        var dlg = dialogs.confirm("Remove Result?","Are you sure you want to remove this result?");
-        dlg.result.then(function(btn) {
-            ResultsService.deleteResult(result).then(function() {
-                var index = $scope.resultsList.indexOf(result);
-                if (index > -1) $scope.resultsList.splice(index, 1);
-            });
-        }, function(btn) {});
-    };
+    // $scope.removeResult = function(result) {
+    //     var dlg = dialogs.confirm("Remove Result?", "Are you sure you want to remove this result?");
+    //     dlg.result.then(function(btn) {
+    //         ResultsService.deleteResult(result).then(function() {
+    //             var index = $scope.resultsList.indexOf(result);
+    //             if (index > -1) $scope.resultsList.splice(index, 1);
+    //         });
+    //     }, function(btn) {});
+    // };
 
 }]);
 
@@ -95,7 +95,7 @@ angular.module('rtmms').controller('ResultModalInstanceController', ['$scope', '
     };
 
     $scope.addNbMembers = function() {
-        $scope.nbOfMembers = $scope.formData.member.length+1;
+        $scope.nbOfMembers = $scope.formData.member.length + 1;
         $scope.updateNbMembers();
     };
 

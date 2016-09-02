@@ -1,4 +1,4 @@
-angular.module('rtmms.enum').controller('EnumValueController', ['$scope', '$http', 'AuthService', 'EnumService', 'dialogs', function($scope, $http, AuthService, EnumService, dialogs) {
+angular.module('rtmms.enum').controller('EnumValueController', ['$scope', '$http', 'AuthService', 'EnumService', function($scope, $http, AuthService, EnumService) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -27,9 +27,9 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', '$http
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name:'info',
-            cellTemplate:' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
-            width:50
+            name: 'info',
+            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+            width: 50
         }, {
             name: 'groups',
             field: 'enums',

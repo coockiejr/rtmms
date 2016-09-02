@@ -1,15 +1,18 @@
 <div>
     <h2>About Rosetta</h2>
     <p>The Rosetta Terminology Mapping uses three primary tables that define and constrain the semantic content of IHE PCD messages. The three tables are:</p>
-	<br>
-    <a ui-sref="/rosetta">Rosetta: </a> The Rosetta table contains the observation identifiers, units-of-measure and enumerations that vendors currently support on their gateways and how they plan to map these to the ISO/IEEE 11073-10101 nomenclature and its extensions.
-	<br><br>
-    <a ui-sref="/units">Units: </a> This table defines all the allowed units-of-measure and normative mapping between the ISO/IEEE 11073-10101 units-of-measure (by Reference IDs and numeric codes) and the equivalent UCUM term(s). It also defines groups of related units-of-measure, such as units used for drug dose, concentration, etc. that are referenced by the primary Rosetta table. It also specifies the dimensionality of each unit-of-measure to ensure that all the units associated with an observation identifier are consistent. The units table includes additional information required for publication in ISO/IEEE 11073-10101 standard so that all of the units-of-measure information can be updated and maintained in a single repository.
-	<br><br>
-    <a ui-sref="/enums">Enums </a> This table defines groups of enumerated values (either token strings or as IEEE Reference IDs and numeric codes) that are referenced from the main 'Rosetta' table.
-	<br><br>
-   	<h4>Other tables</h4>
-	<br>
+    <br>
+    <a ui-sref="/rosetta">Rosetta: </a> The Rosetta table contains the observation identifiers, units-of-measure and enumerations that vendors currently support on their gateways and how they plan to map these to the ISO/IEEE 11073-10101 nomenclature
+    and its extensions.
+    <br><br>
+    <a ui-sref="/units">Units: </a> This table defines all the allowed units-of-measure and normative mapping between the ISO/IEEE 11073-10101 units-of-measure (by Reference IDs and numeric codes) and the equivalent UCUM term(s). It also defines groups
+    of related units-of-measure, such as units used for drug dose, concentration, etc. that are referenced by the primary Rosetta table. It also specifies the dimensionality of each unit-of-measure to ensure that all the units associated with an observation
+    identifier are consistent. The units table includes additional information required for publication in ISO/IEEE 11073-10101 standard so that all of the units-of-measure information can be updated and maintained in a single repository.
+    <br><br>
+    <a ui-sref="/enumValues">Enums </a> This table defines groups of enumerated values (either token strings or as IEEE Reference IDs and numeric codes) that are referenced from the main 'Rosetta' table.
+    <br><br>
+    <h4>Other tables</h4>
+    <br>
     <a ui-sref="/hRtm">hRTM </a> The Harmonized Rosetta table contains terms agreed upon during the harmonization process. This table is automatically generated from the Rosetta table.
     <br><br>
 </div>

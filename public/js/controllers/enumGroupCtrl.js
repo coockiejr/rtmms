@@ -1,4 +1,4 @@
-angular.module('rtmms.enum').controller('EnumGroupController', ['$scope', 'AuthService', 'EnumService', 'dialogs', function($scope, AuthService, EnumService, dialogs) {
+angular.module('rtmms.enum').controller('EnumGroupController', ['$scope', 'AuthService', 'EnumService', function($scope, AuthService, EnumService) {
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
         $scope.user = user;

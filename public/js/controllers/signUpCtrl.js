@@ -4,13 +4,29 @@ angular.module('rtmms.authentication').controller('SignUpController', ['$scope',
         $scope.newCo = !$scope.newCo;
         console.log($scope.newCo);
     };
+    $scope.setCo = function(co) {
+        console.log(co);
+        $scope.user.contributingOrganization = {
+            id: JSON.parse(co)._id,
+            name: JSON.parse(co).name
+        };
+        console.log("$scope.user");
+
+        console.log($scope.user);
+
+    };
     $scope.signup = function(user) {
+        user.test = {
+            name: "TEST",
+        };
+        console.log(user);
+
         if ($scope.userForm.$invalid) {
             return;
         }
 
         $http.post("/api/signup", user).success(function(data, status) {
-            window.location.href = '/';
+            //window.location.href = '/';
         }).error(function(data) {
             $scope.message = data[0];
             $state.go('/signup');
@@ -47,10 +63,10 @@ angular.module('rtmms.authentication').controller('SignUpController', ['$scope',
     $scope.addCo = function() {
         //  console.log($scope.user.contributingOrganization);
         $http.post('/api/addCo/' + $scope.Co).then(function(res) {
-            
-            $scope.message=res.data;
+
+            $scope.message = res.data;
             $scope.getCOs();
-            $scope.Co="";
+            $scope.Co = "";
         });
     };
 

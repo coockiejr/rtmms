@@ -1,29 +1,29 @@
 {
-  "name": "rtmms",
-  "version": "1.0.0",
-  "dependencies": {
-    "angular": "~1.3.14",
-    "angular-ui-router": "~0.2.13",
-    "angular-bootstrap": "~0.12.1",
-    "restangular": "~1.4.0",
-    "angular-ui-select": "~0.10.0",
-    "angular-sanitize": "~1.3.14",
-    "angular-dialog-service": "~5.2.6",
-    "angular-loading-bar": "~0.6.0",
-    "fontawesome": "~4.3.0",
-    "angular-utils-pagination": "~0.5.0",
-    "angulartics": "~0.17.2",
-    "angular-ui-grid": "~3.0.0-rc.20",
-    "ng-tags-input": "~2.2.0",
-    "angular-bootstrap-toggle-switch": "~0.5.2",
-    "file-saver.js":"~1.20150507.2",
-    "nsPopover":"~0.6.8",
-    "ngdropover":"1.0.0"
+    "name": "rtmms",
+    "version": "1.0.0",
+    "dependencies": {
+        "angular": "1.3.15",
+        "angular-ui-router": "~0.2.15",
+        "angular-bootstrap": "~0.13.4",
+        "restangular": "~1.4.0",
+        "angular-ui-select": "0.17.1",
+        "angular-sanitize": "1.3.15",
+        "angular-dialog-service": "~5.2.11",
+        "angular-loading-bar": "~0.6.0",
+        "fontawesome": "~4.3.0",
+        "angular-utils-pagination": "~0.5.0",
+        "angulartics": "~0.17.2",
+        "angular-ui-grid": "~3.0.0-rc.20",
+        "ng-tags-input": "~3.1.1",
+        "angular-bootstrap-toggle-switch": "~0.5.2",
+        "file-saver.js": "~1.20150507.2",
+        "nsPopover": "~0.6.8",
+        "ngdropover": "1.0.0"
 
-  },
-  "resolutions": {
-    "angular-bootstrap": "~0.12.0",
-    "angular": "1.3.11"
-  },
-  "devDependencies": {}
+    },
+    "resolutions": {
+        "angular-bootstrap": "~0.13.4",
+        "angular": "1.3.15"
+    },
+    "devDependencies": {}
 }

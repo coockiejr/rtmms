@@ -9,7 +9,7 @@ angular.module('rtmms.rosetta').factory('HRosettaService', ['Restangular', '$mod
 
     //retrieve Rosettas
     factory.getHRosettas = function(params) {
-        return HRosetta.customGET("",params).then(function(result) {
+        return HRosetta.customGET("", params).then(function(result) {
             if (result.hrosettas) {
                 Restangular.restangularizeCollection(null, result.hrosettas, 'hrosettas');
             }

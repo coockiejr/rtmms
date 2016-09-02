@@ -24,7 +24,11 @@ var userSchema = mongoose.Schema({
         usertype: String
     },
     contributingOrganization: {
-        name:String
+        id: String,
+        name: String
+    },
+    test: {
+        name: String
     },
     userStat: String,
     resetPasswordToken: String,

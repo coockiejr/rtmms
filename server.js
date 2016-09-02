@@ -2,12 +2,14 @@
 
 // set up ======================================================================
 // get all the tools we need
+    console.log("heeere");
+
 var express = require('express');
 var app = express();
 var osipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-var osport = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var osport = process.env.OPENSHIFT_NODEJS_PORT || 8081;
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 8081;
 var mongoose = require('mongoose');
 var backup = require('mongodb-backup');
 var passport = require('passport');
@@ -17,7 +19,7 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var bson = require('bson');
+//var bson = require('bson');
 var _ = require('underscore');
 
 var async = require('async');
@@ -27,6 +29,8 @@ var nodemailer = require("nodemailer");
 
 
 var qs = require('querystring');
+      
+
 
 var configDB = require('./config/db.js')(mongoose);
 // configuration ===============================================================
@@ -41,13 +45,13 @@ app.use(express.static(__dirname + '/public'));
 
 require('./config/passport')(passport); // pass passport for configuration
 var mail = require('./config/mail')(nodemailer);
-var forgot = require('password-reset')({
-    uri: 'http://localhost:8080/password_reset',
-    from: 'password-robot@localhost',
-    host: 'localhost',
-    port: 25,
-});
-app.use(forgot.middleware);
+// var forgot = require('password-reset')({
+//     uri: 'http://localhost:8080/password_reset',
+//     from: 'password-robot@localhost',
+//     host: 'localhost',
+//     port: 25,
+// });
+// app.use(forgot.middleware);
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)

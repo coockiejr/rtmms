@@ -1,4 +1,4 @@
-angular.module('rtmms.authentication').controller('X73Controller', ['$scope', 'AuthService', 'RosettaService', 'UnitService', 'dialogs', 'uiGridConstants', function($scope, AuthService, RosettaService, UnitService, dialogs, uiGridConstants) {
+angular.module('rtmms.authentication').controller('X73Controller', ['$scope', 'AuthService', 'RosettaService', 'UnitService', 'uiGridConstants', function($scope, AuthService, RosettaService, UnitService, uiGridConstants) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -6,14 +6,14 @@ angular.module('rtmms.authentication').controller('X73Controller', ['$scope', 'A
     });
 
     $scope.user = AuthService.isLoggedIn();
-   
+
     $scope.approvedTerms = function() {
         paginationOptions.Status = "approved";
         $scope.state = "ready";
         getPage();
     };
 
-  
+
     var paginationOptions = {
         pageNumber: 1,
         pageSize: 25,
@@ -124,7 +124,7 @@ angular.module('rtmms.authentication').controller('X73Controller', ['$scope', 'A
     };
     getPage();
 
-    
+
 
 
 
@@ -136,7 +136,6 @@ angular.module('rtmms.authentication').controller('X73Controller', ['$scope', 'A
         });
     };
 
-   
+
 
 }]);
-

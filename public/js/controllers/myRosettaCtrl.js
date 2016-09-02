@@ -1,4 +1,4 @@
-angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$http', 'AuthService', 'RosettaService', 'dialogs', 'uiGridConstants', function($scope,$http, AuthService, RosettaService, dialogs, uiGridConstants) {
+angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope', '$http', 'AuthService', 'RosettaService', 'uiGridConstants', function($scope, $http, AuthService, RosettaService, uiGridConstants) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -31,28 +31,28 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name:'info',
-            cellTemplate:' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
-            width:50
-        },{
+            name: 'info',
+            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+            width: 50
+        }, {
             name: 'groups',
             field: 'groups',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
-        },{
+        }, {
             name: 'refid',
             field: 'term.refid',
             cellTemplate: '<div class="ui-grid-cell-contents" data-toggle="tooltip" data-placement="top" title={{row.entity.term.status}}><span>{{row.entity.term.refid}}</span></div>',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
 
                 if (row.entity.term !== undefined) {
-                    if (row.entity.term.status === undefined||row.entity.term.status ==="pMapped") {
+                    if (row.entity.term.status === undefined || row.entity.term.status === "pMapped") {
 
                         return 'red';
                     }
                     if (row.entity.term.status === "proposed") {
                         return 'blue';
                     }
-                      if (row.entity.term.status === "registered") {
+                    if (row.entity.term.status === "registered") {
                         return 'green';
                     }
                     if (row.entity.term.status === "unregistered") {
@@ -166,10 +166,10 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
             sort: paginationOptions.sort,
             contributingOrganization: paginationOptions.contributingOrganization
         }).then(function(result) {
-          
+
             if (result !== null) {
 
-                $scope.rosettas=result.rosettas;
+                $scope.rosettas = result.rosettas;
                 $scope.gridOptions.data = result.rosettas;
                 $scope.gridOptions.totalItems = result.totalItems;
             }
@@ -203,7 +203,7 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
 
 
     };
-     $scope.proposeMap = function(rosetta) {
+    $scope.proposeMap = function(rosetta) {
         if (rosetta.term.status === "pMapped") {
             rosetta.term.status = "rMapped";
         } else {
@@ -215,31 +215,31 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope','$ht
 
     };
 
-    $scope.download=function(rosetta){
-       
-        $http.get('/api/downloadR/'+rosetta._id).then(function(res){
+    $scope.download = function(rosetta) {
+
+        $http.get('/api/downloadR/' + rosetta._id).then(function(res) {
             window.location = "test.xml";
         });
     };
-     $scope.downHTML=function(){
-       
-        $http.get('/api/downloadR/allHTML').then(function(res){
-            var blob = new Blob([res.data], {type: "text/plain;charset=utf-8"});
-            saveAs(blob,"rosetta_terms.html");
+    $scope.downHTML = function() {
+
+        $http.get('/api/downloadR/allHTML').then(function(res) {
+            var blob = new Blob([res.data], { type: "text/plain;charset=utf-8" });
+            saveAs(blob, "rosetta_terms.html");
         });
     };
-     $scope.downXML=function(){
-       
-        $http.get('/api/downloadR/allXML').then(function(res){
-            var blob = new Blob([res.data], {type: "text/plain;charset=utf-8"});
-            saveAs(blob,"rosetta_terms.xml");
+    $scope.downXML = function() {
+
+        $http.get('/api/downloadR/allXML').then(function(res) {
+            var blob = new Blob([res.data], { type: "text/plain;charset=utf-8" });
+            saveAs(blob, "rosetta_terms.xml");
         });
     };
-    $scope.downCSV=function(){
-       
-        $http.get('/api/downloadR/allCSV').then(function(res){
-            var blob = new Blob([res.data], {type: "text/plain;charset=utf-8"});
-            saveAs(blob,"rosetta_terms.csv");
+    $scope.downCSV = function() {
+
+        $http.get('/api/downloadR/allCSV').then(function(res) {
+            var blob = new Blob([res.data], { type: "text/plain;charset=utf-8" });
+            saveAs(blob, "rosetta_terms.csv");
         });
     };
 }]);
@@ -248,6 +248,7 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
 
     var formDataInitial;
     $scope.user = AuthService.isLoggedIn();
+    console.log($scope.user);
     $scope.constraintType = 'units';
 
 
@@ -336,8 +337,8 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
 
     } else {
         $scope.formData = {};
-        $scope.formData.contributingOrganization ={
-            _id:$scope.user.contributingOrganization._id,
+        $scope.formData.contributingOrganization = {
+            _id: $scope.user.contributingOrganization._id,
             name: $scope.user.contributingOrganization.name
         };
         console.log($scope.formData);
@@ -348,8 +349,12 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
 
     $scope.addRosetta = function() {
         if ($scope.formrosetta.$invalid) {
+            console.log("HEREEEE111");
+
             return;
         }
+        console.log("HEREEEE");
+        console.log($scope.formrosetta);
         //$scope.formData.term.status="proposed";
         RosettaService.createRosetta($scope.formData);
         $modalInstance.dismiss('add');

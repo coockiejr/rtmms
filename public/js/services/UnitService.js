@@ -43,7 +43,7 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
 
     //edit a Unit
     factory.editUnit = function(unitValue) {
-      
+
         unitValue.put();
     };
 
@@ -66,7 +66,7 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
             if (result.unitgroups) {
                 Restangular.restangularizeCollection(null, result.unitgroups, 'unitgroups');
             }
-          //  console.log(result);
+            //  console.log(result);
             return result;
         });
     };
@@ -84,7 +84,7 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
             });
     };
 
-  
+
 
     //create a Unit
     factory.createUnitGroup = function(unitGroup) {
@@ -132,7 +132,7 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
             });
     };
 
-     factory.getUcums = function(params) {
+    factory.getUcums = function(params) {
         return Restangular.all('ucums').getList(params).then(
             function(ucums) {
                 return ucums;
@@ -142,7 +142,7 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
             });
     };
 
-     //get unit tags
+    //get unit tags
     factory.getUnitTags = function(params) {
         return Restangular.all('unittags').getList(params).then(
             function(tags) {
@@ -166,7 +166,7 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
     // Unit MODALS ======================
     // =====================================
 
-     factory.showAddUnitModal = function() {
+    factory.showAddUnitModal = function() {
         var modalInstance = $modal.open({
             templateUrl: 'views/templates/modals/unitModal.tpl.html',
             controller: 'UnitModalInstanceController',
@@ -251,7 +251,7 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
     // Comment MODALS ======================
     // =====================================
 
-    
+
     factory.showAddCommentModal = function(unitValue) {
         console.log(unitValue);
         if (Unit) {

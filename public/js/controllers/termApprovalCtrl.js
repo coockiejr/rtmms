@@ -1,4 +1,4 @@
-angular.module('rtmms.authentication').controller('TermApprovalController', ['$scope', 'AuthService', 'RosettaService', 'EnumService', 'UnitService', 'dialogs', 'uiGridConstants', function($scope, AuthService, RosettaService, EnumService, UnitService, dialogs, uiGridConstants) {
+angular.module('rtmms.authentication').controller('TermApprovalController', ['$scope', 'AuthService', 'RosettaService', 'EnumService', 'UnitService', 'uiGridConstants', function($scope, AuthService, RosettaService, EnumService, UnitService, uiGridConstants) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -85,10 +85,10 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name:'info',
-            cellTemplate:' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
-            width:50
-        },{
+            name: 'info',
+            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+            width: 50
+        }, {
             name: 'groups',
             field: 'groups',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
@@ -339,10 +339,10 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name:'info',
-            cellTemplate:' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popoverU"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
-            width:50
-        },{
+            name: 'info',
+            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popoverU"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+            width: 50
+        }, {
             name: 'unitGroups',
             field: 'unitGroups',
             width: '30%',
@@ -489,10 +489,10 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name:'info',
-            cellTemplate:' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popoverE"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
-            width:50
-        },{
+            name: 'info',
+            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popoverE"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+            width: 50
+        }, {
             name: 'groups',
             field: 'enums',
             cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.enumGroups | EnumOrUnitGroupsAsString  }}</span></div>'
@@ -887,7 +887,7 @@ angular.module('rtmms.rosetta').controller('URefidModalInstanceController', ['$s
 
     }
 
-  
+
 
 
     $scope.assignRefid = function() {

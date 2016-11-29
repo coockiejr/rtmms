@@ -6,18 +6,31 @@ angular.module('rtmms.authentication').controller('ProfileController', ['$scope'
     }).success(function(data) {
         $scope.message = data.message;
         $scope.user = data.user;
-    });
-    $scope.getUsers = function() {
+        console.log($scope.user);
 
-        AuthService.getUsers().then(function(users) {
-            for (i = 0; i < users.length; i++) {
-                if ($scope.user.username === users[i].username)
-                    $scope.user = users[i];
-            }
+        AuthService.getUser($scope.user._id).then(function(user) {
 
         });
+    });
+    // $scope.getUsers = function() {
 
-    };
+    //     AuthService.getUsers().then(function(users) {
+    //         for (i = 0; i < users.length; i++) {
+    //             if ($scope.user.username === users[i].username)
+    //                 $scope.user = users[i];
+    //         }
+
+    //     });
+
+    // };
+    // $scope.getUser = function() {
+    //     console.log($scope.user);
+
+    //     AuthService.getUser($scope.user.id).then(function(user) {
+
+    //     });
+
+    // };
     $scope.showProfileModal = function(user) {
 
         AuthService.showProfileModal(user).then(function(user) {});

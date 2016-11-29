@@ -346,6 +346,7 @@ angular.module('rtmms.unit').controller('UnitModalInstanceController', ['$scope'
 
 
     $scope.addUnit = function() {
+        console.log($scope.formrosetta.$invalid);
         if ($scope.formrosetta.$invalid) {
             return;
         }

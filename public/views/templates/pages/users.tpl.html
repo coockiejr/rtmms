@@ -6,7 +6,7 @@
                 <h3 class="panel-title">
                    <button type="submit" class="glyphicon glyphicon-plus" ng-click="showAddUserModal()"></button>
 Users</h3>
-                
+
             </div>
             <div class="panel-body">
                 <table class="table" ng-init="getUsers()">
@@ -32,7 +32,9 @@ Users</h3>
                             <td>
                                 <span class="glyphicon glyphicon-pencil" ng-click="showEditUserModal(user)"></span>
                                 <span class="glyphicon glyphicon-trash" confirmed-click="removeUser($index,user)" ng-confirm-click="Would you like to delete this user?"></span>
-                                <span class="glyphicon glyphicon-ok" ng-click="approveUser(user)"></span>
+                                <span ng-show="user.contributingOrganization.status==='success'" class="glyphicon glyphicon-ok" ng-click="approveUser(user)"></span>
+                                <span ng-show="user.contributingOrganization.status==='warning'" class="glyphicon glyphicon-ok" ng-click="approveUserAndCo(user)"></span>
+
                                 <span class="glyphicon glyphicon-remove" ng-click="refuseUser(user)"></span>
                             </td>
                         </tr>
@@ -44,7 +46,7 @@ Users</h3>
         </div>
     </div>
     <div class="row">
-        <div class="panel panel-primary filterable" >
+        <div class="panel panel-primary filterable">
             <div class="panel-heading" style="color:#000000">
                 <h3 class="panel-title">
 Backup</h3>
@@ -58,9 +60,9 @@ Backup</h3>
                     </div>
                     <div class="col-md-offset-2 col-md-8">
                         <button type="submit" ng-click="backupNow()">Backup</button>
-                        <button type="submit" ng-click="backupWeek()">Lunch weekly backup</button>
+                        <button type="submit" ng-click="backupWeek()">Launch weekly backup</button>
                         <button type="submit" ng-click="restore()">Restore</button>
-                       
+
                     </div>
                 </div>
             </div>

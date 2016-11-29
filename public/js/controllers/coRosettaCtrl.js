@@ -109,7 +109,7 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
             field: 'term.code10'
         }, {
             name: 'contributingOrganization',
-            field: 'contributingOrganization.name'
+            field: 'contributingOrganization'
         }, {
             name: 'vendorDescription',
             field: 'vendorDescription'

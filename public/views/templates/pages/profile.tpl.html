@@ -9,19 +9,19 @@
 
         <!-- LOCAL INFORMATION -->
         <div class="col-sm-4 col-sm-offset-4" align="center">
-            <div class="well" ng-init="getUsers()">
-               
-                    <p>
-                        <strong>Username</strong>: {{user.username}}<br>
-                        <strong>email</strong>: {{user.email}}<br>
-                        <strong>First Name</strong> {{user.firstName}}<br>
-                        <strong>Last Name</strong>: {{user.lastName}}<br>
-                        <strong>User Type</strong>: {{user.userTypes.usertype}}</span>
-                    </p>
+            <div class="well">
+
+                <p>
+                    <strong>Username</strong>: {{user.username}}<br>
+                    <strong>email</strong>: {{user.email}}<br>
+                    <strong>First Name</strong> {{user.firstName}}<br>
+                    <strong>Last Name</strong>: {{user.lastName}}<br>
+                    <strong>User Type</strong>: {{user.userTypes.usertype}}</span>
+                </p>
 
             </div>
-            <a ng-click="showPassModal(user)"  class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-pencil" ></span>Edit Password</a>
-            <a ng-click="showProfileModal(user)"  class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-pencil" ></span>Edit General information</a>
+            <a ng-click="showPassModal(user)" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-pencil"></span>Edit Password</a>
+            <a ng-click="showProfileModal(user)" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-pencil"></span>Edit General information</a>
         </div>
 
     </div>

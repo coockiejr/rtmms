@@ -207,8 +207,8 @@ module.exports = function(app, qs, passport, async, _) {
 
         //gets rosettas of a specific vendor 
         if (contributingOrganization) {
-            query = query.where("contributingOrganization.name").equals(contributingOrganization);
-            queryCount = queryCount.where("contributingOrganization.name").equals(contributingOrganization);
+            query = query.where("contributingOrganization").equals(contributingOrganization);
+            queryCount = queryCount.where("contributingOrganization").equals(contributingOrganization);
         }
         if (Status) {
             query = query.where("term.status").equals(Status);
@@ -318,11 +318,20 @@ module.exports = function(app, qs, passport, async, _) {
             if (err) {
                 res.send(err)
             }
+            console.log("cos===============");
+            var existingCos = [];
+            for (var i = 0; i < cos.length; i++) {
+                if (cos[i].status === "success") {
+                    existingCos.push(cos[i]);
+                }
+            }
+
+            console.log(cos);
 
             queryCount.count().exec(function(error, count) {
                 res.json({
                     totalItems: count,
-                    cos: cos,
+                    cos: existingCos,
                 }); // return all members in JSON format
 
 
@@ -335,14 +344,17 @@ module.exports = function(app, qs, passport, async, _) {
     });
 
 
-    app.post('/api/addCo/:name', function(req, res, next) {
-        //console.log(req.body);
+    app.post('/api/addCo', function(req, res, next) {
+        console.log("+++++++++");
+        console.log(req.body);
+        console.log(req.params);
 
         var q = req.query.query;
         query = Co.distinct('name');
         query.exec(function(err, cos) {
             coName = {
-                name: req.params.name
+                name: req.body.name,
+                status: req.body.status
             };
 
             if (cos.indexOf(coName.name) != -1) {
@@ -436,6 +448,7 @@ module.exports = function(app, qs, passport, async, _) {
         } else if (req.params.par === "allCSV" || req.params.par === "allHTML") {
             var query = Rosetta.find(null);
             query.exec(function(err, ros) {
+                console.log(ros);
                 rosetta = ros;
             }).then(function() {
                 //console.log(rosetta);

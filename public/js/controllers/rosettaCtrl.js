@@ -1,4 +1,4 @@
-angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'AuthService', 'RosettaService', 'uiGridConstants', function($scope, AuthService, RosettaService, uiGridConstants) {
+angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'AuthService', 'RosettaService', 'uiGridConstants', '$http', function($scope, AuthService, RosettaService, uiGridConstants, $http) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -63,6 +63,9 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
             name: 'cfCode10',
             field: 'term.cfCode10'
         }, {
+            name: 'standardTable',
+            field: 'term.standardTable'
+        }, {
             name: 'systematicName',
             field: 'term.systematicName'
         }, {
@@ -97,7 +100,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
             field: 'term.code10'
         }, {
             name: 'contributingOrganization',
-            field: 'contributingOrganization.name'
+            field: 'contributingOrganization'
         }, {
             name: 'vendorDescription',
             field: 'vendorDescription'
@@ -175,6 +178,33 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
     $scope.showAddCommentModal = function(rosetta) {
         RosettaService.showAddCommentModal(rosetta).then(function() {
 
+        });
+    };
+    $scope.downHTML = function() {
+
+        $http.get('/api/downloadR/allHTML').then(function(res) {
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "rosetta_terms.html");
+        });
+    };
+    $scope.downXML = function() {
+
+        $http.get('/api/downloadR/allXML').then(function(res) {
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "rosetta_terms.xml");
+        });
+    };
+    $scope.downCSV = function() {
+
+        $http.get('/api/downloadR/allCSV').then(function(res) {
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "rosetta_terms.csv");
         });
     };
 

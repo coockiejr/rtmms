@@ -12,6 +12,7 @@ var rosettaSchema = new mongoose.Schema({
         commonTerm: String,
         acronym: String,
         termDescription: String,
+        standardTable: String,
         status: String
     },
     groups: [String],
@@ -51,7 +52,7 @@ var rosettaSchema = new mongoose.Schema({
                 author: {
                     _id: Number,
                     name: String,
-                    co:String
+                    co: String
                 },
                 text: String,
                 date: Date
@@ -96,7 +97,7 @@ var rosettaSchema = new mongoose.Schema({
             author: {
                 _id: Number,
                 name: String,
-                co:String
+                co: String
             },
             text: String,
             date: Date
@@ -133,7 +134,7 @@ var rosettaSchema = new mongoose.Schema({
                 author: {
                     _id: Number,
                     name: String,
-                    co:String
+                    co: String
                 },
                 text: String,
                 date: Date
@@ -169,7 +170,7 @@ var rosettaSchema = new mongoose.Schema({
             author: {
                 _id: Number,
                 name: String,
-                co:String
+                co: String
             },
             text: String,
             date: Date
@@ -183,7 +184,6 @@ var rosettaSchema = new mongoose.Schema({
         createdAt: Date,
         updatedAt: Date
     }],
-    // contributingOrganization: String,
     contributingOrganization: {
         name: String
     },
@@ -191,7 +191,7 @@ var rosettaSchema = new mongoose.Schema({
         author: {
             _id: Number,
             name: String,
-            co:String
+            co: String
         },
         text: String,
         date: Date

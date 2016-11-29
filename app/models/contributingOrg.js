@@ -3,8 +3,9 @@ var mongoose = require('mongoose');
 
 // define the schema for our enum model
 var contributingOrgSchema = mongoose.Schema({
-    name: String
-    
+    name: String,
+    status: String,
+
 });
 
 // keep track of when enum are updated and created

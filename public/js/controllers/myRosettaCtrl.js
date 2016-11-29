@@ -101,7 +101,7 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope', '$h
             field: 'term.code10'
         }, {
             name: 'contributingOrganization',
-            field: 'contributingOrganization.name'
+            field: 'contributingOrganization'
         }, {
             name: 'vendorDescription',
             field: 'vendorDescription'

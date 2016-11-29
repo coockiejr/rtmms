@@ -179,10 +179,11 @@ var hRosettaSchema = mongoose.Schema({
         createdAt: Date,
         updatedAt: Date
     }],
-   
-     contributingOrganization: {
-         name: String
-     },
+    // contributingOrganization: String,
+
+    contributingOrganization: {
+        name: String
+    },
     comments: [{
         author: {
             _id: Number,

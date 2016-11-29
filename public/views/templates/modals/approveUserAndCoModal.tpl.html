@@ -1,0 +1,62 @@
+<div class="modal-header">
+    <h3 ng-show="!editmode" class="modal-title">Add a User</h3>
+    <h3 ng-show="editmode" class="modal-title">Edit User</h3>
+</div>
+<div class="modal-body">
+    <form name="formUserForm">
+        <div class="form-group has-feedback">
+            <label class="control-label">User Name</label>
+            <input type="text" class="form-control " name="username" ng-model="formUser.username" ng-minlength="3" ng-maxlength="8" required>
+            <span ng-show="!formUserForm.username.$error.minlength && !formUserForm.username.$error.maxlength " class="glyphicon glyphicon-ok  form-control-feedback " aria-hidden="true"></span>
+            <span ng-show="formUserForm.username.$error.minlength || formUserForm.username.$error.maxlength " class="glyphicon glyphicon-remove  form-control-feedback " aria-hidden="true"></span>
+            <p ng-show="formUserForm.username.$error.minlength">Username is too short.</p>
+            <p ng-show="formUserForm.username.$error.maxlength">Username is too long.</p>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password" class="form-control" name="password" ng-model="formUser.password" ng-minlength="8" ng-maxlength="20" ng-pattern="/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])/" required>
+            <span ng-show="formUserForm.password.$error.minlength || formUserForm.password.$error.maxlength ">Passwords must be between 8 and 20 characters.</span>
+            <span ng-show="formUserForm.password.$error.pattern">Must contain one lower &amp; uppercase letter, and one non-alpha character (a number or a symbol.)</span>
+        </div>
+        <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" class="form-control" ng-class="{'has-error':!formUserForm.password_c.$valid}" name="password_c" ng-model="password_c" ng-match="formUser.password" required>
+            <span ng-show="formUserForm.password_c.$error.required && formUserForm.password_c.$dirty">Please confirm your password.</span>
+            <span ng-show="formUserForm.password_c.$error.match">Passwords don't match.</span>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="control-label">Email</label>
+            <input type="email" name="email" class="form-control" ng-model="formUser.email" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/">
+            <span ng-show="!formUserForm.email.$invalid && formUserForm.email.$pristine " class="glyphicon glyphicon-ok  form-control-feedback " aria-hidden="true"></span>
+            <span ng-show="formUserForm.email.$invalid && !formUserForm.email.$pristine " class="glyphicon glyphicon-remove  form-control-feedback " aria-hidden="true"></span>
+            <p ng-show="formUserForm.email.$invalid && !formUserForm.email.$pristine" class="help-block">Enter a valid email.</p>
+        </div>
+        <div class="form-group ">
+            <label class="control-label">First Name</label>
+            <input type="text" name="firstname" class="form-control" ng-model="formUser.firstName">
+        </div>
+        <div class="form-group ">
+            <label class="control-label">Last Name</label>
+            <input type="text" name="lastname" class="form-control" ng-model="formUser.lastName">
+        </div>
+        <div class="form-group" ng-init="getUserTypes()">
+            <label>User Type</label>
+            <select class="form-control" ng-model="formUser.userTypes" required>
+                <option ng-repeat="usertype in usertypes" ng-selected="formUser.userTypes.usertype===usertype.usertype" value="{{usertype}}"> {{usertype.usertype}}</option>
+            </select>
+        </div>
+        <div class="form-group" ng-init="getCOs()">
+            <label>Contributing Organization</label>
+            <select class="form-control" ng-model="formUser.contributingOrganization" required>
+                    <option ng-repeat="co in cos" ng-selected="formUser.contributingOrganization.name===co.name" value="{{co}}"> {{co.name}}</option>
+                </select>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <!-- createMember() WILL CREATE NEW Members -->
+    <button ng-show="!editmode && !formUserForm.$invalid" type="submit" class="btn btn-primary" ng-click="addUser()">Add User</button>
+    <button ng-show="editmode && !formUserForm.$invalid" type="submit" class="btn btn-primary" ng-click="editUser()">Edit User</button>
+    <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+</div>

@@ -1,6 +1,9 @@
 <div class="jumbotron ">
     <div class="row button-row ">
         <button ng-show="authService.isCOLoggedIn() || authService.isRevLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showAddCommentModal(selectedEntity)">Comments</button>
+        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downHTML()">DownloadHTML</button>
+        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downXML()">DownloadXML</button>
+        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downCSV()">DownloadCSV</button>
     </div>
     <div class="row">
         <div ng-show="authService.isCOLoggedIn()|| authService.isRevLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
@@ -44,7 +47,7 @@
         </tr>
         <tr>
             <th>Contributing Organization</th>
-            <td>{{row.entity.contributingOrganization.name}}</td>
+            <td>{{row.entity.contributingOrganization}}</td>
         </tr>
         <tr>
             <th>Vendor_UOM</th>

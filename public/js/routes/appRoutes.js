@@ -13,6 +13,9 @@ angular.module('appRoutes', []).config(function($stateProvider, $urlRouterProvid
             url: "/login",
             templateUrl: "views/templates/pages/login.tpl.html",
             controller: 'LoginController'
+        }).state('/logout', {
+            url: "/",
+            controller: 'LogoutController'
         }).state('/signup', {
             url: "/signup",
             templateUrl: "views/templates/pages/signup.tpl.html",
@@ -79,5 +82,5 @@ angular.module('appRoutes', []).config(function($stateProvider, $urlRouterProvid
             controller: 'EnumGroupController'
         });
 
-    
+
 });

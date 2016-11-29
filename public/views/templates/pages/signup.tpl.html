@@ -40,15 +40,15 @@
             </div>
             <div class="form-group" ng-init="getCOs()">
                 <label>Contributing Organization</label>
-                <select class="form-control" ng-model="contributingOrganization" ng-change="setCo(contributingOrganization)" required>
-                    <option ng-repeat="co in cos" value="{{co}}"> {{co.name}}</option>
+                <select class="form-control" ng-model="user.contributingOrganization" ng-options="co as co.name for co in cos" ng-change="setCo(user.contributingOrganization)" required>
+                    <option ng-click="addCo()" value="other">Other</option>
                 </select>
 
             </div>
-            <div class="form-group">
-                <label>Add a new Contributing Organization</label>
-                <input type="text" class="form-control" ng-model="Co">
-                <button confirmed-click="addCo()" ng-confirm-click="Would you like to add {{Co}} as a new Contributing Organization?"><span class="glyphicon glyphicon-plus"></span> </button>
+            <div class="form-group" ng-show="addContO">
+                <label>Add a new Contributing Organization (Will be validated)</label>
+                <input type="text" class="form-control" ng-model="newCo">
+                <!--<button confirmed-click="addNewCo()" ng-confirm-click="Would you like to add {{Co}} as a new Contributing Organization?"><span class="glyphicon glyphicon-plus"></span> </button>-->
             </div>
             <div class="form-group" ng-init="getUserTypes()">
                 <label>User Type</label>

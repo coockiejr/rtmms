@@ -36,11 +36,30 @@ angular.module('rtmms').factory('AuthService', ['Restangular', '$modal', functio
         }
 
     };
+    factory.logout = function() {
+        $http.get("/logout").success(function(data, status) {
+            console.log("heeeeeere");
+        }).error(function(data) {
+            console.log(" not heeeeeere");
+
+        });
+    };
 
     factory.getUserTypes = function(params) {
         return Restangular.all('usertypes').getList(params).then(
             function(userTypes) {
                 return userTypes;
+            },
+            function(res) {
+                console.log('Error: ' + res.status);
+            });
+    };
+    factory.getUser = function(id) {
+        console.log(id);
+        return Restangular.one('users', id).get().then(
+            function(user) {
+                console.log(user);
+                return user;
             },
             function(res) {
                 console.log('Error: ' + res.status);
@@ -154,6 +173,24 @@ angular.module('rtmms').factory('AuthService', ['Restangular', '$modal', functio
         return modalInstance.result.then(function(user) {
             factory.createUser(user);
             console.log("here");
+            return user;
+        }, function() {
+            return null;
+        });
+    };
+    factory.approveUserAndCo = function() {
+        var modalInstance = $modal.open({
+            templateUrl: 'views/templates/modals/approveUserAndCoModal.tpl.html',
+            controller: 'approveUserAndCoModalInstanceController',
+            size: 'lg',
+            resolve: {
+                user: false
+            }
+        });
+
+        return modalInstance.result.then(function(user) {
+            // factory.createUser(user);
+            // console.log("here");
             return user;
         }, function() {
             return null;

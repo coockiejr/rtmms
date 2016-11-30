@@ -1,5 +1,6 @@
-<div class="jumbotron ">
+<div class="jumbotron">
     <div class="row button-row ">
+        <button ng-show="authService.isCOLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showEditRosettaModal(selectedEntity)">Edit</button>
         <button ng-show="authService.isCOLoggedIn() || authService.isRevLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showAddCommentModal(selectedEntity)">Comments</button>
         <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downHTML()">DownloadHTML</button>
         <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downXML()">DownloadXML</button>

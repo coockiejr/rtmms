@@ -337,11 +337,11 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
 
     } else {
         $scope.formData = {};
-        $scope.formData.contributingOrganization = {
-            _id: $scope.user.contributingOrganization._id,
-            name: $scope.user.contributingOrganization.name
-        };
-        console.log($scope.formData);
+        // $scope.formData.contributingOrganization = {
+        //     _id: $scope.user.contributingOrganization._id,
+        //     name: $scope.user.contributingOrganization.name
+        // };
+        $scope.formData.contributingOrganization = $scope.user.contributingOrganization.name;
         $scope.editmode = false;
     }
 

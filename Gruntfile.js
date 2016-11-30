@@ -19,7 +19,7 @@ module.exports = function(grunt) {
             build: {
                 files: {
                     'public/dist/js/app.min.js': [
-                        
+
                         'public/libs/angular/angular.js',
                         'public/libs/jquery/dist/jquery.js',
                         'public/libs/angular-bootstrap/ui-bootstrap-tpls.js',
@@ -51,9 +51,9 @@ module.exports = function(grunt) {
             build: {
                 files: {
                     'public/dist/css/style.css': [
-                    'public/css/less/*.less',
-                    'public/css/less/toggle-switch/angular-toggle-switch-bootstrap-3.less',
-                    'public/libs/nsPopover/less/ns-popover.less',
+                        'public/css/less/*.less',
+                        'public/css/less/toggle-switch/angular-toggle-switch-bootstrap-3.less',
+                        'public/libs/nsPopover/less/ns-popover.less',
                     ]
                 }
             }
@@ -151,7 +151,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('default', ['less', 'cssmin', 'jshint', 'uglify', 'copy', 'concurrent']);
+    //grunt.registerTask('default', ['less', 'cssmin', 'jshint', 'uglify', 'copy', 'concurrent']);
+    grunt.registerTask('default', ['less', 'cssmin', 'jshint', 'copy', 'concurrent']);
     grunt.registerTask('build', ['less', 'cssmin', 'jshint', 'uglify', 'copy']);
 
 };

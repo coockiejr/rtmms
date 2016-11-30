@@ -20,6 +20,9 @@ var rosettaSchema = new mongoose.Schema({
     vendorDescription: String,
     displayName: String,
     vendorVmd: String,
+    vendorStatus: String,
+    vendorSort: Number,
+    vendorComment: String,
     unitGroups: [{
         _id: Number,
         groupName: String,
@@ -184,9 +187,10 @@ var rosettaSchema = new mongoose.Schema({
         createdAt: Date,
         updatedAt: Date
     }],
-    contributingOrganization: {
-        name: String
-    },
+    // contributingOrganization: {
+    //     name: String
+    // },
+    contributingOrganization: String,
     comments: [{
         author: {
             _id: Number,

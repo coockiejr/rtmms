@@ -27,90 +27,118 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
         columnDefs: [{
-            name: 'info',
-            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
-            width: 50
-        }, {
-            name: 'groups',
-            field: 'groups',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
-        }, {
-            name: 'refid',
-            field: 'term.refid',
-            cellTemplate: '<div class="ui-grid-cell-contents" data-toggle="tooltip" data-placement="top" title={{row.entity.term.status}}><span>{{row.entity.term.refid}}</span></div>',
-            cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
+                name: 'info',
+                cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+                width: 50
+            }, {
+                name: 'groups',
+                field: 'groups',
+                cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity.groups | ArrayAsString }}</span></div>'
+            }, {
+                name: 'refid',
+                field: 'term.refid',
+                cellTemplate: '<div class="ui-grid-cell-contents" data-toggle="tooltip" data-placement="top" title={{row.entity.term.status}}><span>{{row.entity.term.refid}}</span></div>',
+                cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
 
-                if (row.entity.term !== undefined) {
-                    if (row.entity.term.status === undefined || row.entity.term.status === "pMapped") {
+                    if (row.entity.term !== undefined) {
+                        if (row.entity.term.status === undefined || row.entity.term.status === "pMapped") {
 
-                        return 'red';
-                    }
-                    if (row.entity.term.status === "proposed") {
-                        return 'blue';
-                    }
-                    if (row.entity.term.status === "registered") {
-                        return 'green';
-                    }
-                    if (row.entity.term.status === "unregistered") {
-                        return 'purple';
-                    }
-                    if (row.entity.term.status === "rMapped") {
-                        return 'orange';
+                            return 'red';
+                        }
+                        if (row.entity.term.status === "proposed") {
+                            return 'blue';
+                        }
+                        if (row.entity.term.status === "registered") {
+                            return 'green';
+                        }
+                        if (row.entity.term.status === "unregistered") {
+                            return 'purple';
+                        }
+                        if (row.entity.term.status === "rMapped") {
+                            return 'orange';
+                        }
                     }
                 }
+            }, {
+                name: 'cfCode10',
+                field: 'term.cfCode10'
+            }, {
+                name: 'standardTable',
+                field: 'term.standardTable'
+            }, {
+                name: 'systematicName',
+                field: 'term.systematicName'
+            }, {
+                name: 'commonTerm',
+                field: 'term.commonTerm'
+            }, {
+                name: 'acronym',
+                field: 'term.acronym'
+            }, {
+                name: 'termDescription',
+                field: 'term.termDescription'
+            }, {
+                name: 'partition',
+                field: 'term.partition'
+            }, {
+                name: 'code10',
+                field: 'term.code10'
+            }, {
+                name: 'vendorDescription',
+                field: 'vendorDescription'
+            }, {
+                name: 'displayName',
+                field: 'displayName'
+            }, {
+                name: 'vendorUOM',
+                field: 'vendorUom'
+            },
+
+            {
+                name: 'UOM_MDC',
+                field: 'units',
+                cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.unitGroups | EnumOrUnitGroupsAsString }}</span> <span>{{row.entity.units | UnitsAsString }}</span></div>',
+                enableSorting: false
+            }, {
+                name: 'ucode10',
+                field: 'units',
+                cellTemplate: '<div class="ui-grid-cell-contents"> <span>{{row.entity.units | UCODEAsString }}</span></div>',
+                enableSorting: false
+            }, {
+                name: 'cf_ucode10',
+                field: 'units',
+                cellTemplate: '<div class="ui-grid-cell-contents"> <span>{{row.entity.units | CFUCODEAsString }}</span></div>',
+                enableSorting: false
+            }, {
+                name: 'ucums',
+                field: 'ucums',
+                cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity | UcumsAsStringFromRosetta }}</div>',
+                enableSorting: false
+            }, {
+                name: 'contributingOrganization',
+                field: 'contributingOrganization'
+            }, {
+                name: 'vendorStatus',
+                field: 'vendorStatus'
+            }, {
+                name: 'vendorSort',
+                field: 'vendorSort'
+            }, {
+                name: 'enums',
+                field: 'enums',
+                cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.enumGroups | EnumOrUnitGroupsAsString }}</span> <span>{{row.entity.enums | EnumsAsString }}</span></div>',
+                enableSorting: false
+            }, {
+                name: 'externalSites',
+
+            }, {
+                name: 'vendorComment',
+                field: 'vendorComment'
+            }, {
+                name: 'vendorVmd',
+                field: 'vendorVmd'
             }
-        }, {
-            name: 'cfCode10',
-            field: 'term.cfCode10'
-        }, {
-            name: 'standardTable',
-            field: 'term.standardTable'
-        }, {
-            name: 'systematicName',
-            field: 'term.systematicName'
-        }, {
-            name: 'commonTerm',
-            field: 'term.commonTerm'
-        }, {
-            name: 'acronym',
-            field: 'term.acronym'
-        }, {
-            name: 'termDescription',
-            field: 'term.termDescription'
-        }, {
-            name: 'partition',
-            field: 'term.partition'
-        }, {
-            name: 'units',
-            field: 'units',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.unitGroups | EnumOrUnitGroupsAsString }}</span> <span>{{row.entity.units | UnitsAsString }}</span></div>',
-            enableSorting: false
-        }, {
-            name: 'ucums',
-            field: 'ucums',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span>{{row.entity | UcumsAsStringFromRosetta }}</div>',
-            enableSorting: false
-        }, {
-            name: 'enums',
-            field: 'enums',
-            cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.enumGroups | EnumOrUnitGroupsAsString }}</span> <span>{{row.entity.enums | EnumsAsString }}</span></div>',
-            enableSorting: false
-        }, {
-            name: 'code10',
-            field: 'term.code10'
-        }, {
-            name: 'contributingOrganization',
-            field: 'contributingOrganization'
-        }, {
-            name: 'vendorDescription',
-            field: 'vendorDescription'
-        }, {
-            name: 'displayName',
-            field: 'displayName'
-        }, {
-            name: 'vendorVmd',
-            field: 'vendorVmd'
-        }],
+        ],
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;
             $scope.gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
@@ -177,6 +205,11 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
 
     $scope.showAddCommentModal = function(rosetta) {
         RosettaService.showAddCommentModal(rosetta).then(function() {
+
+        });
+    };
+    $scope.showEditRosettaModal = function(rosetta) {
+        RosettaService.showEditRosettaModal(rosetta).then(function() {
 
         });
     };

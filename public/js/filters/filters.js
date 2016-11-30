@@ -301,6 +301,30 @@ app.filter('UnitsAsString', function() {
         }
     };
 });
+app.filter('UCODEAsString', function() {
+    return function(units) {
+        if (units) {
+            var res = '';
+            units.forEach(function(u) {
+                res += u.term.code10 + ', ';
+            });
+            res = res.slice(0, -2);
+            return res;
+        }
+    };
+});
+app.filter('CFUCODEAsString', function() {
+    return function(units) {
+        if (units) {
+            var res = '';
+            units.forEach(function(u) {
+                res += u.term.cfCode10 + ', ';
+            });
+            res = res.slice(0, -2);
+            return res;
+        }
+    };
+});
 
 
 app.filter('EnumsAsString', function() {

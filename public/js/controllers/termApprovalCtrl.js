@@ -86,7 +86,7 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
         selectionRowHeaderWidth: 35,
         columnDefs: [{
             name: 'info',
-            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+            cellTemplate: ' <i class="fa fa-info" style="margin-left:10px;margin-right:10px" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </i>',
             width: 50
         }, {
             name: 'groups',
@@ -631,12 +631,12 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
 
     $scope.showAssignRefidModal = function(rosetta) {
         RosettaService.showAssignRefidModal(rosetta).then(function() {
-
+            getPage();
         });
     };
     $scope.showReadyRefidModal = function(rosetta) {
         RosettaService.showReadyRefidModal(rosetta).then(function() {
-
+            getPage0();
         });
     };
 
@@ -647,13 +647,13 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
     };
     $scope.showEditUnitModal = function(unitValue) {
         UnitService.showEditUnitModal(unitValue).then(function() {
-
+            getPage1();
         });
     };
     $scope.showUAssignRefidModal = function(unitValue) {
         if (unitValue.term.status === "proposed") {
             UnitService.showAssignRefidModal(unitValue).then(function() {
-
+                getPage1();
             });
         } else {
             alert("Only proposed terms can get their REFID assigned");
@@ -663,7 +663,7 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
     $scope.showUReadyRefidModal = function(unitValue) {
         if (unitValue.term.status === "unregistered") {
             UnitService.showReadyRefidModal(unitValue).then(function() {
-
+                getPage1();
             });
         } else {
             alert("Only unregistered units can get their REFID registered");
@@ -673,13 +673,13 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
 
     $scope.showEditEnumModal = function(enumValue) {
         EnumService.showEditEnumModal(enumValue).then(function() {
-
+            getPage2();
         });
     };
     $scope.showEAssignRefidModal = function(enumValue) {
         if (enumValue.term.status === "proposed") {
             EnumService.showAssignRefidModal(enumValue).then(function() {
-
+                getPage2();
             });
         } else {
             alert("Only proposed terms can get their REFID assigned");
@@ -689,7 +689,7 @@ angular.module('rtmms.authentication').controller('TermApprovalController', ['$s
     $scope.showEReadyRefidModal = function(enumValue) {
         if (enumValue.term.status === "unregistered") {
             EnumService.showReadyRefidModal(enumValue).then(function() {
-
+                getPage2();
             });
         } else {
             alert("Only unregistered enums can get their REFID registered");

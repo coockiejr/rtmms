@@ -1,4 +1,19 @@
 <div class="jumbotron ">
+    <div class="row button-row">
+        <div style="display: inline" dropdown on-toggle="toggled(open)" ng-show="authService.isLoggedIn()">
+            <button type="button" class="btn btn-primary btn-xs" dropdown-toggle aria-expanded="false">
+            <i class="fa fa-download" aria-hidden="true"></i> 
+            Download
+            <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu " role="menu">
+                <li><a class="point" ng-click="downHTML()"> HTML</a></li>
+                <li><a class="point" ng-click="downXML()"> XML</a></li>
+                <li><a class="point" ng-click="downCSV()"> CSV</a></li>
+
+            </ul>
+        </div>
+    </div>
     <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-pagination class="grid hrosetta-grid"></div>
 </div>
 <script type="text/ng-template" id="popover">

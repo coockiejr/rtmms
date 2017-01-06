@@ -1,13 +1,23 @@
 <div class="jumbotron ">
     <div class="row button-row ">
-        <button ng-show="authService.isCOLoggedIn()" type="submit" class="btn btn-primary" ng-click="showAddEnumModal()">Add</button>
-        <button ng-show="authService.isCOLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showEditEnumModal(selectedEntity)">Edit</button>
-        <button ng-show="authService.isCOLoggedIn() || authService.isRevLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showAddCommentModal(selectedEntity)">Comments</button>
-        <button ng-show="authService.isLoggedIn() " ng-disabled="selectedEntity.term.refid === undefined || selectedEntity.term.status !== undefined" type="submit" class="btn btn-primary" ng-click="propose(selectedEntity)">Propose</button>
-        <button ng-show="authService.isLoggedIn()" ng-disabled="selectedEntity.term.status !== 'pMapped'" type="submit" class="btn btn-primary" ng-click="proposeMap(selectedEntity)">Propose Mapping</button>
-        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downHTML()">DownloadHTML</button>
-        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downXML()">DownloadXML</button>
-        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="downCSV()">DownloadCSV</button>
+        <button ng-show="authService.isCOLoggedIn()" type="submit" class="btn btn-primary btn-xs" ng-click="showAddEnumModal()"><i class="fa fa-plus" aria-hidden="true"></i>Add</button>
+        <button ng-show="authService.isCOLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showEditEnumModal(selectedEntity)"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+        <button ng-show="authService.isCOLoggedIn() || authService.isRevLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showAddCommentModal(selectedEntity)"><i class="fa fa-comments" aria-hidden="true"></i> Comments</button>
+        <button ng-show="authService.isLoggedIn() " ng-disabled="selectedEntity.term.refid === undefined || selectedEntity.term.status !== undefined" type="submit" class="btn btn-primary btn-xs" ng-click="propose(selectedEntity)">Propose</button>
+        <button ng-show="authService.isLoggedIn()" ng-disabled="selectedEntity.term.status !== 'pMapped'" type="submit" class="btn btn-primary btn-xs" ng-click="proposeMap(selectedEntity)">Propose Mapping</button>
+        <div style="display: inline" dropdown on-toggle="toggled(open)" ng-show="authService.isLoggedIn()">
+            <button type="button" class="btn btn-primary btn-xs" dropdown-toggle aria-expanded="false">
+            <i class="fa fa-download" aria-hidden="true"></i> 
+            Download
+            <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu " role="menu">
+                <li><a class="point" ng-click="downHTML()"> HTML</a></li>
+                <li><a class="point" ng-click="downXML()"> XML</a></li>
+                <li><a class="point" ng-click="downCSV()"> CSV</a></li>
+
+            </ul>
+        </div>
     </div>
     <div class="row">
         <div ng-show="authService.isCOLoggedIn() ||authService.isRevLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
@@ -45,7 +55,7 @@
             <th>CF_CODE10</th>
             <td>{{row.entity.term.cfCode10}}</td>
         </tr>
-      
+
         <tr>
             <th>Systematic Name</th>
             <td>{{row.entity.term.systematicName}}</td>
@@ -70,9 +80,9 @@
             <th>Description</th>
             <td>{{row.entity.description}}</td>
         </tr>
-        
-       
-       
+
+
+
         <tr>
             <th>Tags</th>
             <td>
@@ -93,4 +103,3 @@
     <p ng-show="row.entity.term.status==='pMapped'">Mapped waiting to register Refid</p>
     <p ng-show="row.entity.term.status!=='rMapped' && row.entity.term.status!=='pMapped'">{{row.entity.term.status}}</p>
 </script>
-

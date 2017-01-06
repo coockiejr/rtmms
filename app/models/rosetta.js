@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var customFields = require('mongoose-custom-fields');
+
 
 // define the schema for our rosetta model
 var rosettaSchema = new mongoose.Schema({
@@ -48,7 +50,7 @@ var rosettaSchema = new mongoose.Schema({
             unitOfMeasure: String,
             ucums: [{
                 _id: Number,
-                ucum: String
+                value: String
             }],
             display_name: String,
             comments: [{
@@ -93,7 +95,7 @@ var rosettaSchema = new mongoose.Schema({
         unitOfMeasure: String,
         ucums: [{
             _id: Number,
-            ucum: String
+            value: String
         }],
         display_name: String,
         comments: [{
@@ -111,6 +113,79 @@ var rosettaSchema = new mongoose.Schema({
             suffix: String
         },
         tags: [String],
+        createdAt: Date,
+        updatedAt: Date
+    }],
+    externalSites: [{
+        _id: Number,
+        term: {
+            refid: String,
+            code10: Number,
+            cfCode10: Number,
+            partition: Number,
+            systematicName: String,
+            commonTerm: String,
+            acronym: String,
+            termDescription: String,
+            status: String
+        },
+        token: String,
+        description: String,
+        comments: [{
+            author: {
+                _id: Number,
+                name: String,
+                co: String
+            },
+            text: String,
+            date: Date
+        }],
+        user: {
+            _id: mongoose.Schema.ObjectId,
+            name: String,
+            suffix: String
+        },
+        tags: [String],
+        createdAt: Date,
+        updatedAt: Date
+    }],
+    externalSiteGroups: [{
+        _id: Number,
+        groupName: String,
+        groupDescription: String,
+        enums: [{
+            _id: Number,
+            term: {
+                refid: String,
+                code10: Number,
+                cfCode10: Number,
+                partition: Number,
+                systematicName: String,
+                commonTerm: String,
+                acronym: String,
+                termDescription: String,
+                status: String
+            },
+            token: String,
+            description: String,
+            comments: [{
+                author: {
+                    _id: Number,
+                    name: String,
+                    co: String
+                },
+                text: String,
+                date: Date
+            }],
+            user: {
+                _id: mongoose.Schema.ObjectId,
+                name: String,
+                suffix: String
+            },
+            tags: [String],
+            createdAt: Date,
+            updatedAt: Date
+        }],
         createdAt: Date,
         updatedAt: Date
     }],
@@ -207,6 +282,7 @@ var rosettaSchema = new mongoose.Schema({
     updatedAt: Date
 
 });
+rosettaSchema.plugin(customFields);
 
 
 // keep track of when rosettas are updated and created
@@ -217,6 +293,7 @@ rosettaSchema.pre('save', function(next, done) {
     this.updatedAt = Date.now();
     next();
 });
+
 
 
 

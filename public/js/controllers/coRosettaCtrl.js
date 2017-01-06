@@ -39,7 +39,7 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
         selectionRowHeaderWidth: 35,
         columnDefs: [{
             name: 'info',
-            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+            cellTemplate: ' <i class="fa fa-info" style="margin-left:10px;margin-right:10px" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </i>',
             width: 50
         }, {
             name: 'groups',
@@ -179,6 +179,7 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
                 $scope.gridOptions.data = result.rosettas;
 
                 $scope.gridOptions.totalItems = result.totalItems;
+                console.log($scope.gridOptions.totalItems);
             }
         });
 
@@ -227,12 +228,43 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
             if (rosetta !== null) {
                 $scope.gridOptions.data.unshift(rosetta);
             }
+            getPage();
+
         });
     };
 
     $scope.showEditRosettaModal = function(rosetta) {
         RosettaService.showEditRosettaModal(rosetta).then(function() {
+            getPage();
 
+
+        });
+    };
+    $scope.clone = function(rosetta) {
+
+        rosettaCopy = angular.copy(rosetta);
+        rosettaCopy._id = null;
+        rosettaCopy.comments = [];
+        rosettaCopy.term.status = undefined;
+        rosettaCopy.contributingOrganization = $scope.user.contributingOrganization.name;
+
+        console.log($scope.user);
+        RosettaService.createRosetta(rosettaCopy).then(function(rosetta) {
+            console.log(rosetta);
+            getPage();
+
+        });
+        // $scope.gridOptions.data.push(rosettaCopy);
+
+        // $scope.gridOptions.totalItems = $scope.gridOptions.totalItems + 1;
+
+
+    };
+    $scope.deprecate = function(rosetta) {
+        console.log("========");
+        console.log(rosetta);
+        RosettaService.deprecateRosetta(rosetta).then(function() {
+            getPage();
         });
     };
 
@@ -431,6 +463,25 @@ angular.module('rtmms.rosetta').controller('CoModalInstanceController', ['$scope
 
         //$modalInstance.dismiss('add');
 
+    };
+
+
+
+
+}]);
+
+
+angular.module('rtmms.rosetta').controller('DeleteRosettaModalInstanceController', ['$scope', '$modalInstance', '$http', 'rosetta', 'AuthService', 'RosettaService', 'uiGridConstants', function($scope, $modalInstance, $http, rosetta, AuthService, RosettaService, uiGridConstants) {
+
+    $scope.deprecate = function() {
+        console.log(rosetta);
+        RosettaService.deleteRosetta(rosetta).then(function(rosetta) {
+
+        });
+        $modalInstance.dismiss('deprecate');
+    };
+    $scope.cancel = function() {
+        $modalInstance.close();
     };
 
 

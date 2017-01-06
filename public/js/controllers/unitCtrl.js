@@ -28,7 +28,7 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', '$http', 'A
         selectionRowHeaderWidth: 35,
         columnDefs: [{
             name: 'info',
-            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+            cellTemplate: ' <i class="fa fa-info" style="margin-left:10px;margin-right:10px" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </i>',
             width: 50
         }, {
             name: 'unitGroups',

@@ -2075,15 +2075,15 @@
 			</comments>
 			<ucums>
 				<ucum>
-					<_id>1394</_id>
 					<value>mg/m2</value>
+					<_id>1394</_id>
 				</ucum>
 			</ucums>
 			<term>
-				<refid>MDC_DIM_MILLI_G_PER_M_SQ</refid>
-				<code10>7762</code10>
+				<status>pMapped</status>
 				<partition>4</partition>
-				<status>proposed</status>
+				<code10>7762</code10>
+				<refid>MDC_DIM_MILLI_G_PER_M_SQ</refid>
 			</term>
 		</term>
 		<term>
@@ -12709,6 +12709,149 @@
 				<code10>7296</code10>
 				<partition>4</partition>
 				<status>proposed</status>
+			</term>
+		</term>
+		<term>
+			<_id>1807</_id>
+			<updatedAt>2016-11-29T16:30:35.845Z</updatedAt>
+			<createdAt>2016-11-29T16:30:35.844Z</createdAt>
+			<dimension>test</dimension>
+			<symbol>test</symbol>
+			<unitOfMeasure>test</unitOfMeasure>
+			<dimC>test</dimC>
+			<__v>0</__v>
+			<tags>
+			</tags>
+			<unitGroups>
+				<unitGroup>
+					<_id>31</_id>
+					<groupName>_UOM_DOSE_QUAN_LIQUID</groupName>
+				</unitGroup>
+			</unitGroups>
+			<comments>
+			</comments>
+			<ucums>
+				<ucum>
+					<_id>1333</_id>
+					<value>rad</value>
+				</ucum>
+			</ucums>
+			<term>
+				<refid>MDC_DIM_BOOLEAN</refid>
+				<code10>7776</code10>
+				<partition>4</partition>
+				<status>pMapped</status>
+			</term>
+		</term>
+		<term>
+			<_id>1808</_id>
+			<updatedAt>2016-11-29T16:36:38.617Z</updatedAt>
+			<createdAt>2016-11-29T16:36:38.617Z</createdAt>
+			<dimension>aaaa</dimension>
+			<symbol>aaaa</symbol>
+			<unitOfMeasure>aaaa</unitOfMeasure>
+			<dimC>aaaaa</dimC>
+			<__v>0</__v>
+			<tags>
+			</tags>
+			<unitGroups>
+				<unitGroup>
+					<_id>31</_id>
+					<groupName>_UOM_DOSE_QUAN_LIQUID</groupName>
+				</unitGroup>
+			</unitGroups>
+			<comments>
+			</comments>
+			<ucums>
+				<ucum>
+					<_id>1333</_id>
+					<value>rad</value>
+				</ucum>
+			</ucums>
+			<term>
+				<refid>MDC_DIM_DECIBEL_DECA_NV</refid>
+				<code10>7936</code10>
+				<partition>4</partition>
+				<status>pMapped</status>
+			</term>
+		</term>
+		<term>
+			<_id>1809</_id>
+			<updatedAt>2016-11-29T16:41:39.189Z</updatedAt>
+			<createdAt>2016-11-29T16:41:39.189Z</createdAt>
+			<dimension>qqq</dimension>
+			<symbol>qqq</symbol>
+			<dimC>qq</dimC>
+			<unitOfMeasure>sss</unitOfMeasure>
+			<__v>0</__v>
+			<tags>
+			</tags>
+			<unitGroups>
+				<unitGroup>
+					<_id>31</_id>
+					<groupName>_UOM_DOSE_QUAN_LIQUID</groupName>
+				</unitGroup>
+			</unitGroups>
+			<comments>
+			</comments>
+			<ucums>
+			</ucums>
+		</term>
+		<term>
+			<_id>1810</_id>
+			<updatedAt>2016-11-29T16:43:41.964Z</updatedAt>
+			<createdAt>2016-11-29T16:43:41.964Z</createdAt>
+			<dimension>qqq</dimension>
+			<symbol>qqq</symbol>
+			<unitOfMeasure>qqq</unitOfMeasure>
+			<dimC>qqq</dimC>
+			<__v>0</__v>
+			<tags>
+			</tags>
+			<unitGroups>
+				<unitGroup>
+					<_id>32</_id>
+					<groupName>_UOM_DEPRECATE</groupName>
+				</unitGroup>
+			</unitGroups>
+			<comments>
+			</comments>
+			<ucums>
+				<ucum>
+					<_id>1387</_id>
+					<value>[oz_av]</value>
+				</ucum>
+			</ucums>
+			<term>
+				<refid>MDC_DIM_BOOLEAN</refid>
+				<code10>7776</code10>
+				<partition>4</partition>
+				<status>pMapped</status>
+			</term>
+		</term>
+		<term>
+			<_id>1811</_id>
+			<updatedAt>2016-11-29T16:44:21.272Z</updatedAt>
+			<createdAt>2016-11-29T16:44:21.272Z</createdAt>
+			<dimension>test1</dimension>
+			<symbol>test</symbol>
+			<unitOfMeasure>test</unitOfMeasure>
+			<dimC>test</dimC>
+			<__v>0</__v>
+			<tags>
+			</tags>
+			<unitGroups>
+				<unitGroup>
+					<_id>31</_id>
+					<groupName>_UOM_DOSE_QUAN_LIQUID</groupName>
+				</unitGroup>
+			</unitGroups>
+			<comments>
+			</comments>
+			<ucums>
+			</ucums>
+			<term>
+				<refid>MDCX_aaa</refid>
 			</term>
 		</term>
 	</terms>

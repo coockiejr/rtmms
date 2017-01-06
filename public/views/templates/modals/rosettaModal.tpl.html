@@ -217,6 +217,75 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+
+                    <div class="form-group-sm">
+                        <div external-sites-picker enumgroups="formData.externalSiteGroups" enums="formData.externalSites" limit="5"></div>
+                    </div>
+                    <div class="enumsFields">
+
+                        <div ng-show="(formData.externalSiteGroups.length>0 || formData.externalSites.length>0)" class="formField enumGrouplist">
+                            <table ng-show="formData.externalSiteGroups.length>0" class="table super-table-striped levelOne">
+                                <thead>
+                                    <tr>
+                                        <th>Group Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-ng-repeat="enumGroup in formData.externalSiteGroups">
+                                    <tr>
+                                        <td class="hoverhand" data-ng-click="selectEnumGroupRow($index, enumGroup.groupName)">
+                                            <i title="collapse" ng-show="enumGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-down"></i>
+                                            <i title="expand" ng-show="!enumGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-right"></i>
+                                            <span class="bold">{{enumGroup.groupName}}</span>
+                                        </td>
+                                        <td class="right">
+                                            <i ng-click="removeExternalSiteGroup($index,enumGroup)" class="fa fa-times hoverhand red"></i>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="enumGroupIsExpanded[$index]">
+                                        <td colspan="2">
+                                            <div style="padding-left:10px;">
+                                                <table class="table table-striped levelTwo">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>REFID</th>
+                                                            <th>TOKEN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr data-ng-repeat="enum in enumGroup.enums">
+                                                            <td>{{enum.term.refid}}</td>
+                                                            <td>{{enum.token}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-show="formData.externalSites.length>0" class="formField enumlist">
+                            <table ng-show="formData.externalSites.length>0" class="table table-striped levelOne">
+                                <thead>
+                                    <tr>
+                                        <th>REFID</th>
+                                        <th>TOKEN</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="enum in formData.externalSites">
+                                        <td>{{enum.term.refid}}</td>
+                                        <td>{{enum.token}}</td>
+                                        <td class="right">
+                                            <i ng-click="removeExternalSite($index,enum)" class="fa fa-times hoverhand red "></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">

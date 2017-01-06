@@ -7516,7 +7516,7 @@ footer {
 }
 .formrosetta .unitenums .unitsFields {
   overflow-y: scroll;
-  height: 340px;
+  height: 250px;
 }
 .formrosetta .unitenums .unitsFields .unitlist.formField::before {
   position: relative;
@@ -7538,7 +7538,7 @@ footer {
 }
 .formrosetta .unitenums .enumsFields {
   overflow-y: scroll;
-  height: 340px;
+  height: 250px;
 }
 .formrosetta .unitenums .enumsFields .enumlist.formField::before {
   position: relative;

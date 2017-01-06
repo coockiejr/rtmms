@@ -397,7 +397,7 @@ app.filter('UcumsAsStringFromRosetta', function() {
             rosetta.units.forEach(function(u) {
                 u.ucums.forEach(function(ucum) {
                     if (ucum !== null) {
-                        res.push(ucum.ucum);
+                        res.push(ucum.value);
 
                     }
                 });
@@ -434,8 +434,7 @@ app.filter('UcumsAsStringFromUnit', function() {
         if (unit.ucums) {
             unit.ucums.forEach(function(ucum) {
                 if (ucum !== null) {
-                    // console.log(ucum.ucum);
-                    res.push(ucum.ucum);
+                    res.push(ucum.value);
                 }
             });
         }

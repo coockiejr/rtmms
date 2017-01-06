@@ -22,6 +22,8 @@ module.exports = function(app, qs, passport, async, _) {
         var sort = req.query.sort;
         var limit = req.query.limit;
         var skip = req.query.skip;
+        var contributingOrganization = req.query.contributingOrganization;
+
         console.log(limit);
 
 
@@ -100,6 +102,10 @@ module.exports = function(app, qs, passport, async, _) {
 
         if (limit) {
             query = query.limit(req.query.limit);
+        }
+        if (contributingOrganization) {
+            query = query.where("contributingOrganization").equals(contributingOrganization);
+            queryCount = queryCount.where("contributingOrganization").equals(contributingOrganization);
         }
 
         query.exec(function(err, rosettas) {
@@ -306,13 +312,6 @@ module.exports = function(app, qs, passport, async, _) {
             query = query.limit(req.query.limit);
         }
 
-
-        //gets rosettas of a specific vendor 
-
-
-
-
-
         query.exec(function(err, cos) {
             // if there is an error retrieving, send the error. nothing after res.send(err) will execute
             if (err) {
@@ -435,7 +434,7 @@ module.exports = function(app, qs, passport, async, _) {
 
                     }
                 };
-                fs.writeFile('./public/docs/rosetta_terms.xml', js2xmlparser("rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
+                fs.writeFile('./public/docs/rosetta_terms.xml', js2xmlparser("Rosetta", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
                     //res.download('test.xml');
                     if (err) {
                         return console.log(err);
@@ -701,6 +700,7 @@ module.exports = function(app, qs, passport, async, _) {
 
         }).then(function() {
             var rosetta = new Rosetta(req.body);
+            rosetta.customField('term.test', 'tesssttttt')
             rosetta._id = max + 1;
             rosetta.save(function(err, rosetta) {
                 if (err) {
@@ -743,6 +743,19 @@ module.exports = function(app, qs, passport, async, _) {
         });
 
     });
+    // delete a rosetta
+    app.delete('/api/myrosettas/:rosetta_id', isCOLoggedIn, function(req, res) {
+        Rosetta.remove({
+            _id: req.params.rosetta_id
+        }, function(err, rosetta) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.end('{"success" : "Rosetta deleted successfully", "status" : 200}');
+            }
+        });
+    });
+
 
 
     // delete a rosetta
@@ -844,6 +857,7 @@ module.exports = function(app, qs, passport, async, _) {
 
     function isCOLoggedIn(req, res, next) {
         // if user is authenticated in the session and has an Co role, or a vendor role carry on 
+        console.log(req.user);
 
         if (req.isAuthenticated() && (req.user.userTypes.id === 1 || req.user.userTypes.id === 3)) {
             if (true) {

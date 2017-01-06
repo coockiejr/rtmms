@@ -1,8 +1,8 @@
 <div class="jumbotron">
-    
+
     <div class="row button-row ">
-        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary" ng-click="showAddCOModal()">Add a CO</button>
-        <button ng-show="authService.isLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showEditCOModal(selectedEntity)">Edit CO</button>
+        <button ng-show="authService.isLoggedIn()" type="submit" class="btn btn-primary btn-xs" ng-click="showAddCOModal()"><i class="fa fa-plus" aria-hidden="true"></i>  Add a CO</button>
+        <button ng-show="authService.isLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showEditCOModal(selectedEntity)"><i class="fa fa-pencil" aria-hidden="true"></i> Edit CO</button>
     </div>
     <div class="row">
         <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>

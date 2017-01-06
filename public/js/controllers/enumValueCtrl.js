@@ -28,7 +28,7 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', '$http
         selectionRowHeaderWidth: 35,
         columnDefs: [{
             name: 'info',
-            cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+            cellTemplate: ' <i class="fa fa-info" style="margin-left:10px;margin-right:10px" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </i>',
             width: 50
         }, {
             name: 'groups',
@@ -373,6 +373,14 @@ angular.module('rtmms.enum').controller('EnumModalInstanceController', ['$scope'
 
     $scope.removeEnumGroup = function(index, enumGroup) {
         $scope.formData.enumGroups.splice(index, 1);
+    };
+
+    $scope.removeExternalSite = function(index, enumeration) {
+        $scope.formData.externalSites.splice(index, 1);
+    };
+
+    $scope.removeExternalSiteGroup = function(index, enumGroup) {
+        $scope.formData.externalSiteGroups.splice(index, 1);
     };
 
     $scope.removeTerm = function(index, term) {

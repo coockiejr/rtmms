@@ -1,36 +1,36 @@
 <div class="jumbotron " ng-init="proposedTerms()">
     <div class="row button-row ">
-        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-class="{active: state==='proposed'}" ng-click="proposedTerms()">Proposed Terms Table</button>
-        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-class="{active: state==='ready'}" ng-click="readyTerms()">Ready Terms Table</button>
-        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-class="{active: state==='mapped'}" ng-click="mappedTerms()">Mapped terms</button>
-        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-class="{active: state==='proposedU'}" ng-click="proposedUnits()">Proposed units</button>
-        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms" ng-click="proposedEnums()">Proposed enumerations</button>
+        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms btn-xs" ng-class="{active: state==='proposed'}" ng-click="proposedTerms()">Proposed Terms Table</button>
+        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms btn-xs" ng-class="{active: state==='ready'}" ng-click="readyTerms()">Ready Terms Table</button>
+        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms btn-xs" ng-class="{active: state==='mapped'}" ng-click="mappedTerms()">Mapped terms</button>
+        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms btn-xs" ng-class="{active: state==='proposedU'}" ng-click="proposedUnits()">Proposed units</button>
+        <button ng-show="authService.isLoggedIn()" class="btn btn-rtmms btn-xs" ng-click="proposedEnums()">Proposed enumerations</button>
     </div>
     <div class="row button-row ">
-        <button ng-show="authService.isLoggedIn() && state==='proposed' " ng-disabled="selectedEntity.term.status !== 'proposed'" class="btn btn-rtmms" ng-click="showAssignRefidModal(selectedEntity)">Assign REFID</button>
-        <button ng-show="authService.isLoggedIn() && (state==='ready') " ng-disabled="selectedEntity.term.status !== 'unregistered' && selectedEntity.term.status !== 'registered'" class="btn btn-rtmms" ng-click="showReadyRefidModal(selectedEntity)">Register REFID</button>
-        <button ng-show="authService.isLoggedIn() && state==='ready'" ng-disabled="selectedEntity.term.status !== 'registered'" class="btn btn-rtmms" ng-click="approve(selectedEntity)">Approve REFID</button>
-        <button ng-show="authService.isLoggedIn() && state==='mapped' " type="submit" ng-disabled="selectedEntity.term.status !== 'rMapped'" class="btn btn-primary" ng-click="approve(selectedEntity)">Approve Mapping</button>
-        <button ng-show="authService.isLoggedIn() && (state==='mapped') " ng-disabled="selectedEntity.term.status !== 'rMapped'" class="btn btn-rtmms" ng-click="showReadyRefidModal(selectedEntity)">Register REFID</button>
-        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" class="btn btn-primary" ng-click="showEditUnitModal(selectedEntity)">Edit Unit</button>
-        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" ng-disabled="selectedEntity.term.status !== 'proposed'" class="btn btn-primary" ng-click="showUAssignRefidModal(selectedEntity)">Assign REFID</button>
-        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" class="btn btn-primary" ng-disabled="selectedEntity.term.status !== 'unregistered' && selectedEntity.term.status !== 'registered'" ng-click="showUReadyRefidModal(selectedEntity)">Register REFID</button>
-        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" class="btn btn-primary" ng-disabled="selectedEntity.term.status !== 'registered'" ng-click="approve(selectedEntity)">Approve Unit</button>
-        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" ng-disabled="selectedEntity.term.status !== 'rMapped'" class="btn btn-primary" ng-click="approve(selectedEntity)">Approve Mapping</button>
-        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" class="btn btn-primary" ng-click="showEditEnumModal(selectedEntity)">Edit Enum</button>
-        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" ng-disabled="selectedEntity.term.status !== 'proposed'" class="btn btn-primary" ng-click="showEAssignRefidModal(selectedEntity)">Assign REFID</button>
-        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" class="btn btn-primary" ng-disabled="selectedEntity.term.status !== 'unregistered' && selectedEntity.term.status !== 'registered'" ng-click="showEReadyRefidModal(selectedEntity)">Register REFID</button>
-        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" class="btn btn-primary" ng-disabled="selectedEntity.term.status !== 'registered'" ng-click="approve(selectedEntity)">Approve Enum</button>
-        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" ng-disabled="selectedEntity.term.status !== 'rMapped'" class="btn btn-primary" ng-click="approve(selectedEntity)">Approve Mapping</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposed' " ng-disabled="selectedEntity.term.status !== 'proposed'" class="btn btn-rtmms btn-xs" ng-click="showAssignRefidModal(selectedEntity)">Assign REFID</button>
+        <button ng-show="authService.isLoggedIn() && (state==='ready') " ng-disabled="selectedEntity.term.status !== 'unregistered' && selectedEntity.term.status !== 'registered'" class="btn btn-rtmms btn-xs" ng-click="showReadyRefidModal(selectedEntity)">Register REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='ready'" ng-disabled="selectedEntity.term.status !== 'registered'" class="btn btn-rtmms btn-xs" ng-click="approve(selectedEntity)">Approve REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='mapped' " type="submit" ng-disabled="selectedEntity.term.status !== 'rMapped'" class="btn btn-primary btn-xs" ng-click="approve(selectedEntity)">Approve Mapping</button>
+        <button ng-show="authService.isLoggedIn() && (state==='mapped') " ng-disabled="selectedEntity.term.status !== 'rMapped'" class="btn btn-rtmms btn-xs" ng-click="showReadyRefidModal(selectedEntity)">Register REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" class="btn btn-primary btn-xs" ng-click="showEditUnitModal(selectedEntity)">Edit Unit</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" ng-disabled="selectedEntity.term.status !== 'proposed'" class="btn btn-primary btn-xs" ng-click="showUAssignRefidModal(selectedEntity)">Assign REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" class="btn btn-primary btn-xs" ng-disabled="selectedEntity.term.status !== 'unregistered' && selectedEntity.term.status !== 'registered'" ng-click="showUReadyRefidModal(selectedEntity)">Register REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" class="btn btn-primary btn-xs" ng-disabled="selectedEntity.term.status !== 'registered'" ng-click="approve(selectedEntity)">Approve Unit</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedU' " type="submit" ng-disabled="selectedEntity.term.status !== 'rMapped'" class="btn btn-primary btn-xs" ng-click="approve(selectedEntity)">Approve Mapping</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" class="btn btn-primary btn-xs" ng-click="showEditEnumModal(selectedEntity)">Edit Enum</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" ng-disabled="selectedEntity.term.status !== 'proposed'" class="btn btn-primary btn-xs" ng-click="showEAssignRefidModal(selectedEntity)">Assign REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" class="btn btn-primary btn-xs" ng-disabled="selectedEntity.term.status !== 'unregistered' && selectedEntity.term.status !== 'registered'" ng-click="showEReadyRefidModal(selectedEntity)">Register REFID</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" class="btn btn-primary btn-xs" ng-disabled="selectedEntity.term.status !== 'registered'" ng-click="approve(selectedEntity)">Approve Enum</button>
+        <button ng-show="authService.isLoggedIn() && state==='proposedE' " type="submit" ng-disabled="selectedEntity.term.status !== 'rMapped'" class="btn btn-primary btn-xs" ng-click="approve(selectedEntity)">Approve Mapping</button>
     </div>
     <div class="row" ng-show="state==='proposed' || state==='ready'  || state==='mapped' ">
-        <div  ui-grid="gridOptions" ui-grid-selection  ui-grid-auto-resize ui-grid-pagination class="grid rosetta-grid"></div>
+        <div ui-grid="gridOptions" ui-grid-selection ui-grid-auto-resize ui-grid-pagination class="grid rosetta-grid"></div>
     </div>
     <div class="row" ng-show="state==='proposedU'">
-        <div  ui-grid="gridOptions1" ui-grid-selection ui-grid-auto-resize ui-grid-pagination class="grid units-grid"></div>
+        <div ui-grid="gridOptions1" ui-grid-selection ui-grid-auto-resize ui-grid-pagination class="grid units-grid"></div>
     </div>
     <div class="row" ng-show="state==='proposedE'">
-        <div  ui-grid="gridOptions2" ui-grid-selection ui-grid-auto-resize ui-grid-pagination class="grid enums-grid"></div>
+        <div ui-grid="gridOptions2" ui-grid-selection ui-grid-auto-resize ui-grid-pagination class="grid enums-grid"></div>
     </div>
 </div>
 <script type="text/ng-template" id="popover">
@@ -331,7 +331,7 @@
             <th>CF_CODE10</th>
             <td>{{row.entity.term.cfCode10}}</td>
         </tr>
-      
+
         <tr>
             <th>Systematic Name</th>
             <td>{{row.entity.term.systematicName}}</td>
@@ -356,9 +356,9 @@
             <th>Description</th>
             <td>{{row.entity.description}}</td>
         </tr>
-        
-       
-       
+
+
+
         <tr>
             <th>Tags</th>
             <td>
@@ -379,4 +379,3 @@
     <p ng-show="row.entity.term.status==='pMapped'">Mapped waiting to register Refid</p>
     <p ng-show="row.entity.term.status!=='rMapped' && row.entity.term.status!=='pMapped'">{{row.entity.term.status}}</p>
 </script>
-

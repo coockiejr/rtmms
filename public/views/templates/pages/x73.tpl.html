@@ -1,7 +1,7 @@
 <div class="jumbotron ">
-   	<div class="row button-row ">
-        <button ng-show="authService.isLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showAddCommentModal(selectedEntity)">General comments</button>
-        <button ng-show="authService.isLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms" ng-click="showEditRosettaModal(selectedEntity)">Contributing Organization comments</button>
+    <div class="row button-row ">
+        <button ng-show="authService.isLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showAddCommentModal(selectedEntity)">General comments</button>
+        <button ng-show="authService.isLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showEditRosettaModal(selectedEntity)">Contributing Organization comments</button>
     </div>
     <div class="row">
         <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>

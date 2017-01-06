@@ -19,9 +19,8 @@ module.exports = function(grunt) {
             build: {
                 files: {
                     'public/dist/js/app.min.js': [
-
-                        'public/libs/angular/angular.js',
                         'public/libs/jquery/dist/jquery.js',
+                        'public/libs/angular/angular.js',
                         'public/libs/angular-bootstrap/ui-bootstrap-tpls.js',
                         'public/libs/angular-loading-bar/build/loading-bar.js',
                         'public/libs/angular-sanitize/angular-sanitize.js',
@@ -38,6 +37,11 @@ module.exports = function(grunt) {
                         'public/libs/angular-bootstrap-toggle-switch/angular-toggle-switch.min.js',
                         'public/libs/nsPopover/src/nsPopover.js',
                         'public/libs/ngdropover/src/dropover.js',
+                        'public/libs/angular-animate/angular-animate.js',
+                        'public/libs/angular-aria/angular-aria.js',
+
+                        'public/libs/angular-material/angular-material.js',
+
                         'public/js/**/*.js',
                         'public/js/*.js'
                     ]

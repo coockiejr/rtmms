@@ -24,7 +24,7 @@ app.directive('unitsPicker', ['$timeout', '$document', 'UnitService', function($
 
             scope.suggestions = [];
             scope.selectedIndex = -1;
-            
+
 
             scope.search = function() {
                 if (scope.searchText === '') {
@@ -44,31 +44,31 @@ app.directive('unitsPicker', ['$timeout', '$document', 'UnitService', function($
 
             scope.addToUnitLists = function(index) {
                 input[0].focus();
-                exist=false;
-                gExist=false;
-                if(scope.unitGroupsList===undefined){
-                    scope.unitGroupsList=[];
+                exist = false;
+                gExist = false;
+                if (scope.unitGroupsList === undefined) {
+                    scope.unitGroupsList = [];
                 }
-                if(scope.unitsList===undefined){
-                    scope.unitsList=[];
-                }	
+                if (scope.unitsList === undefined) {
+                    scope.unitsList = [];
+                }
                 if (scope.suggestions[scope.selectedIndex].groupName !== undefined) {
-                    for(i=0;i<scope.unitGroupsList.length;i++){
-                      if(scope.unitGroupsList[i]._id===scope.suggestions[scope.selectedIndex]._id){
-                            exist=true;
+                    for (i = 0; i < scope.unitGroupsList.length; i++) {
+                        if (scope.unitGroupsList[i]._id === scope.suggestions[scope.selectedIndex]._id) {
+                            exist = true;
                         }
                     }
-                    if(!exist){
+                    if (!exist) {
                         scope.unitGroupsList.push(scope.suggestions[scope.selectedIndex]);
 
                     }
                 } else if (scope.suggestions[scope.selectedIndex].term.refid !== undefined) {
-                    for(i=0;i<scope.unitsList.length;i++){
-                      if(scope.unitsList[i]._id===scope.suggestions[scope.selectedIndex]._id){
-                            gExist=true;
+                    for (i = 0; i < scope.unitsList.length; i++) {
+                        if (scope.unitsList[i]._id === scope.suggestions[scope.selectedIndex]._id) {
+                            gExist = true;
                         }
                     }
-                    if(!gExist){
+                    if (!gExist) {
                         scope.unitsList.push(scope.suggestions[scope.selectedIndex]);
 
                     }
@@ -174,22 +174,22 @@ app.directive('ucumsPicker', ['$timeout', '$document', 'UnitService', function($
 
             scope.addToUcumLists = function(index) {
                 input[0].focus();
-                    exist=false;
-                 if(scope.ucumsList===undefined){
-                    scope.ucumsList=[];
+                exist = false;
+                if (scope.ucumsList === undefined) {
+                    scope.ucumsList = [];
                 }
-                if (scope.suggestions[scope.selectedIndex] !== undefined ) {
-                    for(i=0;i<scope.ucumsList.length;i++){
-                      if(scope.ucumsList[i]._id===scope.suggestions[scope.selectedIndex]._id){
-                            exist=true;
+                if (scope.suggestions[scope.selectedIndex] !== undefined) {
+                    for (i = 0; i < scope.ucumsList.length; i++) {
+                        if (scope.ucumsList[i]._id === scope.suggestions[scope.selectedIndex]._id) {
+                            exist = true;
                         }
                     }
-                    if(!exist){
+                    if (!exist) {
                         scope.ucumsList.push(scope.suggestions[scope.selectedIndex]);
 
                     }
-                            
-                 }
+
+                }
 
                 scope.searchText = '';
                 scope.suggestions = [];
@@ -215,13 +215,13 @@ app.directive('ucumsPicker', ['$timeout', '$document', 'UnitService', function($
 
             scope.$watch('selectedIndex', function(val) {
                 if (val !== -1) {
-                    
-                    if (scope.suggestions[scope.selectedIndex] !== undefined) {
-                            for(i=0;i<scope.suggestions[scope.selectedIndex].length;i++){
 
-                                scope.searchText = scope.suggestions[scope.selectedIndex].value;
-                            }
-                    } 
+                    if (scope.suggestions[scope.selectedIndex] !== undefined) {
+                        for (i = 0; i < scope.suggestions[scope.selectedIndex].length; i++) {
+
+                            scope.searchText = scope.suggestions[scope.selectedIndex].value;
+                        }
+                    }
                 }
             });
 
@@ -271,7 +271,7 @@ app.directive('enumsPicker', ['$timeout', '$document', 'EnumService', function($
 
             scope.suggestions = [];
             scope.selectedIndex = -1;
-            
+
 
             scope.search = function() {
                 if (scope.searchText === '') {
@@ -290,17 +290,17 @@ app.directive('enumsPicker', ['$timeout', '$document', 'EnumService', function($
             };
 
             scope.addToEnumLists = function(index) {
-                input[0].focus();	
-               if(scope.enumGroupsList===undefined){
-                    scope.enumGroupsList=[];
+                input[0].focus();
+                if (scope.enumGroupsList === undefined) {
+                    scope.enumGroupsList = [];
                 }
-                if(scope.enumsList===undefined){
-                    scope.enumsList=[];
-                }   
+                if (scope.enumsList === undefined) {
+                    scope.enumsList = [];
+                }
 
                 if (scope.suggestions[scope.selectedIndex].groupName !== undefined) {
                     scope.enumGroupsList.push(scope.suggestions[scope.selectedIndex]);
-                } else if ( scope.suggestions[scope.selectedIndex].term.refid !== undefined) {
+                } else if (scope.suggestions[scope.selectedIndex].term.refid !== undefined) {
                     scope.enumsList.push(scope.suggestions[scope.selectedIndex]);
                 }
 
@@ -358,6 +358,120 @@ app.directive('enumsPicker', ['$timeout', '$document', 'EnumService', function($
     };
 }]);
 
+
+
+
+app.directive('externalSitesPicker', ['$timeout', '$document', 'EnumService', function($timeout, $document, EnumService) {
+    return {
+        restrict: 'A',
+        scope: {
+            enumGroupsList: '=enumgroups',
+            enumsList: '=enums',
+            limit: '=limit'
+        },
+        templateUrl: 'views/templates/pickers/externalSite-picker.tpl.html',
+        link: function(scope, elem, attrs) {
+            if (scope.limit === undefined) {
+                scope.limit = 10;
+            }
+            input = elem.find('input');
+
+
+            scope.visible = true;
+
+
+            events = scope.events;
+
+            scope.suggestions = [];
+            scope.selectedIndex = -1;
+
+
+            scope.search = function() {
+                if (scope.searchText === '') {
+                    scope.suggestions = [];
+                } else {
+                    scope.visible = true;
+                    EnumService.getEnumsAndEnumGroups({
+                        "filter": scope.searchText,
+                        "limit": scope.limit
+                    }).then(function(enumsAndEnumGroups) {
+                        scope.suggestions = enumsAndEnumGroups;
+                    });
+                }
+                scope.selectedIndex = -1;
+
+            };
+
+            scope.addToEnumLists = function(index) {
+                input[0].focus();
+                if (scope.enumGroupsList === undefined) {
+                    scope.enumGroupsList = [];
+                }
+                if (scope.enumsList === undefined) {
+                    scope.enumsList = [];
+                }
+
+                if (scope.suggestions[scope.selectedIndex].groupName !== undefined) {
+                    scope.enumGroupsList.push(scope.suggestions[scope.selectedIndex]);
+                } else if (scope.suggestions[scope.selectedIndex].term.refid !== undefined) {
+                    scope.enumsList.push(scope.suggestions[scope.selectedIndex]);
+                }
+
+                scope.searchText = '';
+                scope.suggestions = [];
+
+            };
+
+            scope.checkKeyDown = function(event) {
+                if (event.keyCode === 40) { //down
+                    event.preventDefault();
+                    if (scope.selectedIndex + 1 !== scope.suggestions.length) {
+                        scope.selectedIndex++;
+                    }
+                } else if (event.keyCode === 38) { //up
+                    event.preventDefault();
+                    if (scope.selectedIndex - 1 !== -1) {
+                        scope.selectedIndex--;
+                    }
+                } else if (event.keyCode === 13 || event.keyCode === 9) { //enter or tab
+                    scope.addToEnumLists(scope.selectedIndex);
+                    event.preventDefault();
+                }
+            };
+
+            scope.$watch('selectedIndex', function(val) {
+                if (val !== -1) {
+                    //if group
+                    if (scope.suggestions[scope.selectedIndex].groupName !== undefined) {
+                        scope.searchText = scope.suggestions[scope.selectedIndex].groupName;
+                    } else if (scope.suggestions[scope.selectedIndex].refid !== undefined) {
+                        scope.searchText = scope.suggestions[scope.selectedIndex].refid;
+                    }
+                }
+            });
+
+
+
+            scope.hideResults = function() {
+                $timeout(function() {
+                    var activeElement = $document.prop('activeElement'),
+                        lostFocusToBrowserWindow = activeElement !== input[0],
+                        lostFocusToChildElement = elem[0].contains(activeElement);
+
+                    //lost focus and not a suggestion click
+                    if (lostFocusToBrowserWindow && !lostFocusToChildElement) {
+                        scope.visible = false;
+                        scope.suggestions = [];
+                        scope.searchText = '';
+                    }
+                });
+
+            };
+        }
+    };
+}]);
+
+
 app.directive('rosettaRefidPicker', ['$timeout', '$document', 'RosettaService', function($timeout, $document, RosettaService) {
     return {
         restrict: 'A',
@@ -384,7 +498,7 @@ app.directive('rosettaRefidPicker', ['$timeout', '$document', 'RosettaService', 
             scope.search = function() {
                 if (scope.searchText === '') {
                     scope.suggestions = [];
-                    scope.refid=[];
+                    scope.refid = [];
                 } else {
                     scope.visible = true;
                     console.log(scope.searchText);
@@ -401,17 +515,17 @@ app.directive('rosettaRefidPicker', ['$timeout', '$document', 'RosettaService', 
             };
 
             scope.addToRefidLists = function(index) {
-                input[0].focus();   
-             
-              
+                input[0].focus();
+
+
 
                 if (scope.suggestions[scope.selectedIndex] !== undefined) {
-                    scope.refid=scope.suggestions[scope.selectedIndex].term;
-                } 
-             //   console.log(scope.refidList);
+                    scope.refid = scope.suggestions[scope.selectedIndex].term;
+                }
+                //   console.log(scope.refidList);
 
-               scope.searchText = scope.suggestions[scope.selectedIndex].term.refid;
-               scope.suggestions = [];
+                scope.searchText = scope.suggestions[scope.selectedIndex].term.refid;
+                scope.suggestions = [];
 
             };
 
@@ -435,7 +549,7 @@ app.directive('rosettaRefidPicker', ['$timeout', '$document', 'RosettaService', 
             scope.$watch('selectedIndex', function(val) {
                 if (val !== -1) {
                     //if group
-                     if (scope.suggestions[scope.selectedIndex] !== undefined) {
+                    if (scope.suggestions[scope.selectedIndex] !== undefined) {
                         scope.searchText = scope.suggestions[scope.selectedIndex].term.refid;
                     }
                 }
@@ -453,7 +567,7 @@ app.directive('rosettaRefidPicker', ['$timeout', '$document', 'RosettaService', 
                     if (lostFocusToBrowserWindow && !lostFocusToChildElement) {
                         scope.visible = false;
                         scope.suggestions = [];
-                      //  scope.searchText = '';
+                        //  scope.searchText = '';
                     }
                 });
 
@@ -488,7 +602,7 @@ app.directive('unitRefidPicker', ['$timeout', '$document', 'UnitService', functi
             scope.search = function() {
                 if (scope.searchText === '') {
                     scope.suggestions = [];
-                    scope.refid=[];
+                    scope.refid = [];
                 } else {
                     scope.visible = true;
                     console.log(scope.searchText);
@@ -505,17 +619,17 @@ app.directive('unitRefidPicker', ['$timeout', '$document', 'UnitService', functi
             };
 
             scope.addToRefidLists = function(index) {
-                input[0].focus();   
-             
-              
+                input[0].focus();
+
+
 
                 if (scope.suggestions[scope.selectedIndex] !== undefined) {
-                    scope.refid=scope.suggestions[scope.selectedIndex].term;
-                } 
-             //   console.log(scope.refidList);
+                    scope.refid = scope.suggestions[scope.selectedIndex].term;
+                }
+                //   console.log(scope.refidList);
 
-               scope.searchText = scope.suggestions[scope.selectedIndex].term.refid;
-               scope.suggestions = [];
+                scope.searchText = scope.suggestions[scope.selectedIndex].term.refid;
+                scope.suggestions = [];
 
             };
 
@@ -539,7 +653,7 @@ app.directive('unitRefidPicker', ['$timeout', '$document', 'UnitService', functi
             scope.$watch('selectedIndex', function(val) {
                 if (val !== -1) {
                     //if group
-                     if (scope.suggestions[scope.selectedIndex] !== undefined) {
+                    if (scope.suggestions[scope.selectedIndex] !== undefined) {
                         scope.searchText = scope.suggestions[scope.selectedIndex].term.refid;
                     }
                 }
@@ -557,7 +671,7 @@ app.directive('unitRefidPicker', ['$timeout', '$document', 'UnitService', functi
                     if (lostFocusToBrowserWindow && !lostFocusToChildElement) {
                         scope.visible = false;
                         scope.suggestions = [];
-                      //  scope.searchText = '';
+                        //  scope.searchText = '';
                     }
                 });
 
@@ -592,7 +706,7 @@ app.directive('enumRefidPicker', ['$timeout', '$document', 'EnumService', functi
             scope.search = function() {
                 if (scope.searchText === '') {
                     scope.suggestions = [];
-                    scope.refid=[];
+                    scope.refid = [];
                 } else {
                     scope.visible = true;
                     console.log(scope.searchText);
@@ -609,17 +723,17 @@ app.directive('enumRefidPicker', ['$timeout', '$document', 'EnumService', functi
             };
 
             scope.addToRefidLists = function(index) {
-                input[0].focus();   
-             
-              
+                input[0].focus();
+
+
 
                 if (scope.suggestions[scope.selectedIndex] !== undefined) {
-                    scope.refid=scope.suggestions[scope.selectedIndex].term;
-                } 
-             //   console.log(scope.refidList);
+                    scope.refid = scope.suggestions[scope.selectedIndex].term;
+                }
+                //   console.log(scope.refidList);
 
-               scope.searchText = scope.suggestions[scope.selectedIndex].term.refid;
-               scope.suggestions = [];
+                scope.searchText = scope.suggestions[scope.selectedIndex].term.refid;
+                scope.suggestions = [];
 
             };
 
@@ -643,7 +757,7 @@ app.directive('enumRefidPicker', ['$timeout', '$document', 'EnumService', functi
             scope.$watch('selectedIndex', function(val) {
                 if (val !== -1) {
                     //if group
-                     if (scope.suggestions[scope.selectedIndex] !== undefined) {
+                    if (scope.suggestions[scope.selectedIndex] !== undefined) {
                         scope.searchText = scope.suggestions[scope.selectedIndex].term.refid;
                     }
                 }
@@ -661,7 +775,7 @@ app.directive('enumRefidPicker', ['$timeout', '$document', 'EnumService', functi
                     if (lostFocusToBrowserWindow && !lostFocusToChildElement) {
                         scope.visible = false;
                         scope.suggestions = [];
-                      //  scope.searchText = '';
+                        //  scope.searchText = '';
                     }
                 });
 

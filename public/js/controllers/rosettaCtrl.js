@@ -1,9 +1,11 @@
-angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'AuthService', 'RosettaService', 'uiGridConstants', '$http', function($scope, AuthService, RosettaService, uiGridConstants, $http) {
+angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'AuthService', 'RosettaService', 'uiGridConstants', '$http', '$filter', function($scope, AuthService, RosettaService, uiGridConstants, $http, $filter) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
         $scope.user = user;
     });
+    $scope.showContent = false;
+
 
 
     var paginationOptions = {
@@ -11,7 +13,16 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         pageSize: 25,
         sort: null,
         filters: null,
+        contributingOrganization: undefined
     };
+    $scope.vendor = function() {
+        console.log($scope.co);
+        var org = JSON.parse($scope.co);
+        paginationOptions.contributingOrganization = org.name;
+
+        getPage();
+    };
+
 
     $scope.gridOptions = {
         enableFiltering: true,
@@ -28,7 +39,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         selectionRowHeaderWidth: 35,
         columnDefs: [{
                 name: 'info',
-                cellTemplate: ' <button class="glyphicon glyphicon-info-sign" ns-popover ns-popover-template="popover"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" >  </button>',
+                cellTemplate: ' <i class="fa fa-info" ns-popover ns-popover-template="popover" style="margin-left:10px;margin-right:10px"  ns-popover-theme="ns-popover-theme " ns-popover-trigger="click" ns-popover-placement="right|top" ></i>',
                 width: 50
             }, {
                 name: 'groups',
@@ -130,6 +141,9 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
                 enableSorting: false
             }, {
                 name: 'externalSites',
+                field: 'externalSites',
+                cellTemplate: '<div class="ui-grid-cell-contents"><span class="bold">{{row.entity.externalSiteGroups | EnumOrUnitGroupsAsString }}</span> <span>{{row.entity.externalSites | EnumsAsString }}</span></div>',
+                enableSorting: false
 
             }, {
                 name: 'vendorComment',
@@ -152,6 +166,8 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
                 }
                 getPage();
             });
+            $scope.gridApi.grid.registerRowsProcessor($scope.singleFilter, 200);
+
 
             gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
                 paginationOptions.pageNumber = newPage;
@@ -185,13 +201,40 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
 
         }
     };
+    $scope.singleFilter = function(renderableRows) {
+        var matcher = new RegExp($scope.filterValue);
+        renderableRows.forEach(function(row) {
+            var match = false;
+            ['groups', 'refid', 'cfCode10', 'displayName'].forEach(function(field) {
+
+                if (row.entity[field]) {
+
+                    if (row.entity[field][0].match(matcher)) {
+                        match = true;
+                    }
+                }
+
+            });
+            if (!match) {
+                row.visible = false;
+            }
+        });
+        return renderableRows;
+    };
+
+    $scope.refreshData = function() {
+        $scope.gridApi.grid.refresh();
+    };
+
 
     var getPage = function() {
         RosettaService.getRosettas({
             limit: paginationOptions.pageSize,
             skip: (paginationOptions.pageNumber - 1) * paginationOptions.pageSize,
             filters: paginationOptions.filters,
-            sort: paginationOptions.sort
+            sort: paginationOptions.sort,
+            contributingOrganization: paginationOptions.contributingOrganization
+
         }).then(function(result) {
             if (result !== null) {
                 $scope.gridOptions.data = result.rosettas;
@@ -202,6 +245,18 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
     };
     getPage();
 
+    $scope.getCOs = function() {
+
+
+        RosettaService.getCos({}).then(function(result) {
+            if (result !== null) {
+                $scope.cos = result.cos;
+
+            }
+        });
+    };
+
+
 
     $scope.showAddCommentModal = function(rosetta) {
         RosettaService.showAddCommentModal(rosetta).then(function() {
@@ -209,10 +264,20 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         });
     };
     $scope.showEditRosettaModal = function(rosetta) {
+        console.log(rosetta);
         RosettaService.showEditRosettaModal(rosetta).then(function() {
 
         });
     };
+    $scope.deprecate = function(rosetta) {
+        console.log("========");
+        console.log(rosetta);
+        RosettaService.deprecateRosetta(rosetta).then(function() {
+            getPage();
+        });
+    };
+
+
     $scope.downHTML = function() {
 
         $http.get('/api/downloadR/allHTML').then(function(res) {

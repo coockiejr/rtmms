@@ -3,7 +3,9 @@
         <div class="col-md-4" ng-init="getCOs()">
             <label>Filter by Contributing Organization</label>
             <select class="form-control" ng-model="co" ng-change="vendor()">
+                <option value="all">All</option>
                 <option ng-repeat="co in cos" value="{{co}}"> {{co.name}}</option>
+                
             </select>
 
         </div>
@@ -24,6 +26,8 @@
             <ul class="dropdown-menu " role="menu">
                 <li><a class="point" ng-click="downHTML()"> HTML</a></li>
                 <li><a class="point" ng-click="downXML()"> XML</a></li>
+                <li><a class="point" ng-click="downXMLInView()"> XMLInView</a></li>
+
                 <li><a class="point" ng-click="downCSV()"> CSV</a></li>
 
             </ul>

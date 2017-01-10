@@ -416,7 +416,7 @@ app.directive('externalSitesPicker', ['$timeout', '$document', 'EnumService', fu
                 } else if (scope.suggestions[scope.selectedIndex].term.refid !== undefined) {
                     scope.enumsList.push(scope.suggestions[scope.selectedIndex]);
                 }
-
+                console.log(scope.enumsList);
                 scope.searchText = '';
                 scope.suggestions = [];
 
@@ -493,6 +493,7 @@ app.directive('rosettaRefidPicker', ['$timeout', '$document', 'RosettaService', 
 
             scope.suggestions = [];
             scope.selectedIndex = -1;
+            scope.searchText = '';
 
 
             scope.search = function() {
@@ -567,11 +568,12 @@ app.directive('rosettaRefidPicker', ['$timeout', '$document', 'RosettaService', 
                     if (lostFocusToBrowserWindow && !lostFocusToChildElement) {
                         scope.visible = false;
                         scope.suggestions = [];
-                        //  scope.searchText = '';
+                        //  
                     }
                 });
 
             };
+
         }
     };
 }]);

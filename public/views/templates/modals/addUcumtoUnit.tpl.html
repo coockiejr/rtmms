@@ -1,0 +1,47 @@
+<div>
+    <div class="modal-header">
+
+        <h3 class="modal-title">Add UCUM </h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="ucumInfo formField">
+
+
+                <div class="form-group-sm">
+                    <div ucums-picker ucums="newUcums" limit="5"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="unitsFields">
+                <div ng-show="newUcums.length>0" class="formField ucumlist">
+                    <table ng-show="newUcums.length>0" class="table super-table-striped levelOne">
+                        <thead>
+                            <tr>
+                                <th>Ucums</th>
+                            </tr>
+                        </thead>
+                        <tbody data-ng-repeat="ucum in newUcums track by $index">
+                            <tr>
+                                <td>
+
+                                    <span>{{ucum.value}}</span>
+                                </td>
+                                <td class="right">
+                                    <i ng-click="removeUcum($index,ucum)" class="fa fa-times hoverhand red"></i>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-click="add()">Add</button>
+        <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+    </div>

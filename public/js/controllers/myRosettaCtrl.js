@@ -244,7 +244,7 @@ angular.module('rtmms.rosetta').controller('MyRosettaController', ['$scope', '$h
     };
 }]);
 
-angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$scope', '$modalInstance', 'Restangular', 'rosetta', 'RosettaService', 'UnitService', 'AuthService', function($scope, $modalInstance, Restangular, rosetta, RosettaService, UnitService, AuthService) {
+angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$scope', '$modalInstance', '$modal', 'Restangular', 'rosetta', 'RosettaService', 'UnitService', 'AuthService', function($scope, $modalInstance, $modal, Restangular, rosetta, RosettaService, UnitService, AuthService) {
 
     var formDataInitial;
     $scope.user = AuthService.isLoggedIn();
@@ -259,8 +259,11 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
     $scope.groups = [];
     $scope.refid = [];
     $scope.tags = [];
+    $scope.term = {};
     $scope.unitGroupIsExpanded = [];
     $scope.enumGroupIsExpanded = [];
+    $scope.externalSiteGroupIsExpanded = [];
+
 
     $scope.$watch('groups', function() {
         $scope.formData.groups = _.flatten(_.map($scope.groups, _.values));
@@ -289,25 +292,52 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
             }
         }
 
-        if ($scope.refidType === 'new') {
-            delete $scope.formData.term.partition;
-            delete $scope.formData.term.code10;
-            delete $scope.formData.term.cfCode10;
 
-            $scope.status = 'pending';
-        }
         if ($scope.formData.term !== undefined) {
-            if ($scope.formData.term.partition !== undefined) {
+            if ($scope.formData.term.partition !== undefined && $scope.formData.term.partition !== null) {
                 $scope.refidType = 'existing';
             }
         }
-
         if ($scope.refidType === 'existing') {
-            $scope.formrosetta.$invalid = false;
-            if ($scope.formData.term.status !== undefined) {
-                $scope.formData.term.status = "pMapped";
+            console.log($scope.formrosetta.refid);
+            console.log($scope.formData.term.partition);
+            if ($scope.formrosetta.refid.$invalid === true) {
+                console.log("=======");
+                $scope.formrosetta.refid.$invalid = false;
+                console.log($scope.formrosetta.refid);
 
             }
+
+        }
+
+
+
+    }, true);
+
+    $scope.$watch('refidType', function() {
+        console.log($scope.formData);
+        if ($scope.refidType === 'new' && $scope.formData.term) {
+            $scope.formData.term.partition = null;
+            $scope.formData.term.code10 = null;
+            $scope.formData.term.cfCode10 = null;
+            $scope.formData.term.refid = null;
+            $scope.formData.term.status = undefined;
+
+        }
+        if ($scope.refidType === 'existing') {
+
+            $scope.formData.term.partition = null;
+            $scope.formData.term.code10 = null;
+            $scope.formData.term.cfCode10 = null;
+            $scope.formData.term.refid = null;
+            $scope.formData.term.status = "pMapped";
+
+
+
+
+
+
+
         }
 
     }, true);
@@ -325,6 +355,12 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
         if ($scope.formData.unitGroups !== undefined) {
             for (i = 0; i < $scope.formData.unitGroups.length; i += 1) {
                 $scope.unitGroupIsExpanded.push(false);
+            }
+        }
+
+        if ($scope.formData.externalSiteGroups !== undefined) {
+            for (i = 0; i < $scope.formData.externalSiteGroups.length; i += 1) {
+                $scope.externalSiteGroupIsExpanded.push(false);
             }
         }
 
@@ -356,6 +392,7 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
         console.log("HEREEEE");
         console.log($scope.formrosetta);
         //$scope.formData.term.status="proposed";
+        console.log($scope.formData);
         RosettaService.createRosetta($scope.formData);
         $modalInstance.dismiss('add');
 
@@ -393,6 +430,19 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
 
     $scope.removeUnit = function(index, unit) {
         $scope.formData.units.splice(index, 1);
+    };
+    $scope.addUcumtoUnit = function(unit) {
+        var modalInstance = $modal.open({
+            templateUrl: 'views/templates/modals/addUcumtoUnit.tpl.html',
+            controller: 'UcumToUnitModalInstanceController',
+            size: 'sm',
+            windowClass: 'addUcumtoUnit-window',
+            resolve: {
+                unit: function() {
+                    return unit;
+                }
+            }
+        });
     };
 
     $scope.removeUnitGroup = function(index, unitGroup) {
@@ -433,12 +483,67 @@ angular.module('rtmms.rosetta').controller('RosettaModalInstanceController', ['$
         $scope.unitGroupIsExpanded[index] = !$scope.unitGroupIsExpanded[index];
     };
 
-
+    $scope.selectExtSiteGroupRow = function(index, groupName) {
+        $scope.externalSiteGroupIsExpanded[index] = !$scope.externalSiteGroupIsExpanded[index];
+    };
 
 
     $scope.selectEnumGroupRow = function(index, groupName) {
         $scope.enumGroupIsExpanded[index] = !$scope.enumGroupIsExpanded[index];
     };
+
+
+}]);
+
+
+angular.module('rtmms.rosetta').controller('UcumToUnitModalInstanceController', ['$scope', '$modalInstance', 'unit', function($scope, $modalInstance, unit) {
+
+
+
+
+    $scope.unit = unit;
+    $scope.newUcums = [];
+    $scope.finalUcums = [];
+
+
+
+    console.log($scope.unit);
+    $scope.add = function() {
+        console.log($scope.newUcums);
+        //$modalInstance.dismiss('add');
+        for (var i = 0; i < $scope.newUcums.length; i++) {
+            var exists = false;
+            for (var j = 0; j < $scope.unit.ucums.length; j++) {
+                if ($scope.newUcums[i]._id === $scope.unit.ucums[j]._id) {
+                    exists = true;
+
+                }
+            }
+            if (exists) {
+                $scope.newUcums.splice(i, 1);
+            } else {
+                $scope.unit.ucums.push({
+                    _id: $scope.newUcums[i]._id,
+                    value: $scope.newUcums[i].value
+                });
+
+            }
+
+
+        }
+
+        console.log($scope.unit);
+        $modalInstance.dismiss('add');
+
+    };
+    $scope.removeUcum = function(index, ucum) {
+        $scope.newUcums.splice(index, 1);
+    };
+
+    $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+
 
 
 }]);

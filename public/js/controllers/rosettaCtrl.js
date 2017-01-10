@@ -17,8 +17,14 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
     };
     $scope.vendor = function() {
         console.log($scope.co);
-        var org = JSON.parse($scope.co);
-        paginationOptions.contributingOrganization = org.name;
+        if ($scope.co === "all") {
+            paginationOptions.contributingOrganization = undefined;
+
+        } else {
+            var org = JSON.parse($scope.co);
+            paginationOptions.contributingOrganization = org.name;
+        }
+
 
         getPage();
     };
@@ -289,12 +295,22 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
     };
     $scope.downXML = function() {
 
-        $http.get('/api/downloadR/allXML').then(function(res) {
+        $http.post('/api/downloadR/allXML').then(function(res) {
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
             });
             saveAs(blob, "rosetta_terms.xml");
         });
+    };
+    $scope.downXMLInView = function() {
+        console.log($scope.gridOptions.data);
+        $http({ method: "POST", url: '/api/downloadR/XMLinView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "rosetta_terms.xml");
+        });
+
     };
     $scope.downCSV = function() {
 

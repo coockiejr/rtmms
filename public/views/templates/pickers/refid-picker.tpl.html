@@ -1,12 +1,12 @@
 <div class="tags-wrapper">
-    <div>
-        <input type="text"  ng-init="searchText=refid.refid" placeholder="choose a Refid" ng-keydown="checkKeyDown($event)" class="form-control" ng-model="searchText" ng-change="search()" ng-blur="hideResults()" />
-       
+    <div ng-class="{ 'has-error' : formrosetta.term.refid.$invalid && !formrosetta.term.refid.$pristine}">
+        <input type="text" ng-init="searchText=''" placeholder="choose a Refid" ng-keydown="checkKeyDown($event)" class="form-control" ng-model="searchText" ng-change="search()" ng-blur="hideResults()" required/>
+
     </div>
     <div>
         <div class="picker">
             <ul class="suggestions-list" ng-show="visible && suggestions.length>0">
-                <li ng-repeat="term in suggestions track by $index"  ng-mousedown="addToRefidLists($index)"  ng-mouseenter="$parent.selectedIndex=$index" ng-class="{active : selectedIndex===$index}"  ng-bind-html="term.term.refid" ></li>
+                <li ng-repeat="term in suggestions track by $index" ng-mousedown="addToRefidLists($index)" ng-mouseenter="$parent.selectedIndex=$index" ng-class="{active : selectedIndex===$index}" ng-bind-html="term.term.refid"></li>
             </ul>
         </div>
     </div>

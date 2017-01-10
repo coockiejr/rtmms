@@ -340,6 +340,17 @@ footer {
             content: "Co-constraints Information:";
         }
     }
+    .externalSiteInfo {
+        &.formField::before {
+            position: relative;
+            font-size: 12px;
+            font-weight: 700;
+            color: @brand-rtmms-blue;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            content: "External Sites Information:";
+        }
+    }
     .ucumInfo {
         &.formField::before {
             position: relative;
@@ -414,6 +425,28 @@ footer {
                 text-transform: uppercase;
                 letter-spacing: 1px;
                 content: "Enumeration Groups";
+            }
+        }
+        .extSiteFields {
+            overflow-y: scroll;
+            height: 250px;
+            .extSitelist.formField::before {
+                position: relative;
+                font-size: 12px;
+                font-weight: 700;
+                color: @brand-rtmms-blue;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                content: "External Sites";
+            }
+            .extSiteGrouplist.formField::before {
+                position: relative;
+                font-size: 12px;
+                font-weight: 700;
+                color: @brand-rtmms-blue;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                content: "External Site Groups";
             }
         }
         table {
@@ -508,3 +541,15 @@ footer {
         text-align: left;
     }
 }
+.addUcumtoUnit-window .modal-dialog{
+    margin-top: 30%;
+}
+.dropdown-submenu {
+    position: relative;
+    .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -1px;
+    }
+}
+

@@ -410,7 +410,7 @@ module.exports = function(app, qs, passport, async, _) {
 
     });
 
-    app.get('/api/downloadR/:par', function(req, res, next) {
+    app.post('/api/downloadR/:par', function(req, res, next) {
 
         if (req.params.par === "allXML") {
             var query = Rosetta.find(null);
@@ -418,19 +418,20 @@ module.exports = function(app, qs, passport, async, _) {
                 rosetta = ros;
             }).then(function() {
                 rosettas = {
-                    terms: rosetta
+                    term: rosetta
                 };
+
                 var options = {
                     arrayMap: {
-                        terms: "term",
-                        groups: "groupName",
-                        unitGroups: "unitGroup",
-                        units: "unit",
-                        ucums: "ucum",
-                        comments: "comment",
-                        tags: "tag",
-                        enumGroups: "enumGroup",
-                        enums: "enum",
+                        // group: "groupName",
+                        // term: "term.refid",
+                        // unitGroups: "unitGroup",
+                        // units: "unit",
+                        // ucums: "ucum",
+                        // comments: "comment",
+                        // tags: "tag",
+                        // enumGroups: "enumGroup",
+                        // enums: "enum",
 
                     }
                 };
@@ -443,6 +444,35 @@ module.exports = function(app, qs, passport, async, _) {
                     var filestream = fs.createReadStream('./public/docs/rosetta_terms.xml');
                     filestream.pipe(res);
                 });
+            });
+        } else if (req.params.par === "XMLinView") {
+            var options = {
+                arrayMap: {
+                    group: "groupName",
+                    term: "term.refid",
+                    unitGroups: "unitGroup",
+                    units: "unit",
+                    ucums: "ucum",
+                    comments: "comment",
+                    tags: "tag",
+                    enumGroups: "enumGroup",
+                    enums: "enum",
+
+                }
+            };
+            rosettas = {
+                term: req.body
+            };
+
+
+            fs.writeFile('./public/docs/rosetta_terms.xml', js2xmlparser("Rosetta", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
+                //res.download('test.xml');
+                if (err) {
+                    return console.log(err);
+                }
+                res.setHeader('Content-disposition', 'attachment; filename=rosetta_terms.xml');
+                var filestream = fs.createReadStream('./public/docs/rosetta_terms.xml');
+                filestream.pipe(res);
             });
         } else if (req.params.par === "allCSV" || req.params.par === "allHTML") {
             var query = Rosetta.find(null);

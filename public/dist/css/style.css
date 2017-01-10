@@ -7485,6 +7485,15 @@ footer {
   letter-spacing: 1px;
   content: "Co-constraints Information:";
 }
+.formrosetta .externalSiteInfo.formField::before {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #021A4C;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  content: "External Sites Information:";
+}
 .formrosetta .ucumInfo.formField::before {
   position: relative;
   font-size: 12px;
@@ -7557,6 +7566,28 @@ footer {
   text-transform: uppercase;
   letter-spacing: 1px;
   content: "Enumeration Groups";
+}
+.formrosetta .unitenums .extSiteFields {
+  overflow-y: scroll;
+  height: 250px;
+}
+.formrosetta .unitenums .extSiteFields .extSitelist.formField::before {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #021A4C;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  content: "External Sites";
+}
+.formrosetta .unitenums .extSiteFields .extSiteGrouplist.formField::before {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #021A4C;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  content: "External Site Groups";
 }
 .formrosetta .unitenums table {
   margin-bottom: 0px;
@@ -7638,6 +7669,17 @@ footer {
 .tableInfo td {
   padding: 5px;
   text-align: left;
+}
+.addUcumtoUnit-window .modal-dialog {
+  margin-top: 30%;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
 }
 
 .ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {

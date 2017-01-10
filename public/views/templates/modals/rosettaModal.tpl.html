@@ -9,8 +9,8 @@
                 <div class="row">
                     <div class="groupInfo formField">
                         <div class="form-group-sm" ng-class="{ 'has-error' : groups.$invalid && !groups.$pristine}">
-                            <label class="text-left">Groups:</label>
-                            <tags-input class="bootstrap" ng-model="groups" placeholder="Add a group" replace-spaces-with-dashes="false">
+                            <label class="text-left">Groups *:</label>
+                            <tags-input class="bootstrap" ng-model="groups" placeholder="Add a group" replace-spaces-with-dashes="false" required>
                                 <auto-complete source="loadGroups($query)" min-length="0" debounce-delay="0" max-results="10"></auto-complete>
                             </tags-input>
                         </div>
@@ -23,20 +23,32 @@
                             <input type="text" name="contributingOrganization" class="form-control  text-left" ng-model="formData.contributingOrganization" disabled>
                         </div>
                         <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorDescription.$invalid && !formrosetta.vendorDescription.$pristine}">
-                            <label class="text-left">Vendor Description:</label>
-                            <input type="text" name="vendorDescription" class="form-control  text-left" ng-model="formData.vendorDescription" ng-required="true">
+                            <label class="text-left">Vendor Description *:</label>
+                            <input type="text" name="vendorDescription" class="form-control  text-left" ng-model="formData.vendorDescription" required>
                         </div>
                         <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.displayName.$invalid && !formrosetta.displayName.$pristine}">
-                            <label class="text-left">Display Name:</label>
-                            <input type="text" name="displayName" class="form-control  text-left" ng-model="formData.displayName" ng-required="true">
+                            <label class="text-left">Display Name *:</label>
+                            <input type="text" name="displayName" class="form-control  text-left" ng-model="formData.displayName" required>
                         </div>
                         <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorUom.$invalid && !formrosetta.vendorUom.$pristine}">
-                            <label class="text-left">Vendor UOM:</label>
-                            <input type="text" name="vendorUom" class="form-control  text-left" ng-model="formData.vendorUom" ng-required="true">
+                            <label class="text-left">Vendor UOM *:</label>
+                            <input type="text" name="vendorUom" class="form-control  text-left" ng-model="formData.vendorUom" required>
+                        </div>
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorStatus.$invalid && !formrosetta.vendorStatus.$pristine}">
+                            <label class="text-left">Vendor Status :</label>
+                            <input type="text" name="vendorStatus" class="form-control  text-left" ng-model="formData.vendorStatus">
+                        </div>
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorSort.$invalid && !formrosetta.vendorSort.$pristine}">
+                            <label class="text-left">Vendor Sort :</label>
+                            <input type="text" name="vendorSort" class="form-control  text-left" ng-model="formData.vendorSort">
                         </div>
                         <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorVmd.$invalid && !formrosetta.vendorVmd.$pristine}">
-                            <label class="text-left">Vendor VMD:</label>
-                            <input type="text" name="vendorVmd" class="form-control  text-left" ng-model="formData.vendorVmd" ng-required="true">
+                            <label class="text-left">Vendor VMD *:</label>
+                            <input type="text" name="vendorVmd" class="form-control  text-left" ng-model="formData.vendorVmd" required>
+                        </div>
+                        <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.vendorComment.$invalid && !formrosetta.vendorComment.$pristine}">
+                            <label class="text-left">Vendor Comment :</label>
+                            <textarea rows="4" cols="50" name="vendorComment" style="resize: vertical;" class="form-control  text-left" ng-model="formData.vendorComment"></textarea>
                         </div>
                     </div>
                     <div class="termInfo formField">
@@ -50,37 +62,37 @@
                                 <div ng-show="refidType=='new'">
                                     <div class="form-group-sm" ng-class="{ 'has-error' : formrosetta.term.refid.$invalid && !formrosetta.term.refid.$pristine}">
                                         <label class="text-left">Refid:</label>
-                                        <input type="text" name="refid" class="form-control  text-left" ng-model="formData.term.refid" ng-pattern="/MDCX_/" ng-required="true">
+                                        <input type="text" name="refid" class="form-control  text-left" ng-model="formData.term.refid" ng-pattern="/MDCX_/" required>
                                         <p ng-show="formrosetta.refid.$error.pattern">Refid must start with MDCX_</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label class="text-left">Partition #:</label>
-                                    <input ng-init="partition=formData.term.partition" type="text" only-digits name="partition" class="form-control  text-left" ng-model="formData.term.partition" value="partition" disabled>
+                            <div class="row" ng-show="refidType==='existing'">
+                                <div class=" col-sm-4 ">
+                                    <label class="text-left ">Partition #:</label>
+                                    <input ng-init="partition=formData.term.partition " type="text " only-digits name="partition " class="form-control text-left " ng-model="formData.term.partition " value="partition " disabled>
                                 </div>
-                                <div class="col-sm-4">
-                                    <label class="text-left">Code10:</label>
-                                    <input ng-init="code10=formData.term.code10" type="text" only-digits name="code10" class="form-control  text-left" ng-model="formData.term.code10" value="code10" disabled>
+                                <div class="col-sm-4 ">
+                                    <label class="text-left ">Code10:</label>
+                                    <input ng-init="code10=formData.term.code10 " type="text " only-digits name="code10 " class="form-control text-left " ng-model="formData.term.code10 " value="code10 " disabled>
                                 </div>
-                                <div class="col-sm-4">
-                                    <label class="text-left">CF_Code10:</label>
-                                    <input ng-init="cfCode10=formData.term.cfCode10" type="text" only-digits name="cfCode10" class="form-control  text-left" ng-model="formData.term.cfCode10" value="cfCode10" disabled>
+                                <div class="col-sm-4 ">
+                                    <label class="text-left ">CF_Code10:</label>
+                                    <input ng-init="cfCode10=formData.term.cfCode10 " type="text " only-digits name="cfCode10 " class="form-control text-left " ng-model="formData.term.cfCode10 " value="cfCode10 " disabled>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="unitenums col-md-6">
-                <div class="row">
-                    <div class="constraintsInfo formField">
-                        <div class="center red" ng-show="constraintType===null">
+            <div class="unitenums col-md-6 ">
+                <div class="row ">
+                    <div class="constraintsInfo formField ">
+                        <div class="center red " ng-show="constraintType===null ">
                             Select a type of co-constraint
                         </div>
-                        <div class="btn-group choice-btn-group">
-                            <label class="choice btn btn-primary" ng-disabled="(formData.enumGroups.length>0 || formData.enums.length>0)" ng-model="constraintType " btn-radio="'units'">Units</label>
+                        <div class="btn-group choice-btn-group ">
+                            <label class="choice btn btn-primary " ng-disabled="(formData.enumGroups.length>0 || formData.enums.length>0)" ng-model="constraintType " btn-radio="'units'">Units</label>
                             <label class="choice btn btn-primary" ng-disabled="(formData.unitGroups.length>0 || formData.units.length>0)" ng-model="constraintType" btn-radio="'enums'">Enumerations</label>
                         </div>
                         <div class="form-group-sm">
@@ -122,7 +134,7 @@
                                                     <tbody>
                                                         <tr data-ng-repeat="unit in unitGroup.units">
                                                             <td>{{unit.term.refid}}</td>
-                                                            <td>{{unit | UcumsAsStringFromUnit}}</td>
+                                                            <td>{{unit | UcumsAsStringFromUnit}}<i ng-click="addUcumtoUnit(unit)" class="fa fa-plus hoverhand blue"></i></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -143,7 +155,7 @@
                                 <tbody>
                                     <tr data-ng-repeat="unit in formData.units">
                                         <td>{{unit.term.refid}}</td>
-                                        <td>{{unit | UcumsAsStringFromUnit}}</td>
+                                        <td>{{unit | UcumsAsStringFromUnit}}<i ng-click="addUcumtoUnit(unit)" class="fa fa-plus hoverhand blue"></i></td>
                                         <td class="right">
                                             <i ng-click="removeUnit($index,unit)" class="fa fa-times hoverhand red "></i>
                                         </td>
@@ -218,13 +230,14 @@
                     </div>
                 </div>
                 <div class="row">
-
-                    <div class="form-group-sm">
-                        <div external-sites-picker enumgroups="formData.externalSiteGroups" enums="formData.externalSites" limit="5"></div>
+                    <div class="externalSiteInfo formField">
+                        <div class="form-group-sm">
+                            <div external-sites-picker enumgroups="formData.externalSiteGroups" enums="formData.externalSites" limit="5"></div>
+                        </div>
                     </div>
-                    <div class="enumsFields">
+                    <div class="extSiteFields">
 
-                        <div ng-show="(formData.externalSiteGroups.length>0 || formData.externalSites.length>0)" class="formField enumGrouplist">
+                        <div ng-show="(formData.externalSiteGroups.length>0 || formData.externalSites.length>0)" class="formField extSiteGrouplist">
                             <table ng-show="formData.externalSiteGroups.length>0" class="table super-table-striped levelOne">
                                 <thead>
                                     <tr>
@@ -233,16 +246,16 @@
                                 </thead>
                                 <tbody data-ng-repeat="enumGroup in formData.externalSiteGroups">
                                     <tr>
-                                        <td class="hoverhand" data-ng-click="selectEnumGroupRow($index, enumGroup.groupName)">
-                                            <i title="collapse" ng-show="enumGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-down"></i>
-                                            <i title="expand" ng-show="!enumGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-right"></i>
+                                        <td class="hoverhand" data-ng-click="selectExtSiteGroupRow($index, enumGroup.groupName)">
+                                            <i title="collapse" ng-show="externalSiteGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-down"></i>
+                                            <i title="expand" ng-show="!externalSiteGroupIsExpanded[$index]" class="glyphicon glyphicon-menu-right"></i>
                                             <span class="bold">{{enumGroup.groupName}}</span>
                                         </td>
                                         <td class="right">
                                             <i ng-click="removeExternalSiteGroup($index,enumGroup)" class="fa fa-times hoverhand red"></i>
                                         </td>
                                     </tr>
-                                    <tr ng-show="enumGroupIsExpanded[$index]">
+                                    <tr ng-show="externalSiteGroupIsExpanded[$index]">
                                         <td colspan="2">
                                             <div style="padding-left:10px;">
                                                 <table class="table table-striped levelTwo">
@@ -265,7 +278,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div ng-show="formData.externalSites.length>0" class="formField enumlist">
+                        <div ng-show="formData.externalSites.length>0" class="formField extSitelist">
                             <table ng-show="formData.externalSites.length>0" class="table table-striped levelOne">
                                 <thead>
                                     <tr>
@@ -303,6 +316,6 @@
 <div class="modal-footer">
     <!-- createMember() WILL CREATE NEW Members -->
     <button ng-show="editmode" type="submit" class="btn btn-primary" ng-click="editRosetta()">Edit rosetta term</button>
-    <button ng-show="!editmode" type="submit" class="btn btn-primary" ng-click="addRosetta()">Add rosetta term</button>
+    <button ng-show="!editmode" type="submit" class="btn btn-primary" ng-click="addRosetta()" ng-disabled="(formData.enumGroups.length===0 && formData.enums.length===0 && formData.units.length===0 && formData.unitGroups.length===0)">Add rosetta term</button>
     <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
 </div>

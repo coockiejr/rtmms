@@ -7,8 +7,13 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
 
     $scope.user = AuthService.isLoggedIn();
     $scope.vendor = function() {
-        var org = JSON.parse($scope.co);
-        paginationOptions.contributingOrganization = org.name;
+
+        if ($scope.co === "all") {
+            paginationOptions.contributingOrganization = '';
+        } else {
+            var org = JSON.parse($scope.co);
+            paginationOptions.contributingOrganization = org.name;
+        }
 
         getPage();
     };

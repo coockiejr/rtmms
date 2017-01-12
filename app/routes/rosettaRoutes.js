@@ -14,6 +14,8 @@ module.exports = function(app, qs, passport, async, _) {
     var js2xmlparser = require('js2xmlparser');
     var json2csv = require('nice-json2csv');
     var fs = require('fs');
+    var libxslt = require('libxslt');
+    var libxmljs = libxslt.libxmljs;
     var columnNumberSearch = ['term.code10', 'term.cfCode10', 'term.partition'];
 
     //get all rosetta
@@ -417,25 +419,51 @@ module.exports = function(app, qs, passport, async, _) {
             query.exec(function(err, ros) {
                 rosetta = ros;
             }).then(function() {
+
                 rosettas = {
                     term: rosetta
                 };
 
                 var options = {
                     arrayMap: {
-                        // group: "groupName",
-                        // term: "term.refid",
-                        // unitGroups: "unitGroup",
-                        // units: "unit",
-                        // ucums: "ucum",
-                        // comments: "comment",
-                        // tags: "tag",
-                        // enumGroups: "enumGroup",
-                        // enums: "enum",
+                        group: "groupName",
+                        'term.refid': "REFID",
+                        unitGroups: "unitGroup",
+                        units: "unit",
+                        ucums: "ucum",
+                        comments: "comment",
+                        tags: "tag",
+                        enumGroups: "enumGroup",
+                        enums: "enum",
+                        externalSiteGroups: "externalSiteGroup",
+                        externalSites: "externalSite"
 
-                    }
+                    },
+                    valueString: "_id"
                 };
-                fs.writeFile('./public/docs/rosetta_terms.xml', js2xmlparser("Rosetta", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
+                // var xmlObject = js2xmlparser("Rosetta", JSON.parse(JSON.stringify(rosettas)), options);
+                // fs.readFile('/Users/inm1/Documents/rtmms/app/routes/stylesheet.xsl', 'utf8', function(err, data) {
+                //     if (err) {
+                //         return console.log(err);
+                //     }
+
+                //     var stylesheetString = data;
+                //     var stylesheet = libxslt.parse(stylesheetString);
+
+                //     var result = stylesheet.apply(xmlObject);
+                //     fs.writeFile('./public/docs/rosetta_terms.html', result, function(err) {
+                //         //res.download('test.xml');
+                //         if (err) {
+                //             return console.log(err);
+                //         }
+                //         res.setHeader('Content-disposition', 'attachment; filename=rosetta.html');
+                //         var filestream = fs.createReadStream('./public/docs/rosetta_terms.html');
+                //         filestream.pipe(res);
+                //     });
+                // });
+
+
+                fs.writeFile('./public/docs/rosetta_terms.xml', js2xmlparser("Rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
                     //res.download('test.xml');
                     if (err) {
                         return console.log(err);
@@ -458,7 +486,8 @@ module.exports = function(app, qs, passport, async, _) {
                     enumGroups: "enumGroup",
                     enums: "enum",
 
-                }
+                },
+                valueString: "_id"
             };
             rosettas = {
                 term: req.body
@@ -477,90 +506,13 @@ module.exports = function(app, qs, passport, async, _) {
         } else if (req.params.par === "allCSV" || req.params.par === "allHTML") {
             var query = Rosetta.find(null);
             query.exec(function(err, ros) {
-                console.log(ros);
                 rosetta = ros;
             }).then(function() {
                 //console.log(rosetta);
-                rosettas = [];
-                for (i = 0; i < rosetta.length; i++) {
-
-                    if (rosetta[i].units !== undefined) {
-
-                        unitsRef = '';
-                        unitsCode = '';
-                        unitsCFCode = '';
-                        ucum = '';
-                        for (j = 0; j < rosetta[i].units.length; j++) {
-
-                            unitsRef = rosetta[i].units[j].term.refid + ' ' + unitsRef;
-                            unitsCode = rosetta[i].units[j].term.code10 + ' ' + unitsCode;
-                            unitsCFCode = rosetta[i].units[j].term.cfCode10 + ' ' + unitsCFCode;
-
-                            if (rosetta[i].units[j].ucums !== undefined) {
-
-                                //console.log( rosetta[i].units[j].ucums[0].ucum);
-                                for (k = 0; k < rosetta[i].units[j].ucums.length; k++) {
-                                    ucum = rosetta[i].units[j].ucums[k].ucum + ' ' + ucum;
-                                }
-
-
-
-                            }
-                        };
-                    }
-
-                    if (rosetta[i].enums !== undefined || rosetta[i].enums.length > 0) {
-
-                        enumsRef = '';
-                        for (j = 0; j < rosetta[i].enums.length; j++) {
-
-
-                            enumsRef = rosetta[i].enums[j].term.refid + ' ' + enumsRef;
-
-                        };
-                    }
-                    if (rosetta[i].tags !== undefined) {
-                        tags = '';
-                        for (j = 0; j < rosetta[i].tags.length; j++) {
-
-
-                            tags = rosetta[i].tags[j] + ' ' + tags;
-
-                        };
-                    }
-                    if (rosetta[i].groups !== undefined) {
-                        groups = '';
-                        for (j = 0; j < rosetta[i].groups.length; j++) {
-
-
-                            groups = rosetta[i].groups[j] + ' ' + groups;
-
-                        };
-                    }
-
-                    rosettas[i] = {
-                        Group: groups,
-                        REFID: rosetta[i].term.refid,
-                        CF_CODE10: rosetta[i].term.cfCode10,
-                        'Systematic Name': rosetta[i].term.systematicName,
-                        'Common Term': rosetta[i].term.commonTerm,
-                        Acronym: rosetta[i].term.acronym,
-                        'Term Description': rosetta[i].term.termDescription,
-                        PART: rosetta[i].term.partition,
-                        CODE10: rosetta[i].term.code10,
-                        Description: rosetta[i].vendorDescription,
-                        'Display Name': rosetta[i].displayName,
-                        Vendor_UOM: rosetta[i].vendorUom,
-                        UOM_MDC: unitsRef,
-                        UCODE10: unitsCode,
-                        CF_UCODE10: unitsCFCode,
-                        UOM_UCUM: ucum,
-                        Enum_Values: enumsRef,
-                        'Contributing Organization': rosetta[i].contributingOrganization.name,
-                        Vendor_VMD: rosetta[i].vendorVmd,
-                        Tags: tags
-                    };
+                rosettas = {
+                    term: rosetta
                 };
+
                 if (req.params.par === "allCSV") {
                     fs.writeFile('./public/docs/rosetta_terms.csv', json2csv.convert(JSON.parse(JSON.stringify(rosettas))), function(err) {
                         //res.download('test.xml');
@@ -572,45 +524,49 @@ module.exports = function(app, qs, passport, async, _) {
                         filestream.pipe(res);
                     });
                 } else if (req.params.par === "allHTML") {
-                    var html = '<html><head></head><body><h2>Rosetta terms</h2><table border="1"><tbody><tr bgcolor="#FFCC00"><th>#</th><th>Group</th><th>REFID</th><th>Systematic Name</th><th>Common Term</th><th>Acronym</th><th>Term Description</th><th>Part</th><th>CODE10</th><th>CF_CODE10</th><th>Description</th><th>Display Name</th><th>UOM_MDC</th><th>UCODE10</th><th>CF_UCODE10</th><th>UCUM</th><th>Vendor UOM</th><th>Enum_Values</th><th>Contributing Organization</th><th>Vendor VMD</th><th>Tags</th></tr>';
-                    for (i = 0; i < rosettas.length; i++) {
-                        html = html + '<tr>';
-                        html = html + "<td>" + (i + 1) + "</td>";
-                        html = html + "<td>" + rosettas[i].Group + "</td>";
-                        html = html + "<td>" + rosettas[i].REFID + "</td>";
-                        html = html + "<td>" + rosettas[i]["Systematic Name"] + "</td>";
-                        html = html + "<td>" + rosettas[i]["Common Term"] + "</td>";
-                        html = html + "<td>" + rosettas[i].Acronym + "</td>";
-                        html = html + "<td>" + rosettas[i]["Term Description"] + "</td>";
-                        html = html + "<td>" + rosettas[i].PART + "</td>";
-                        html = html + "<td>" + rosettas[i].CODE10 + "</td>";
-                        html = html + "<td>" + rosettas[i].CF_CODE10 + "</td>";
-                        html = html + "<td>" + rosettas[i].Description + "</td>";
-                        html = html + "<td>" + rosettas[i]["Display Name"] + "</td>";
-                        html = html + "<td>" + rosettas[i].UOM_MDC + "</td>";
-                        html = html + "<td>" + rosettas[i].UCODE10 + "</td>";
-                        html = html + "<td>" + rosettas[i].CF_UCODE10 + "</td>";
-                        html = html + "<td>" + rosettas[i].UOM_UCUM + "</td>";
-                        html = html + "<td>" + rosettas[i].Vendor_UOM + "</td>";
-                        html = html + "<td>" + rosettas[i].Enum_Values + "</td>";
-                        html = html + "<td>" + rosettas[i]["Contributing Organization"].name + "</td>";
-                        html = html + "<td>" + rosettas[i].Vendor_VMD + "</td>";
-                        html = html + "<td>" + rosettas[i].Tags + "</td>";
+
+                    var options = {
+                        arrayMap: {
+                            group: "groupName",
+                            'term.refid': "REFID",
+                            unitGroups: "unitGroup",
+                            units: "unit",
+                            ucums: "ucum",
+                            comments: "comment",
+                            tags: "tag",
+                            enumGroups: "enumGroup",
+                            enums: "enum",
+                            externalSiteGroups: "externalSiteGroup",
+                            externalSites: "externalSite"
+
+                        },
+                        valueString: "_id"
+                    };
 
 
-
-                        html = html + '</tr>';
-                    }
-                    html = html + '</tbody></table></body><html>'
-                    fs.writeFile('./public/docs/rosetta_terms.html', html, function(err) {
-                        //res.download('test.xml');
+                    var xmlString = js2xmlparser("Rosetta", JSON.parse(JSON.stringify(rosettas)), options);
+                    fs.readFile('./ressources/stylesheet.xsl', 'utf8', function(err, data) {
                         if (err) {
                             return console.log(err);
                         }
-                        res.setHeader('Content-disposition', 'attachment; filename=rosetta_terms.html');
-                        var filestream = fs.createReadStream('./public/docs/rosetta_terms.html');
-                        filestream.pipe(res);
+
+                        var stylesheetString = data;
+                        var stylesheet = libxslt.parse(stylesheetString);
+
+                        var result = stylesheet.apply(xmlString);
+                        fs.writeFile('./public/docs/rosetta_terms.html', result, function(err) {
+                            //res.download('test.xml');
+                            if (err) {
+                                return console.log(err);
+                            }
+                            res.setHeader('Content-disposition', 'attachment; filename=rosetta_terms.html');
+                            var filestream = fs.createReadStream('./public/docs/rosetta_terms.html');
+                            filestream.pipe(res);
+                        });
                     });
+
+
+
 
                 }
 

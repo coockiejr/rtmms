@@ -17,7 +17,7 @@
         <button ng-show="authService.isCOLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showEditRosettaModal(selectedEntity)"><i class="fa fa-pencil" aria-hidden="true"></i>  Edit</button>
         <button ng-show="authService.isCOLoggedIn() || authService.isRevLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showAddCommentModal(selectedEntity)"><i class="fa fa-comments" aria-hidden="true"></i>  Comments</button>
         <button ng-show="authService.isLoggedIn()" class="btn btn-primary btn-xs" ng-click="deprecate(selectedEntity)" ng-disabled="!selectedEntity"><i class="fa fa-times" aria-hidden="true"></i> Deprecate</button>
-        <div style="display: inline" dropdown on-toggle="toggled(open)" ng-show="authService.isLoggedIn()">
+        <div style="display: inline" dropdown on-toggle="toggled(open)">
             <button type="button" class="btn btn-primary btn-xs" dropdown-toggle aria-expanded="false">
             <i class="fa fa-download" aria-hidden="true"></i> 
             Download

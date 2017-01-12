@@ -286,7 +286,8 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
 
     $scope.downHTML = function() {
 
-        $http.get('/api/downloadR/allHTML').then(function(res) {
+        $http.post('/api/downloadR/allHTML').then(function(res) {
+            console.log(res);
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
             });
@@ -305,6 +306,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
     $scope.downXMLInView = function() {
         console.log($scope.gridOptions.data);
         $http({ method: "POST", url: '/api/downloadR/XMLinView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
+            console.log($scope.gridOptions.data);
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
             });
@@ -314,7 +316,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
     };
     $scope.downCSV = function() {
 
-        $http.get('/api/downloadR/allCSV').then(function(res) {
+        $http.post('/api/downloadR/allCSV').then(function(res) {
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
             });

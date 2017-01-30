@@ -22,7 +22,7 @@ module.exports = function(app, qs, passport, async) {
 
             var path = './backup/backup.txt';
             backup({
-                uri: 'mongodb://ismail:ismail@127.0.0.1:27017/rtmms', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
+                uri: 'mongodb://127.0.0.1:27017/rtmms', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
                 root: root, // write files into this dir
                 parser: 'json'
 
@@ -44,7 +44,7 @@ module.exports = function(app, qs, passport, async) {
         } else if (req.params.par === "week") {
             schedule.scheduleJob('* * * * *', function() {
                 backup({
-                    uri: 'mongodb://ismail:ismail@127.0.0.1:27017/rtmms', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
+                    uri: 'mongodb://127.0.0.1:27017/rtmms', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
                     root: './backup/backup' + Date.now(), // write files into this dir
 
                 });
@@ -59,7 +59,7 @@ module.exports = function(app, qs, passport, async) {
         if (req.body[0] !== undefined) {
             root = req.body[0] + '/rtmms';
             restore({
-                uri: 'mongodb://ismail:ismail@127.0.0.1:27017/rtmms', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
+                uri: 'mongodb://127.0.0.1:27017/rtmms', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
                 root: root
             });
             res.send("Restore successful");

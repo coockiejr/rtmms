@@ -314,6 +314,17 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         });
 
     };
+    $scope.downHtmlInView = function() {
+        console.log($scope.gridOptions.data);
+        $http({ method: "POST", url: '/api/downloadR/HTMLinView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
+            console.log($scope.gridOptions.data);
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "rosetta_terms.html");
+        });
+
+    };
     $scope.downCSV = function() {
 
         $http.post('/api/downloadR/allCSV').then(function(res) {

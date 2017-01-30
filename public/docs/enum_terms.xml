@@ -3700,8 +3700,11 @@
 			<comments>
 			</comments>
 			<term>
+				<code10>61441</code10>
+				<cfCode10>258049</cfCode10>
+				<partition>3</partition>
 				<refid>MDC_HEAD_REGIONAL_PARIETAL_R</refid>
-				<status>proposed</status>
+				<status>registered</status>
 			</term>
 		</term>
 		<term>
@@ -3837,15 +3840,15 @@
 			</tags>
 			<enumGroups>
 				<enumGroup>
-					<groupName>_MDC_BREATH_PHASE</groupName>
 					<_id>85</_id>
+					<groupName>_MDC_BREATH_PHASE</groupName>
 				</enumGroup>
 			</enumGroups>
 			<comments>
 			</comments>
 			<term>
-				<refid>MDCX_EVT_BREATH_PHASE_INSP </refid>
-				<status>proposed</status>
+				<status>unregistered</status>
+				<refid>MDC_EVT_BREATH_PHASE_INSP </refid>
 			</term>
 		</term>
 		<term>
@@ -5464,6 +5467,33 @@
 			</enumGroups>
 			<comments>
 			</comments>
+		</term>
+		<term>
+			<_id>1073</_id>
+			<updatedAt>2016-10-12T19:42:07.274Z</updatedAt>
+			<createdAt>2016-10-12T19:42:07.274Z</createdAt>
+			<description>test</description>
+			<__v>0</__v>
+			<tags>
+			</tags>
+			<enumGroups>
+				<enumGroup>
+					<_id>73</_id>
+					<groupName>_BOOL</groupName>
+				</enumGroup>
+			</enumGroups>
+			<comments>
+			</comments>
+			<term>
+				<refid>MDC_EVT_EMPTY</refid>
+				<code10>26</code10>
+				<cfCode10>196634</cfCode10>
+				<partition>3</partition>
+				<systematicName>ErrorEvent | Empty | FunctionalDisturbance | Device</systematicName>
+				<commonTerm>Empty</commonTerm>
+				<termDescription></termDescription>
+				<status>pMapped</status>
+			</term>
 		</term>
 	</terms>
 </enums>

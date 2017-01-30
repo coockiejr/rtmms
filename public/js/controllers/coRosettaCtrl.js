@@ -1,4 +1,4 @@
-angular.module('rtmms.authentication').controller('CoRosettaController', ['$scope', 'AuthService', 'RosettaService', 'uiGridConstants', function($scope, AuthService, RosettaService, uiGridConstants) {
+angular.module('rtmms.authentication').controller('CoRosettaController', ['$scope', 'AuthService', 'RosettaService', 'uiGridConstants', '$http', function($scope, AuthService, RosettaService, uiGridConstants, $http) {
 
     $scope.authService = AuthService;
     $scope.$watch('authService.isLoggedIn()', function(user) {
@@ -270,6 +270,56 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
         console.log(rosetta);
         RosettaService.deprecateRosetta(rosetta).then(function() {
             getPage();
+        });
+    };
+    $scope.downHTML = function() {
+
+        $http.post('/api/downloadR/allHTML').then(function(res) {
+            console.log(res);
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "rosetta_terms.html");
+        });
+    };
+    $scope.downXML = function() {
+
+        $http.post('/api/downloadR/allXML').then(function(res) {
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "rosetta_terms.xml");
+        });
+    };
+    $scope.downXMLInView = function() {
+        console.log($scope.gridOptions.data);
+        $http({ method: "POST", url: '/api/downloadR/XMLinView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
+            console.log($scope.gridOptions.data);
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "rosetta_terms.xml");
+        });
+
+    };
+    $scope.downHtmlInView = function() {
+        console.log($scope.gridOptions.data);
+        $http({ method: "POST", url: '/api/downloadR/HTMLinView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
+            console.log($scope.gridOptions.data);
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "rosetta_terms.html");
+        });
+
+    };
+    $scope.downCSV = function() {
+
+        $http.post('/api/downloadR/allCSV').then(function(res) {
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "rosetta_terms.csv");
         });
     };
 

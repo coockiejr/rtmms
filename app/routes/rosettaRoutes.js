@@ -421,13 +421,13 @@ module.exports = function(app, qs, passport, async, _) {
             }).then(function() {
 
                 rosettas = {
-                    term: rosetta
+                    rosetta: rosetta
                 };
 
                 var options = {
                     arrayMap: {
                         group: "groupName",
-                        'term.refid': "REFID",
+                        term: "term",
                         unitGroups: "unitGroup",
                         units: "unit",
                         ucums: "ucum",
@@ -477,7 +477,7 @@ module.exports = function(app, qs, passport, async, _) {
             var options = {
                 arrayMap: {
                     group: "groupName",
-                    term: "term.refid",
+                    term: "term",
                     unitGroups: "unitGroup",
                     units: "unit",
                     ucums: "ucum",
@@ -490,11 +490,11 @@ module.exports = function(app, qs, passport, async, _) {
                 valueString: "_id"
             };
             rosettas = {
-                term: req.body
+                rosetta: req.body
             };
 
 
-            fs.writeFile('./public/docs/rosetta_terms.xml', js2xmlparser("Rosetta", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
+            fs.writeFile('./public/docs/rosetta_terms.xml', js2xmlparser("Rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
                 //res.download('test.xml');
                 if (err) {
                     return console.log(err);
@@ -503,6 +503,52 @@ module.exports = function(app, qs, passport, async, _) {
                 var filestream = fs.createReadStream('./public/docs/rosetta_terms.xml');
                 filestream.pipe(res);
             });
+        } else if (req.params.par === "CSVinView" || req.params.par === "HTMLinView") {
+            rosettas = {
+                rosetta: req.body
+            };
+            if (req.params.par === "HTMLinView") {
+                var options = {
+                    arrayMap: {
+                        group: "groupName",
+                        term: "term",
+                        unitGroups: "unitGroup",
+                        units: "unit",
+                        ucums: "ucum",
+                        comments: "comment",
+                        tags: "tag",
+                        enumGroups: "enumGroup",
+                        enums: "enum",
+                        externalSiteGroups: "externalSiteGroup",
+                        externalSites: "externalSite"
+
+                    },
+                    valueString: "_id"
+                };
+
+
+                var xmlString = js2xmlparser("Rosettas", JSON.parse(JSON.stringify(rosettas)), options);
+                fs.readFile('./ressources/stylesheet.xsl', 'utf8', function(err, data) {
+                    if (err) {
+                        return console.log(err);
+                    }
+
+                    var stylesheetString = data;
+                    var stylesheet = libxslt.parse(stylesheetString);
+
+                    var result = stylesheet.apply(xmlString);
+                    fs.writeFile('./public/docs/rosetta_terms.html', result, function(err) {
+                        //res.download('test.xml');
+                        if (err) {
+                            return console.log(err);
+                        }
+                        res.setHeader('Content-disposition', 'attachment; filename=rosetta_terms.html');
+                        var filestream = fs.createReadStream('./public/docs/rosetta_terms.html');
+                        filestream.pipe(res);
+                    });
+                });
+            }
+
         } else if (req.params.par === "allCSV" || req.params.par === "allHTML") {
             var query = Rosetta.find(null);
             query.exec(function(err, ros) {
@@ -510,7 +556,7 @@ module.exports = function(app, qs, passport, async, _) {
             }).then(function() {
                 //console.log(rosetta);
                 rosettas = {
-                    term: rosetta
+                    rosetta: rosetta
                 };
 
                 if (req.params.par === "allCSV") {
@@ -528,7 +574,7 @@ module.exports = function(app, qs, passport, async, _) {
                     var options = {
                         arrayMap: {
                             group: "groupName",
-                            'term.refid': "REFID",
+                            term: "term",
                             unitGroups: "unitGroup",
                             units: "unit",
                             ucums: "ucum",
@@ -544,7 +590,7 @@ module.exports = function(app, qs, passport, async, _) {
                     };
 
 
-                    var xmlString = js2xmlparser("Rosetta", JSON.parse(JSON.stringify(rosettas)), options);
+                    var xmlString = js2xmlparser("Rosettas", JSON.parse(JSON.stringify(rosettas)), options);
                     fs.readFile('./ressources/stylesheet.xsl', 'utf8', function(err, data) {
                         if (err) {
                             return console.log(err);
@@ -573,45 +619,6 @@ module.exports = function(app, qs, passport, async, _) {
 
 
             });
-        } else {
-
-            Rosetta.findOne({
-                _id: req.params.par
-            }, function(err, rosetta) {
-                if (err)
-                    res.send(err);
-
-                if (rosetta) {
-                    rosettas = {
-                        terms: rosetta
-                    };
-                    var options = {
-                        arrayMap: {
-                            terms: "term",
-                            groups: "groupName",
-                            unitGroups: "unitGroup",
-                            units: "unit",
-                            ucums: "ucum",
-                            comments: "comment",
-                            tags: "tag",
-                            enumGroups: "enumGroup",
-                            enums: "enum",
-
-                        }
-                    };
-                    fs.writeFile('./public/docs/test.xml', js2xmlparser("rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
-                        //res.download('test.xml');
-                        if (err) {
-                            return console.log(err);
-                        }
-                        console.log("./public/docs/file saved");
-                    });
-                    res.download('./public/docs/test.xml');
-                }
-
-
-            });
-
         }
 
 

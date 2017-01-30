@@ -33,7 +33,7 @@
             <th>Vendor VMD</th>
             <th>Tags</th>
           </tr>
-          <xsl:for-each select="Rosetta/term">
+          <xsl:for-each select="Rosettas/rosetta">
             <tr>
               <td>
                 <xsl:for-each select="groups">

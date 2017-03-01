@@ -1,4 +1,13 @@
-<div class="jumbotron ">
-    <div ng-show="authService.isCOLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid enumgroups-grid"></div>
-    <div ng-show="!authService.isCOLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns  ui-grid-pagination class="grid enumgroups-grid"></div>
+
+<div class="jumbotron">
+    <div class="row button-row">
+        <button ng-show="authService.isSDOLoggedIn()" type="submit" class="btn btn-primary btn-xs" ng-click="showAddEnumGroupModal()"> <i class="fa fa-plus" aria-hidden="true"></i>Add</button>
+        <button ng-show="authService.isSDOLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showEditEnumGroupModal(selectedEntity)"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+        <button ng-show="authService.isSDOLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showRemoveEnumGroupModal(selectedEntity)"><i class="fa fa-pencil" aria-hidden="true"></i> Remove (TO DO)</button>
+    </div>
+    <div class="row">
+        <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid unitgroups-grid" style="height: 20%;"></div>
+        <div ui-grid="gridOptionsEnums" ui.grid.resizeColumns  class="grid unitgroups-grid" style="height: 70%"></div>
+
+    </div>
 </div>

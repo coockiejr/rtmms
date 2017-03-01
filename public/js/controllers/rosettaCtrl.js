@@ -208,17 +208,33 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         }
     };
     $scope.singleFilter = function(renderableRows) {
-        var matcher = new RegExp($scope.filterValue);
+
+        var matcher = new RegExp($scope.filterValue, "i");
         renderableRows.forEach(function(row) {
             var match = false;
-            ['groups', 'refid', 'cfCode10', 'displayName'].forEach(function(field) {
+            ['groups', 'term.refid', 'displayName'].forEach(function(field) {
 
-                if (row.entity[field]) {
+                if (row.entity[field] && field === "groups") {
 
-                    if (row.entity[field][0].match(matcher)) {
+                    if (row.entity[field][0] && row.entity[field][0].match(matcher)) {
                         match = true;
                     }
+
                 }
+                if(field === " displayName"){
+                    if (row.entity.displayName && row.entity.displayName.match(matcher)) {
+                            match = true;
+                        }
+                }
+                if (field === "term.refid" || field === "term.cfCode10") {
+                    if (field === "term.refid") {
+                        if (row.entity.term.refid && row.entity.term.refid.match(matcher)) {
+                            match = true;
+                        }
+                    } 
+
+                }
+
 
             });
             if (!match) {
@@ -305,7 +321,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
     };
     $scope.downXMLInView = function() {
         console.log($scope.gridOptions.data);
-        $http({ method: "POST", url: '/api/downloadR/XMLinView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
+        $http({ method: "POST", url: '/api/downloadR/XMLInView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
             console.log($scope.gridOptions.data);
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
@@ -316,7 +332,7 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
     };
     $scope.downHtmlInView = function() {
         console.log($scope.gridOptions.data);
-        $http({ method: "POST", url: '/api/downloadR/HTMLinView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
+        $http({ method: "POST", url: '/api/downloadR/HTMLInView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
             console.log($scope.gridOptions.data);
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
@@ -334,6 +350,16 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
             saveAs(blob, "rosetta_terms.csv");
         });
     };
+    $scope.downCSVInView = function() {
+
+        $http({ method: "POST", url: '/api/downloadR/CSVInView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "rosetta_terms.csv");
+        });
+    };
+
 
 
 }]);

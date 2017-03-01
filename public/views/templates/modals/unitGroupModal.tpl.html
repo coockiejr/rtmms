@@ -1,0 +1,47 @@
+<div class="modal-header">
+    <h3 ng-show="!editmode" class="modal-title">Add a Unit Group</h3>
+    <h3 ng-show="editmode" class="modal-title">Edit a Unit Group</h3>
+</div>
+
+<div class="modal-body">
+    <div class="panel">
+        <div class="form-group-sm">
+            <label class="text-left">Name*:</label>
+            <input type="text" name="name" class="form-control  text-left" ng-model="group.groupName">
+        </div>
+        <div class="form-group-sm">
+            <label class="text-left">Description:</label>
+            <input type="text" name="description" class="form-control  text-left" ng-model="group.groupDescription" ng-required="true">
+        </div>
+    </div>
+    <div class="panel row">
+        <div class="panel col-md-4" >
+            <div class="panel-heading">
+                <h3 class="panel-title">Group's units</h3>
+            </div>
+            <div class="panel-body">
+                <div ui-grid="gridOptionsGUnits" ui.grid.resizeColumns class="grid unitgroups-grid"></div>
+            </div>
+        </div>
+        <div class="panel col-md-8" >
+            <div class="panel-heading">
+                <h3 class="panel-title">Available units</h3>
+            </div>
+            <div class="panel-body">
+                <div ui-grid="gridOptionsRUnits" ui-grid-auto-resize ui.grid.resizeColumns ui-grid-pagination class="grid rosetta-grid" style="overflow-y: scroll"></div>
+            </div>
+        </div>
+        <!--<div class="col-md-4">
+            <div ui-grid="gridOptionsGUnits" ui.grid.resizeColumns class="grid unitgroups-grid"></div>
+        </div>
+        <div class="col-md-8">
+            <div ui-grid="gridOptionsRUnits" ui-grid-auto-resize ui.grid.resizeColumns ui-grid-pagination class="grid rosetta-grid" style="overflow-y: scroll"></div>
+        </div>-->
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button ng-show="editmode" ng-disabled="!group.groupName" type="submit" class="btn btn-primary" ng-click="editUnitGroup()">Edit Unit Group</button>
+    <button ng-show="!editmode" ng-disabled="!group.groupName" type="submit" class="btn btn-primary" ng-click="addUnitGroup()">Add Unit Group</button>
+    <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+</div>

@@ -185,7 +185,7 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', '$http', 'A
 
     $scope.downHTML = function() {
 
-        $http.get('/api/downloadU/allHTML').then(function(res) {
+        $http.post('/api/downloadU/allHTML').then(function(res) {
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
             });
@@ -194,7 +194,7 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', '$http', 'A
     };
     $scope.downXML = function() {
 
-        $http.get('/api/downloadU/allXML').then(function(res) {
+        $http.post('/api/downloadU/allXML').then(function(res) {
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
             });
@@ -203,7 +203,38 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', '$http', 'A
     };
     $scope.downCSV = function() {
 
-        $http.get('/api/downloadU/allCSV').then(function(res) {
+        $http.post('/api/downloadU/allCSV').then(function(res) {
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "unit_terms.csv");
+        });
+    };
+    $scope.downXMLInView = function() {
+        console.log($scope.gridOptions.data);
+        $http({ method: "POST", url: '/api/downloadU/XMLInView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
+            console.log($scope.gridOptions.data);
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "unit_terms.xml");
+        });
+
+    };
+    $scope.downHTMLInView = function() {
+        console.log($scope.gridOptions.data);
+        $http({ method: "POST", url: '/api/downloadU/HTMLInView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
+            console.log($scope.gridOptions.data);
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "unit_terms.html");
+        });
+
+    };
+    $scope.downCSVInView = function() {
+
+        $http({ method: "POST", url: '/api/downloadU/CSVInView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
             });

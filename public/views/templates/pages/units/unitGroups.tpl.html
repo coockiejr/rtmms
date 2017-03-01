@@ -1,4 +1,14 @@
-<div class="jumbotron ">
-    <div ng-show="authService.isCOLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid unitgroups-grid"></div>
-     <div ng-show="!authService.isCOLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns  ui-grid-pagination class="grid unitgroups-grid"></div>
+<div class="jumbotron">
+    <div class="row button-row">
+        <button ng-show="authService.isSDOLoggedIn()" type="submit" class="btn btn-primary btn-xs" ng-click="showAddUnitGroupModal()"> <i class="fa fa-plus" aria-hidden="true"></i>Add</button>
+        <button ng-show="authService.isSDOLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showEditUnitGroupModal(selectedEntity)"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+        <button ng-show="authService.isSDOLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showRemoveUnitGroupModal(selectedEntity)"><i class="fa fa-pencil" aria-hidden="true"></i> Remove(NOT DONE YET)</button>
+        
+    </div>
+    <div class="row">
+        <div ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid unitgroups-grid" style="height: 20%;"></div>
+
+        <div ui-grid="gridOptionsUnits" ui.grid.resizeColumns  class="grid unitgroups-grid" style="height: 70%"></div>
+
+    </div>
 </div>

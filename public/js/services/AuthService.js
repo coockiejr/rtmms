@@ -7,6 +7,7 @@ angular.module('rtmms').factory('AuthService', ['Restangular', '$modal', functio
 
     factory.setUser = function(aUser) {
         user = aUser;
+        console.log(user);
     };
     factory.editUser = function(user) {
         user.put();
@@ -25,7 +26,7 @@ angular.module('rtmms').factory('AuthService', ['Restangular', '$modal', functio
 
 
     factory.isCOLoggedIn = function() {
-        if (user !== undefined && (user.userTypes.id === 1 || user.userTypes.id === 3)) {
+        if (user !== undefined && (user.userTypes.id === 1)) {
             return (user) ? user : false;
         }
 
@@ -36,10 +37,16 @@ angular.module('rtmms').factory('AuthService', ['Restangular', '$modal', functio
         }
 
     };
+    factory.isSDOLoggedIn = function() {
+        if (user !== undefined && (user.userTypes.id === 3)) {
+            return (user) ? user : false;
+        }
+
+    };
     factory.logout = function() {
-        $http.get("/logout").success(function(data, status) {
+        $http.get("/logout").then(function(data, status) {
             console.log("heeeeeere");
-        }).error(function(data) {
+        }, function(data) {
             console.log(" not heeeeeere");
 
         });

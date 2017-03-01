@@ -3,7 +3,7 @@ angular.module('rtmms.authentication').controller('ProfileController', ['$scope'
     $http({
         url: '/api/profile',
         method: 'GET',
-    }).success(function(data) {
+    }).then(function(data) {
         $scope.message = data.message;
         $scope.user = data.user;
         console.log($scope.user);
@@ -11,7 +11,10 @@ angular.module('rtmms.authentication').controller('ProfileController', ['$scope'
         AuthService.getUser($scope.user._id).then(function(user) {
 
         });
-    });
+    }, function(data) {
+            console.log(" not heeeeeere");
+
+        });
     // $scope.getUsers = function() {
 
     //     AuthService.getUsers().then(function(users) {

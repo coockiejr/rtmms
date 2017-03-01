@@ -293,7 +293,7 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
     };
     $scope.downXMLInView = function() {
         console.log($scope.gridOptions.data);
-        $http({ method: "POST", url: '/api/downloadR/XMLinView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
+        $http({ method: "POST", url: '/api/downloadR/XMLInView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
             console.log($scope.gridOptions.data);
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
@@ -304,7 +304,7 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
     };
     $scope.downHtmlInView = function() {
         console.log($scope.gridOptions.data);
-        $http({ method: "POST", url: '/api/downloadR/HTMLinView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
+        $http({ method: "POST", url: '/api/downloadR/HTMLInView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
             console.log($scope.gridOptions.data);
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
@@ -316,6 +316,15 @@ angular.module('rtmms.authentication').controller('CoRosettaController', ['$scop
     $scope.downCSV = function() {
 
         $http.post('/api/downloadR/allCSV').then(function(res) {
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "rosetta_terms.csv");
+        });
+    };
+    $scope.downCSVInView = function() {
+
+        $http({ method: "POST", url: '/api/downloadR/CSVInView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
             });

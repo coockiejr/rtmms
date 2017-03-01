@@ -55,37 +55,37 @@ module.exports = function(app, qs, async, _) {
             query = query.limit(req.query.limit);
         }
         if (Status) {
-     //query = query.where("term.status").equals(Status);
-     //queryCount = queryCount.where("term.status").equals(Status);
-     query = query.and([{
-         'term.status': {
-             $ne: Status
-         }
-     }, {
-         'term.status': {
-             $exists: true
-         }
-     }, {
-         'term.status': {
-             $ne: "pMapped"
-         }
-     }]);
-     queryCount = queryCount.and([{
-         'term.status': {
-             $ne: Status
-         }
-     }, {
-         'term.status': {
-             $exists: true
-         }
-     }, {
-         'term.status': {
-             $ne: "pMapped"
-         }
-     }]);
-     //query=query.where({'term.status':{$ne:Status}}).where({'term.status':{$exists:true}}).where({'term.status':{$ne:"pMapped"}});
-     //queryCount=queryCount.where({'term.status':{$ne:Status}}).where({'term.status':{$exists:true}}).where({'term.status':{$ne:"pMapped"}});
- }
+            //query = query.where("term.status").equals(Status);
+            //queryCount = queryCount.where("term.status").equals(Status);
+            query = query.and([{
+                'term.status': {
+                    $ne: Status
+                }
+            }, {
+                'term.status': {
+                    $exists: true
+                }
+            }, {
+                'term.status': {
+                    $ne: "pMapped"
+                }
+            }]);
+            queryCount = queryCount.and([{
+                'term.status': {
+                    $ne: Status
+                }
+            }, {
+                'term.status': {
+                    $exists: true
+                }
+            }, {
+                'term.status': {
+                    $ne: "pMapped"
+                }
+            }]);
+            //query=query.where({'term.status':{$ne:Status}}).where({'term.status':{$exists:true}}).where({'term.status':{$ne:"pMapped"}});
+            //queryCount=queryCount.where({'term.status':{$ne:Status}}).where({'term.status':{$exists:true}}).where({'term.status':{$ne:"pMapped"}});
+        }
 
         if (partition) {
             query = query.where("term.partition").equals(partition);
@@ -376,26 +376,45 @@ module.exports = function(app, qs, async, _) {
     });
 
     // create unit group
-    app.post('/api/unitgroups', isAdminLoggedIn, function(req, res) {
-        UnitGroup.create({
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            dateofbirth: req.body.dateofbirth,
-            sex: req.body.sex,
-            bio: req.body.bio,
-            memberStatus: req.body.memberStatus
-        }, function(err, unitGrp) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.end('{"success" : "Unit group created successfully", "status" : 200}');
-            }
+    app.post('/api/unitgroups', isSDOLoggedIn, function(req, res,next) {
+        console.log(req.body);
+        // var unitGroup = new UnitGroup(req.body);
+       
+        var query = UnitGroup.find(null);
+        query.sort({
+            _id: -1
+        }).exec(function(err, uni) {
+            max = uni[0]._id;
+           
+
+        }).then(function() {
+            console.log(req.body);
+            var unitGroup = new UnitGroup(req.body);
+            unitGroup._id = max + 1;
+            unitGroup.save(function(err, unitGroup) {
+                if (err) {
+                    return next(err)
+                }
+                res.json(201, unitGroup)
+            });
+            return;
 
         });
+        // UnitGroup.create({
+        //     groupName : req.body.groupName,
+        //     groupDescription: req.body.groupDescription
+        // }, function(err, unitGrp) {
+        //     if (err) {
+        //         res.send(err);
+        //     } else {
+        //         res.end('{"success" : "Unit group created successfully", "status" : 200}');
+        //     }
+
+        // });
     });
 
     //update an unit group
-    app.put('/api/unitgroups/:unitgroup_id', isAdminLoggedIn, function(req, res) {
+    app.put('/api/unitgroups/:unitgroup_id', isSDOLoggedIn, function(req, res) {
         UnitGroup.update({
             _id: req.params.unitgroup_id
         }, req.body, function(err) {
@@ -411,7 +430,7 @@ module.exports = function(app, qs, async, _) {
 
 
     // delete an unit group
-    app.delete('/api/unitgroups/:unitgroup_id', isAdminLoggedIn, function(req, res) {
+    app.delete('/api/unitgroups/:unitgroup_id', isSDOLoggedIn, function(req, res) {
         UnitGroup.remove({
             _id: req.params.unitgroup_id
         }, function(err, unitVal) {
@@ -463,7 +482,7 @@ module.exports = function(app, qs, async, _) {
 
     });
 
-    app.get('/api/downloadU/:par', function(req, res, next) {
+    app.post('/api/downloadU/:par', function(req, res, next) {
 
         if (req.params.par === "allXML") {
             var query = Unit.find(null);
@@ -492,6 +511,29 @@ module.exports = function(app, qs, async, _) {
                     var filestream = fs.createReadStream('./public/docs/unit_terms.xml');
                     filestream.pipe(res);
                 });
+            });
+        } else if (req.params.par === "XMLInView") {
+            unitVals = {
+                terms: req.body
+            };
+            var options = {
+                arrayMap: {
+                    terms: "term",
+                    unitGroups: "unitGroup",
+                    ucums: "ucum",
+                    comments: "comment",
+                    tags: "tag",
+
+                }
+            };
+            fs.writeFile('./public/docs/unit_terms.xml', js2xmlparser("units", JSON.parse(JSON.stringify(unitVals)), options), function(err) {
+                //res.download('test.xml');
+                if (err) {
+                    return console.log(err);
+                }
+                res.setHeader('Content-disposition', 'attachment; filename=unit_terms.xml');
+                var filestream = fs.createReadStream('./public/docs/unit_terms.xml');
+                filestream.pipe(res);
             });
         } else if (req.params.par === "allCSV" || req.params.par === "allHTML") {
             var query = Unit.find(null);
@@ -598,44 +640,105 @@ module.exports = function(app, qs, async, _) {
 
 
             });
-        } else {
+        } else if (req.params.par === "CSVInView" || req.params.par === "HTMLInView") {
+            console.log("INSIDE");
+            unitVal = req.body;
+            unitVals = [];
 
-            Rosetta.findOne({
-                _id: req.params.par
-            }, function(err, rosetta) {
-                if (err)
-                    res.send(err);
 
-                if (rosetta) {
-                    rosettas = {
-                        terms: rosetta
+            for (i = 0; i < unitVal.length; i++) {
+                ucum = '';
+                unitGroup = '';
+
+                if (unitVal[i].unitGroups !== undefined) {
+
+                    for (k = 0; k < unitVal[i].unitGroups.length; k++) {
+                        unitGroup = unitVal[i].unitGroups[k].groupName + ' ' + unitGroup;
+                    }
+
+
+                }
+                if (unitVal[i].ucums !== undefined) {
+
+                    for (k = 0; k < unitVal[i].ucums.length; k++) {
+                        ucum = unitVal[i].ucums[k].value + ' ' + ucum;
+                    }
+
+
+                }
+
+                if (unitVal[i].tags !== undefined) {
+                    tags = '';
+                    for (j = 0; j < unitVal[i].tags.length; j++) {
+
+
+                        tags = unitVal[i].tags[j] + ' ' + tags;
+
                     };
-                    var options = {
-                        arrayMap: {
-                            terms: "term",
-                            groups: "groupName",
-                            unitGroups: "unitGroup",
-                            units: "unit",
-                            ucums: "ucum",
-                            comments: "comment",
-                            tags: "tag",
-                            enumGroups: "enumGroup",
-                            enums: "enum",
-
-                        }
-                    };
-                    fs.writeFile('./public/docs/test.xml', js2xmlparser("rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
-                        //res.download('test.xml');
-                        if (err) {
-                            return console.log(err);
-                        }
-                        console.log("./public/docs/file saved");
-                    });
-                    res.download('./public/docs/test.xml');
                 }
 
 
-            });
+                unitVals[i] = {
+                    UOM_Groups: unitGroup,
+                    Dimension: unitVal[i].dimension,
+                    DIM: unitVal[i].dim,
+                    DIMC: unitVal[i].dimC,
+                    Symbol: unitVal[i].symbol,
+                    UOM_UCUM: ucum,
+                    UOM_MDC: unitVal[i].term.refid,
+                    UCODE10: unitVal[i].term.code10,
+                    CF_UCODE10: unitVal[i].term.cfCode10,
+                    Tags: tags
+
+
+
+
+                };
+
+            };
+            if (req.params.par === "CSVInView") {
+                console.log("SDVd");
+                fs.writeFile('./public/docs/unit_terms.csv', json2csv.convert(JSON.parse(JSON.stringify(unitVals))), function(err) {
+                    //res.download('test.xml');
+                    if (err) {
+                        return console.log(err);
+                    }
+                    res.setHeader('Content-disposition', 'attachment; filename=unit_terms.csv');
+                    var filestream = fs.createReadStream('./public/docs/unit_terms.csv');
+                    filestream.pipe(res);
+                });
+            } else if (req.params.par === "HTMLInView") {
+                var html = '<html><head></head><body><h2> Unit terms</h2><table border="1"><tbody><tr bgcolor="#FFCC00"><th>#</th><th>UOM_Groups</th><th>Dimension</th><th>DIM</th><th>DIMC</th><th>Symbol</th><th>UOM_UCUM</th><th>UOM_MDC</th><th>UCODE10</th><th>CF_UCODE10</th><th>Tags</th></tr>';
+                for (i = 0; i < unitVals.length; i++) {
+                    html = html + '<tr>';
+                    html = html + "<td>" + (i + 1) + "</td>";
+                    html = html + "<td>" + unitVals[i].UOM_Groups + "</td>";
+                    html = html + "<td>" + unitVals[i].Dimension + "</td>";
+                    html = html + "<td>" + unitVals[i].DIM + "</td>";
+                    html = html + "<td>" + unitVals[i].DIMC + "</td>";
+                    html = html + "<td>" + unitVals[i].Symbol + "</td>";
+                    html = html + "<td>" + unitVals[i].UOM_UCUM + "</td>";
+                    html = html + "<td>" + unitVals[i].UOM_MDC + "</td>";
+                    html = html + "<td>" + unitVals[i].UCODE10 + "</td>";
+                    html = html + "<td>" + unitVals[i].CF_UCODE10 + "</td>";
+                    html = html + "<td>" + unitVals[i].Tags + "</td>";
+
+
+
+                    html = html + '</tr>';
+                }
+                html = html + '</tbody></table></body><html>'
+                fs.writeFile('./public/docs/unit_terms.html', html, function(err) {
+                    //res.download('test.xml');
+                    if (err) {
+                        return console.log(err);
+                    }
+                    res.setHeader('Content-disposition', 'attachment; filename=unit_terms.html');
+                    var filestream = fs.createReadStream('./public/docs/unit_terms.html');
+                    filestream.pipe(res);
+                });
+
+            }
 
         }
 
@@ -703,7 +806,7 @@ module.exports = function(app, qs, async, _) {
     function isSCRLoggedIn(req, res, next) {
         // if user is authenticated in the session and has an SDO role, carry on 
 
-        if (req.isAuthenticated() && (req.user.userTypes.id === 1 || req.user.userTypes.id === 2 ||req.user.userTypes.id === 3)) {
+        if (req.isAuthenticated() && (req.user.userTypes.id === 1 || req.user.userTypes.id === 2 || req.user.userTypes.id === 3)) {
             if (true) {
                 return next();
             }

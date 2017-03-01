@@ -41,6 +41,7 @@ module.exports = function(grunt) {
                         'public/libs/angular-aria/angular-aria.js',
 
                         'public/libs/angular-material/angular-material.js',
+                        'public/libs/ui-grid-draggable-rows/js/draggable-rows.js',
 
                         'public/js/**/*.js',
                         'public/js/*.js'

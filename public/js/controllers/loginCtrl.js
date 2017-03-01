@@ -3,19 +3,19 @@ angular.module('rtmms.authentication').controller('LoginController', ['$scope', 
     $http({
         url: '/api/login',
         method: 'GET',
-    }).success(function(data) {
+    }).then(function(data) {
         $scope.message = data.message;
     });
 
     $scope.login = function(user) {
-        $http.post("/api/login", user).success(function(data, status) {
-
-            AuthService.setUser(data.user);
-
-
+        $http.post("/api/login", user).then(function(response, status) {
+           console.log("-----");
+            console.log(response);
+            AuthService.setUser(response.data.user);
             window.location.href = '/';
-        }).error(function(data) {
-            $scope.message = data[0];
+        }, function(data) {
+             
+            $scope.message = data.data[0];
             $state.go('/login');
         });
     };
@@ -32,18 +32,18 @@ angular.module('rtmms.authentication').controller('ForgotController', ['$scope',
     $http({
         url: '/api/forgot',
         method: 'GET',
-    }).success(function(data) {
+    }).then(function(data) {
         $scope.message = data.message;
     });
 
     $scope.forgot = function() {
         console.log($scope.email);
-        $http.post("/api/forgot",$scope.email).success(function(data, status) {
+        $http.post("/api/forgot", $scope.email).then(function(data, status) {
             console.log("Sent ok");
             //            window.location.href = '/';
 
 
-        }).error(function(data) {
+        }, function(data) {
             console.log("Error");
         });
     };

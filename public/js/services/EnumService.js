@@ -111,7 +111,14 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
 
     //edit a Enum
     factory.editEnumGroup = function(enumGroup) {
-        enumGroup.put();
+        if (enumGroup.put) {
+            enumGroup.put();
+
+        } else {
+            var restGroup = Restangular.copy(enumGroup);
+            restGroup.route = "enumgroups";
+            restGroup.put();
+        }
     };
 
     //delete a Enum
@@ -173,6 +180,46 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
 
             return modalInstance.result.then(function(enumValue) {
                 factory.editEnum(enumValue);
+            }, function() {
+                return null;
+            });
+        }
+    };
+    factory.showAddEnumGroupModal = function() {
+        var modalInstance = $modal.open({
+            templateUrl: 'views/templates/modals/enumGroupModal.tpl.html',
+            controller: 'EnumGroupModalInstanceController',
+            size: 'lg',
+            resolve: {
+                group: false
+            }
+        });
+
+        return modalInstance.result.then(function(group) {
+            console.log(group);
+            return group;
+        }, function() {
+            return null;
+        });
+    };
+
+    factory.showEditEnumGroupModal = function(group) {
+
+        if (EnumGroup) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/enumGroupModal.tpl.html',
+                controller: 'EnumGroupModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    group: function() {
+                        return group;
+                    }
+                }
+            });
+
+            return modalInstance.result.then(function(group) {
+
+                factory.editEnumGroup(group);
             }, function() {
                 return null;
             });

@@ -36,9 +36,9 @@ angular.module('rtmms').controller('HomeController', ['$scope', 'AuthService', f
 }]);
 angular.module('rtmms').controller('LogoutController', ['$scope', 'AuthService', '$http', function($scope, AuthService, $http) {
 
-    $http.get("/logout").success(function(data, status) {
+    $http.get("/logout").then(function(data, status) {
         console.log("heeeeeere");
-    }).error(function(data) {
+    },function(data) {
         console.log(" not heeeeeere");
 
     });

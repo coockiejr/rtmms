@@ -1,4 +1,4 @@
-var app = angular.module('rtmms', ['rtmms.admin', 'rtmms.rosetta', 'rtmms.hRtm', 'rtmms.unit', 'rtmms.enum', 'rtmms.authentication', 'restangular', 'nsPopover', 'ngDropover', 'ui.bootstrap', 'ui.bootstrap.popover', 'ui.select', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination', 'ui.grid.resizeColumns', 'ui.grid.autoResize', 'ngSanitize', 'ui.router', 'appRoutes', 'angular-loading-bar', 'angularUtils.directives.dirPagination', 'angulartics', 'ngTagsInput', 'toggle-switch', 'angulartics.google.analytics', 'ngAnimate', 'ngAria', 'ngMaterial']);
+var app = angular.module('rtmms', ['rtmms.admin', 'rtmms.rosetta', 'rtmms.hRtm', 'rtmms.unit', 'rtmms.enum', 'rtmms.authentication', 'restangular', 'nsPopover', 'ngDropover', 'ui.bootstrap', 'ui.bootstrap.popover', 'ui.select', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination', 'ui.grid.resizeColumns', 'ui.grid.autoResize','ui.grid.draggable-rows','ui.grid.emptyBaseLayer', 'ngSanitize', 'ui.router', 'appRoutes', 'angular-loading-bar', 'angularUtils.directives.dirPagination', 'angulartics', 'ngTagsInput', 'toggle-switch', 'angulartics.google.analytics', 'ngAnimate', 'ngAria', 'ngMaterial']);
 
 
 var adminModule = angular.module('rtmms.admin', []);
@@ -21,10 +21,12 @@ app.run(['$http', 'AuthService', 'Restangular', function($http, AuthService, Res
         id: "_id"
     });
 
-    $http.get("/api/login").success(function(data, status) {
-        AuthService.setUser(data.user);
-    }).error(function(data) {
-        $scope.message = data[0];
+    $http.get("/api/login").then(function(data, status) {
+        console.log("app.js");
+        console.log(data);
+        AuthService.setUser(data.data.user);
+    },function(data) {
+        $scope.message = data.data[0];
         $state.go('/login');
     });
 }]);

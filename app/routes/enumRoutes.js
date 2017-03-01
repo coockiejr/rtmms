@@ -8,6 +8,8 @@ module.exports = function(app, qs, async, _) {
     var js2xmlparser = require('js2xmlparser');
     var json2csv = require('nice-json2csv');
     var fs = require('fs');
+    var libxslt = require('libxslt');
+    var libxmljs = libxslt.libxmljs;
 
     var columnNumberSearch = ['term.code10', 'term.cfCode10', 'term.partition'];
 
@@ -87,7 +89,7 @@ module.exports = function(app, qs, async, _) {
             //queryCount=queryCount.where({'term.status':{$ne:Status}}).where({'term.status':{$exists:true}}).where({'term.status':{$ne:"pMapped"}});
         }
 
-         if (partition) {
+        if (partition) {
             query = query.where("term.partition").equals(partition);
             // queryCount = queryCount.where("term.partition").equals(partition);
             query.sort('-term.code10').exec(function(err, ros) {
@@ -332,21 +334,28 @@ module.exports = function(app, qs, async, _) {
 
     // create enum group
     app.post('/api/enumgroups', isAdminLoggedIn, function(req, res) {
-        EnumGroup.create({
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            dateofbirth: req.body.dateofbirth,
-            sex: req.body.sex,
-            bio: req.body.bio,
-            memberStatus: req.body.memberStatus
-        }, function(err, enumGrp) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.end('{"success" : "Enumeration group created successfully", "status" : 200}');
-            }
+       
+        var query = EnumGroup.find(null);
+        query.sort({
+            _id: -1
+        }).exec(function(err, uni) {
+            max = uni[0]._id;
+           
+
+        }).then(function() {
+            console.log(req.body);
+            var enumGroup = new EnumGroup(req.body);
+            enumGroup._id = max + 1;
+            enumGroup.save(function(err, enumGroup) {
+                if (err) {
+                    return next(err)
+                }
+                res.json(201, enumGroup)
+            });
+            return;
 
         });
+       
     });
 
     //update an enum group
@@ -417,7 +426,7 @@ module.exports = function(app, qs, async, _) {
         });
     });
 
-    app.get('/api/downloadE/:par', function(req, res, next) {
+    app.post('/api/downloadE/:par', function(req, res, next) {
 
         if (req.params.par === "allXML") {
             var query = Enum.find(null);
@@ -446,12 +455,71 @@ module.exports = function(app, qs, async, _) {
                     filestream.pipe(res);
                 });
             });
-        } else if (req.params.par === "allCSV" || req.params.par === "allHTML") {
-            var query = Enum.find(null);
-            query.exec(function(err, ros) {
-                enumVal = ros;
-            }).then(function() {
-                //console.log(rosetta);
+        } else if (req.params.par === "XMLInView") {
+            enumVals = {
+                terms: req.body
+            };
+            var options = {
+                arrayMap: {
+                    terms: "term",
+                    enumGroups: "enumGroup",
+                    comments: "comment",
+                    tags: "tag",
+
+                }
+            };
+
+
+            fs.writeFile('./public/docs/enum_terms.xml', js2xmlparser("enums", JSON.parse(JSON.stringify(enumVals)), options), function(err) {
+                if (err) {
+                    return console.log(err);
+                }
+                res.setHeader('Content-disposition', 'attachment; filename=enum_terms.xml');
+                var filestream = fs.createReadStream('./public/docs/enum_terms.xml');
+                filestream.pipe(res);
+            });
+
+        } else if (req.params.par === "CSVInView" || req.params.par === "HTMLInView") {
+
+            enumVals = {
+                enum: req.body
+            };
+
+            if (req.params.par === "HTMLInView") {
+
+                var options = {
+                    arrayMap: {
+                        terms: "term",
+                        enumGroups: "enumGroup",
+                        comments: "comment",
+                        tags: "tag",
+
+                    }
+                };
+                var xmlString = js2xmlparser("enums", JSON.parse(JSON.stringify(enumVals)), options);
+                fs.readFile('./ressources/enumStylesheet.xsl', 'utf8', function(err, data) {
+                    if (err) {
+                        return console.log(err);
+                    }
+
+                    var stylesheetString = data;
+                    var stylesheet = libxslt.parse(stylesheetString);
+
+                    var result = stylesheet.apply(xmlString);
+                    fs.writeFile('./public/docs/enum_terms.html', result, function(err) {
+                        //res.download('test.xml');
+                        if (err) {
+                            return console.log(err);
+                        }
+                        res.setHeader('Content-disposition', 'attachment; filename=enum_terms.html');
+                        var filestream = fs.createReadStream('./public/docs/enum_terms.html');
+                        filestream.pipe(res);
+                    });
+                });
+
+
+            } else if (req.params.par === "CSVInView") {
+                enumVal = req.body;
                 enumVals = [];
 
 
@@ -477,24 +545,94 @@ module.exports = function(app, qs, async, _) {
                         };
                     }
 
-
-                    enumVals[i] = {
+                    if (enumVal[i].term) {
+                        enumVals[i] = {
+                            ENUM_Groups: enumGroup,
+                            TOKEN: enumVal[i].token,
+                            REFID: enumVal[i].term.refid,
+                            EPART: enumVal[i].term.partition,
+                            ECODE10: enumVal[i].term.code10,
+                            CF_ECODE10: enumVal[i].term.cfCode10,
+                            "Application description": enumVal[i].description,
+                            Tags: tags
+                        };
+                    } else {
+                        enumVals[i] = {
                         ENUM_Groups: enumGroup,
                         TOKEN: enumVal[i].token,
-                        REFID: enumVal[i].term.refid,
-                        EPART: enumVal[i].term.partition,
-                        ECODE10: enumVal[i].term.code10,
-                        CF_ECODE10: enumVal[i].term.cfCode10,
                         "Application description": enumVal[i].description,
                         Tags: tags
-
-
-
-
                     };
+                    }
 
+
+                }
+                fs.writeFile('./public/docs/enum_terms.csv', json2csv.convert(JSON.parse(JSON.stringify(enumVals))), function(err) {
+
+                    //res.download('test.xml');
+                    if (err) {
+                        return console.log(err);
+                    }
+                    res.setHeader('Content-disposition', 'attachment; filename=enum_terms.csv');
+                    var filestream = fs.createReadStream('./public/docs/enum_terms.csv');
+                    filestream.pipe(res);
+                });
+            }
+        } else if (req.params.par === "allCSV" || req.params.par === "allHTML") {
+            var query = Enum.find(null);
+            query.exec(function(err, ros) {
+                enumVal = ros;
+            }).then(function() {
+                //console.log(rosetta);
+                enumVals = {
+                    enum: enumVal
                 };
+
+
                 if (req.params.par === "allCSV") {
+                    enumVal = enumVal;
+                    enumVals = [];
+
+
+                    for (i = 0; i < enumVal.length; i++) {
+                        enumGroup = '';
+
+                        if (enumVal[i].enumGroups !== undefined) {
+
+                            for (k = 0; k < enumVal[i].enumGroups.length; k++) {
+                                enumGroup = enumVal[i].enumGroups[k].groupName + ' ' + enumGroup;
+                            }
+
+
+                        }
+
+                        if (enumVal[i].tags !== undefined) {
+                            tags = '';
+                            for (j = 0; j < enumVal[i].tags.length; j++) {
+
+
+                                tags = enumVal[i].tags[j] + ' ' + tags;
+
+                            };
+                        }
+
+
+                        enumVals[i] = {
+                            ENUM_Groups: enumGroup,
+                            TOKEN: enumVal[i].token,
+                            REFID: enumVal[i].term.refid,
+                            EPART: enumVal[i].term.partition,
+                            ECODE10: enumVal[i].term.code10,
+                            CF_ECODE10: enumVal[i].term.cfCode10,
+                            "Application description": enumVal[i].description,
+                            Tags: tags
+
+
+
+
+                        };
+
+                    }
                     fs.writeFile('./public/docs/enum_terms.csv', json2csv.convert(JSON.parse(JSON.stringify(enumVals))), function(err) {
 
                         //res.download('test.xml');
@@ -505,79 +643,42 @@ module.exports = function(app, qs, async, _) {
                         var filestream = fs.createReadStream('./public/docs/enum_terms.csv');
                         filestream.pipe(res);
                     });
+
                 } else if (req.params.par === "allHTML") {
-                    var html = '<html><head></head><body><h2> Enum terms</h2><table border="1"><tbody><tr bgcolor="#FFCC00"><th>#</th><th>Enum Groups</th><th>Token</th><th>REFID</th><th>Enum Partition</th><th>Enum CODE10</th><th>CF_ECODE10</th><th>Application Description</th><th>Tags</th></tr>';
-                    for (i = 0; i < enumVals.length; i++) {
-                        html = html + '<tr>';
-                        html = html + "<td>" + (i + 1) + "</td>";
-                        html = html + "<td>" + enumVals[i].ENUM_Groups + "</td>";
-                        html = html + "<td>" + enumVals[i].TOKEN + "</td>";
-                        html = html + "<td>" + enumVals[i].REFID + "</td>";
-                        html = html + "<td>" + enumVals[i].EPART + "</td>";
-                        html = html + "<td>" + enumVals[i].ECODE10 + "</td>";
-                        html = html + "<td>" + enumVals[i].CF_ECODE10 + "</td>";
-                        html = html + "<td>" + enumVals[i]["Application description"] + "</td>";
-                        html = html + "<td>" + enumVals[i].Tags + "</td>";
-
-
-
-                        html = html + '</tr>';
-                    }
-                    html = html + '</tbody></table></body><html>'
-                    fs.writeFile('./public/docs/enum_terms.html', html, function(err) {
-                        //res.download('test.xml');
-                        if (err) {
-                            return console.log(err);
-                        }
-                        res.setHeader('Content-disposition', 'attachment; filename=enum_terms.html');
-                        var filestream = fs.createReadStream('./public/docs/enum_terms.html');
-                        filestream.pipe(res);
-                    });
-
-                }
-
-
-
-            });
-        } else {
-
-            Rosetta.findOne({
-                _id: req.params.par
-            }, function(err, rosetta) {
-                if (err)
-                    res.send(err);
-
-                if (rosetta) {
-                    rosettas = {
-                        terms: rosetta
-                    };
                     var options = {
                         arrayMap: {
                             terms: "term",
-                            groups: "groupName",
-                            unitGroups: "unitGroup",
-                            units: "unit",
-                            ucums: "ucum",
+                            enumGroups: "enumGroup",
                             comments: "comment",
                             tags: "tag",
-                            enumGroups: "enumGroup",
-                            enums: "enum",
 
                         }
                     };
-                    fs.writeFile('./public/docs/test.xml', js2xmlparser("rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
-                        //res.download('test.xml');
+                    var xmlString = js2xmlparser("enums", JSON.parse(JSON.stringify(enumVals)), options);
+                    fs.readFile('./ressources/enumStylesheet.xsl', 'utf8', function(err, data) {
                         if (err) {
                             return console.log(err);
                         }
-                        console.log("./public/docs/file saved");
+
+                        var stylesheetString = data;
+                        var stylesheet = libxslt.parse(stylesheetString);
+
+                        var result = stylesheet.apply(xmlString);
+                        fs.writeFile('./public/docs/enum_terms.html', result, function(err) {
+                            if (err) {
+                                return console.log(err);
+                            }
+                            res.setHeader('Content-disposition', 'attachment; filename=enum_terms.html');
+                            var filestream = fs.createReadStream('./public/docs/enum_terms.html');
+                            filestream.pipe(res);
+                        });
                     });
-                    res.download('./public/docs/test.xml');
+
                 }
 
 
-            });
 
+            });
         }
 
 

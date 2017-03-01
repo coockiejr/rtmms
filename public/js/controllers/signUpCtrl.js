@@ -30,10 +30,10 @@ angular.module('rtmms.authentication').controller('SignUpController', ['$scope',
 
         $http.post('/api/addCo', $scope.user.contributingOrganization).then(function(res) {
 
-            $http.post("/api/signup", user).success(function(data, status) {
+            $http.post("/api/signup", user).then(function(data, status) {
                 // window.location.href = '/';
                 $state.go('/logout');
-            }).error(function(data) {
+            }, function(data) {
                 $scope.message = data[0];
                 $state.go('/signup');
             });

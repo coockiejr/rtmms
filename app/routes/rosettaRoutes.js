@@ -16,6 +16,7 @@ module.exports = function(app, qs, passport, async, _) {
     var fs = require('fs');
     var libxslt = require('libxslt');
     var libxmljs = libxslt.libxmljs;
+
     var columnNumberSearch = ['term.code10', 'term.cfCode10', 'term.partition'];
 
     //get all rosetta
@@ -441,30 +442,7 @@ module.exports = function(app, qs, passport, async, _) {
                     },
                     valueString: "_id"
                 };
-                // var xmlObject = js2xmlparser("Rosetta", JSON.parse(JSON.stringify(rosettas)), options);
-                // fs.readFile('/Users/inm1/Documents/rtmms/app/routes/stylesheet.xsl', 'utf8', function(err, data) {
-                //     if (err) {
-                //         return console.log(err);
-                //     }
-
-                //     var stylesheetString = data;
-                //     var stylesheet = libxslt.parse(stylesheetString);
-
-                //     var result = stylesheet.apply(xmlObject);
-                //     fs.writeFile('./public/docs/rosetta_terms.html', result, function(err) {
-                //         //res.download('test.xml');
-                //         if (err) {
-                //             return console.log(err);
-                //         }
-                //         res.setHeader('Content-disposition', 'attachment; filename=rosetta.html');
-                //         var filestream = fs.createReadStream('./public/docs/rosetta_terms.html');
-                //         filestream.pipe(res);
-                //     });
-                // });
-
-
                 fs.writeFile('./public/docs/rosetta_terms.xml', js2xmlparser("Rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
-                    //res.download('test.xml');
                     if (err) {
                         return console.log(err);
                     }
@@ -473,7 +451,7 @@ module.exports = function(app, qs, passport, async, _) {
                     filestream.pipe(res);
                 });
             });
-        } else if (req.params.par === "XMLinView") {
+        } else if (req.params.par === "XMLInView") {
             var options = {
                 arrayMap: {
                     group: "groupName",
@@ -495,7 +473,6 @@ module.exports = function(app, qs, passport, async, _) {
 
 
             fs.writeFile('./public/docs/rosetta_terms.xml', js2xmlparser("Rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
-                //res.download('test.xml');
                 if (err) {
                     return console.log(err);
                 }
@@ -503,11 +480,11 @@ module.exports = function(app, qs, passport, async, _) {
                 var filestream = fs.createReadStream('./public/docs/rosetta_terms.xml');
                 filestream.pipe(res);
             });
-        } else if (req.params.par === "CSVinView" || req.params.par === "HTMLinView") {
+        } else if (req.params.par === "CSVInView" || req.params.par === "HTMLInView") {
             rosettas = {
                 rosetta: req.body
             };
-            if (req.params.par === "HTMLinView") {
+            if (req.params.par === "HTMLInView") {
                 var options = {
                     arrayMap: {
                         group: "groupName",
@@ -538,7 +515,6 @@ module.exports = function(app, qs, passport, async, _) {
 
                     var result = stylesheet.apply(xmlString);
                     fs.writeFile('./public/docs/rosetta_terms.html', result, function(err) {
-                        //res.download('test.xml');
                         if (err) {
                             return console.log(err);
                         }
@@ -547,8 +523,101 @@ module.exports = function(app, qs, passport, async, _) {
                         filestream.pipe(res);
                     });
                 });
-            }
+            } else if (req.params.par === "CSVInView") {
+                rosetta = req.body;
+                rosettas = [];
+                for (i = 0; i < rosetta.length; i++) {
 
+                    if (rosetta[i].units !== undefined) {
+
+                        unitsRef = '';
+                        unitsCode = '';
+                        unitsCFCode = '';
+                        ucum = '';
+                        for (j = 0; j < rosetta[i].units.length; j++) {
+
+                            unitsRef = rosetta[i].units[j].term.refid + ' ' + unitsRef;
+                            unitsCode = rosetta[i].units[j].term.code10 + ' ' + unitsCode;
+                            unitsCFCode = rosetta[i].units[j].term.cfCode10 + ' ' + unitsCFCode;
+
+                            if (rosetta[i].units[j].ucums !== undefined) {
+
+                                //console.log( rosetta[i].units[j].ucums[0].ucum);
+                                for (k = 0; k < rosetta[i].units[j].ucums.length; k++) {
+                                    ucum = rosetta[i].units[j].ucums[k].ucum + ' ' + ucum;
+                                }
+
+
+
+                            }
+                        };
+                    }
+
+                    if (rosetta[i].enums !== undefined || rosetta[i].enums.length > 0) {
+
+                        enumsRef = '';
+                        for (j = 0; j < rosetta[i].enums.length; j++) {
+
+
+                            enumsRef = rosetta[i].enums[j].term.refid + ' ' + enumsRef;
+
+                        };
+                    }
+                    if (rosetta[i].tags !== undefined) {
+                        tags = '';
+                        for (j = 0; j < rosetta[i].tags.length; j++) {
+
+
+                            tags = rosetta[i].tags[j] + ' ' + tags;
+
+                        };
+                    }
+                    if (rosetta[i].groups !== undefined) {
+                        groups = '';
+                        for (j = 0; j < rosetta[i].groups.length; j++) {
+
+
+                            groups = rosetta[i].groups[j] + ' ' + groups;
+
+                        };
+                    }
+
+                    rosettas[i] = {
+                        Group: groups,
+                        REFID: rosetta[i].term.refid,
+                        CF_CODE10: rosetta[i].term.cfCode10,
+                        'Systematic Name': rosetta[i].term.systematicName,
+                        'Common Term': rosetta[i].term.commonTerm,
+                        Acronym: rosetta[i].term.acronym,
+                        'Term Description': rosetta[i].term.termDescription,
+                        PART: rosetta[i].term.partition,
+                        CODE10: rosetta[i].term.code10,
+                        Description: rosetta[i].vendorDescription,
+                        'Display Name': rosetta[i].displayName,
+                        Vendor_UOM: rosetta[i].vendorUom,
+                        UOM_MDC: unitsRef,
+                        UCODE10: unitsCode,
+                        CF_UCODE10: unitsCFCode,
+                        UOM_UCUM: ucum,
+                        Enum_Values: enumsRef,
+                        'Contributing Organization': rosetta[i].contributingOrganization.name,
+                        Vendor_VMD: rosetta[i].vendorVmd,
+                        Tags: tags
+                    };
+
+
+                }
+                fs.writeFile('./public/docs/rosetta_terms.csv', json2csv.convert(JSON.parse(JSON.stringify(rosettas))), function(err) {
+                    //res.download('test.xml');
+                    if (err) {
+                        return console.log(err);
+                    }
+                    res.setHeader('Content-disposition', 'attachment; filename=rosetta_terms.csv');
+                    var filestream = fs.createReadStream('./public/docs/rosetta_terms.csv');
+                    filestream.pipe(res);
+                });
+
+            }
         } else if (req.params.par === "allCSV" || req.params.par === "allHTML") {
             var query = Rosetta.find(null);
             query.exec(function(err, ros) {
@@ -560,7 +629,9 @@ module.exports = function(app, qs, passport, async, _) {
                 };
 
                 if (req.params.par === "allCSV") {
-                    fs.writeFile('./public/docs/rosetta_terms.csv', json2csv.convert(JSON.parse(JSON.stringify(rosettas))), function(err) {
+                    
+
+                    fs.writeFile('./public/docs/rosetta_terms.csv', json2csv.convert(JSON.parse(JSON.stringify(rosettas.rosetta))), function(err) {
                         //res.download('test.xml');
                         if (err) {
                             return console.log(err);
@@ -624,45 +695,7 @@ module.exports = function(app, qs, passport, async, _) {
 
     });
 
-    app.get('api/down', function(req, res, next) {
-        console.log(Rosetta.find(null));
 
-
-        var query = Rosetta.find(null);
-        query.exec(function(err, ros) {
-            console.log("here");
-            rosetta = ros;
-        }).then(function() {
-            console.log("req.params");
-            rosettas = {
-                terms: rosetta
-            };
-            var options = {
-                arrayMap: {
-                    terms: "term",
-                    groups: "groupName",
-                    unitGroups: "unitGroup",
-                    units: "unit",
-                    ucums: "ucum",
-                    comments: "comment",
-                    tags: "tag",
-                    enumGroups: "enumGroup",
-                    enums: "enum",
-
-                }
-            };
-            fs.writeFile('test1.xml', js2xmlparser("rosettas", JSON.parse(JSON.stringify(rosettas)), options), function(err) {
-                //res.download('test.xml');
-                if (err) {
-                    return console.log(err);
-                }
-                console.log("file saved");
-                res.end('finish');
-            });
-            return;
-        });
-
-    });
 
     // get a rosetta
     app.get('/api/rosettas/:rosetta_id', function(req, res) {
@@ -737,7 +770,7 @@ module.exports = function(app, qs, passport, async, _) {
 
     });
     // delete a rosetta
-    app.delete('/api/myrosettas/:rosetta_id', isCOLoggedIn, function(req, res) {
+    app.delete('/api/myrosettas/:rosetta_id', isSDOLoggedIn, function(req, res) {
         Rosetta.remove({
             _id: req.params.rosetta_id
         }, function(err, rosetta) {

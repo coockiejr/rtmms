@@ -174,7 +174,16 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', '$http
     };
     $scope.downHTML = function() {
 
-        $http.get('/api/downloadE/allHTML').then(function(res) {
+        $http.post('/api/downloadE/allHTML').then(function(res) {
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "enum_terms.html");
+        });
+    };
+    $scope.downHTMLInView = function() {
+        console.log($scope.gridOptions.data);
+        $http({ method: "POST", url: '/api/downloadE/HTMLInView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
             });
@@ -183,7 +192,16 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', '$http
     };
     $scope.downXML = function() {
 
-        $http.get('/api/downloadE/allXML').then(function(res) {
+        $http.post('/api/downloadE/allXML').then(function(res) {
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "enum_terms.xml");
+        });
+    };
+    $scope.downXMLInView = function() {
+
+        $http({ method: "POST", url: '/api/downloadE/XMLInView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
             });
@@ -192,7 +210,16 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', '$http
     };
     $scope.downCSV = function() {
 
-        $http.get('/api/downloadE/allCSV').then(function(res) {
+        $http.post('/api/downloadE/allCSV').then(function(res) {
+            var blob = new Blob([res.data], {
+                type: "text/plain;charset=utf-8"
+            });
+            saveAs(blob, "enum_terms.csv");
+        });
+    };
+    $scope.downCSVInView = function() {
+
+        $http({ method: "POST", url: '/api/downloadE/CSVInView', data: $scope.gridOptions.data, cache: false }).then(function(res) {
             var blob = new Blob([res.data], {
                 type: "text/plain;charset=utf-8"
             });

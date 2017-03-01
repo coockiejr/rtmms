@@ -17,20 +17,8 @@
 
         <button ng-show="authService.isLoggedIn()" ng-disabled="selectedEntity.term.refid === undefined || selectedEntity.term.status !== undefined" type="submit" class="btn btn-primary btn-xs" ng-click="propose(selectedEntity)">Propose</button>
         <button ng-show="authService.isLoggedIn()" ng-disabled="selectedEntity.term.status !== 'pMapped'" type="submit" class="btn btn-primary btn-xs" ng-click="proposeMap(selectedEntity)">Propose Mapping</button>
-        <!--<div style="display: inline" dropdown on-toggle="toggled(open)" ng-show="authService.isLoggedIn()">
-            <button type="button" class="btn btn-primary btn-xs" dropdown-toggle aria-expanded="false">
-            <i class="fa fa-download" aria-hidden="true"></i> 
-            Download
-            <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu " role="menu">
-                <li><a class="point" ng-click="downHTML()"> HTML</a></li>
-                <li><a class="point" ng-click="downXML()"> XML</a></li>
-                <li><a class="point" ng-click="downCSV()"> CSV</a></li>
-
-            </ul>
-        </div>-->
-        <div style="display: inline" dropdown on-toggle="toggled(open)" ng-show="authService.isLoggedIn()">
+        
+       <div style="display: inline" dropdown on-toggle="toggled(open)" ng-show="authService.isLoggedIn()">
             <button type="button" class="btn btn-primary btn-xs" dropdown-toggle aria-expanded="false">
             <i class="fa fa-download" aria-hidden="true"></i> 
             Download
@@ -40,9 +28,10 @@
                 <li><a class="point" ng-click="downHTML()"> HTML</a></li>
                 <li><a class="point" ng-click="downXML()"> XML</a></li>
                 <li><a class="point" ng-click="downXMLInView()"> XMLInView</a></li>
+                <li><a class="point" ng-click="downHtmlInView()"> HTMLInView</a></li>
 
                 <li><a class="point" ng-click="downCSV()"> CSV</a></li>
-
+                <li><a class="point" ng-click="downCSVInView()"> CSVInView</a></li>
 
             </ul>
         </div>

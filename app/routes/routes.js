@@ -95,6 +95,7 @@ module.exports = function(app, qs, passport, async) {
                 res.status(401).send(req.flash('loginMessage'));
             } else {
                 req.logIn(user, function(err) {
+                    console.log(user);
                     if (err) {
                         return next(err);
                     }

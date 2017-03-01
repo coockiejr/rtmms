@@ -30,8 +30,6 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
                 console.log('Error: ' + res.status);
             });
     };
-
-
     //create a Unit
     factory.createUnit = function(unitValue) {
         return Unit.post(unitValue).then(
@@ -40,10 +38,9 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
                 console.log('Error: ' + res.status);
             });
     };
-
     //edit a Unit
     factory.editUnit = function(unitValue) {
-
+        console.log(unitValue);
         unitValue.put();
     };
 
@@ -86,7 +83,6 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
 
 
 
-    //create a Unit
     factory.createUnitGroup = function(unitGroup) {
         return UnitGroup.post(unitGroup).then(
             function(unitGroup) {},
@@ -97,7 +93,16 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
 
     //edit a Unit
     factory.editUnitGroup = function(unitGroup) {
-        unitGroup.put();
+        if (unitGroup.put) {
+            unitGroup.put();
+
+        } else {
+            var restGroup = Restangular.copy(unitGroup);
+            restGroup.route = "unitgroups";
+            
+            restGroup.put();
+        }
+       
     };
 
     //delete a Unit
@@ -199,6 +204,48 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
 
             return modalInstance.result.then(function(unitValue) {
                 factory.editUnit(unitValue);
+            }, function() {
+                return null;
+            });
+        }
+    };
+
+    factory.showAddUnitGroupModal = function() {
+        var modalInstance = $modal.open({
+            templateUrl: 'views/templates/modals/unitGroupModal.tpl.html',
+            controller: 'UnitGroupModalInstanceController',
+            size: 'lg',
+            resolve: {
+                group: false
+            }
+        });
+
+        return modalInstance.result.then(function(group) {
+            console.log(group);
+            //factory.createUnitGroup(group);
+            return group;
+        }, function() {
+            return null;
+        });
+    };
+
+    factory.showEditUnitGroupModal = function(group) {
+       
+        if (UnitGroup) {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/templates/modals/unitGroupModal.tpl.html',
+                controller: 'UnitGroupModalInstanceController',
+                size: 'lg',
+                resolve: {
+                    group: function() {
+                        return group;
+                    }
+                }
+            });
+
+            return modalInstance.result.then(function(group) {
+                
+                factory.editUnitGroup(group);
             }, function() {
                 return null;
             });

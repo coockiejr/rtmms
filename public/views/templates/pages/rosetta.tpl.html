@@ -38,8 +38,8 @@
     </div>
 
     <div class="row">
-        <div ng-show="authService.isCOLoggedIn()|| authService.isRevLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
-        <div ng-show="!authService.isCOLoggedIn() && !authService.isRevLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-pagination class="grid rosetta-grid"></div>
+        <div ng-show="authService.isLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
+        <div ng-show="!authService.isLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-pagination class="grid rosetta-grid"></div>
     </div>
 </div>
 

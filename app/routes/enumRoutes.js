@@ -146,7 +146,7 @@ module.exports = function(app, qs, async, _) {
     });
 
     // create enum 
-    app.post('/api/enums', isAdminLoggedIn, function(req, res, next) {
+    app.post('/api/enums', isSDOLoggedIn, function(req, res, next) {
         var query = Enum.find(null);
         query.sort({
             _id: -1
@@ -171,7 +171,7 @@ module.exports = function(app, qs, async, _) {
 
 
     //update an enum term
-    app.put('/api/enums/:enum_id', isAdminLoggedIn, function(req, res) {
+    app.put('/api/enums/:enum_id', isSDOLoggedIn, function(req, res,next) {
         console.log(req.body);
 
         Enum.findOneAndUpdate({
@@ -181,7 +181,7 @@ module.exports = function(app, qs, async, _) {
                 res.end('{"success" : "Enumeration value updated successfully", "status" : 200}');
             } else {
                 console.log(err);
-                res.send(err);
+                return next(err);
             }
         });
 
@@ -189,12 +189,12 @@ module.exports = function(app, qs, async, _) {
 
 
     // delete an enum
-    app.delete('/api/enums/:enum_id', isAdminLoggedIn, function(req, res) {
+    app.delete('/api/enums/:enum_id', isSDOLoggedIn, function(req, res,next) {
         Enum.remove({
             _id: req.params.enum_id
         }, function(err, enumVal) {
             if (err) {
-                res.send(err);
+                return next(err);
             } else {
                 res.end('{"success" : "Enumeration value deleted successfully", "status" : 200}');
             }
@@ -333,7 +333,7 @@ module.exports = function(app, qs, async, _) {
     });
 
     // create enum group
-    app.post('/api/enumgroups', isAdminLoggedIn, function(req, res) {
+    app.post('/api/enumgroups', isAdminLoggedIn, function(req, res,next) {
        
         var query = EnumGroup.find(null);
         query.sort({
@@ -359,7 +359,7 @@ module.exports = function(app, qs, async, _) {
     });
 
     //update an enum group
-    app.put('/api/enumgroups/:enumgroup_id', isAdminLoggedIn, function(req, res) {
+    app.put('/api/enumgroups/:enumgroup_id', isAdminLoggedIn, function(req, res,next) {
         EnumGroup.update({
             _id: req.params.enumgroup_id
         }, req.body, function(err) {
@@ -367,7 +367,7 @@ module.exports = function(app, qs, async, _) {
                 res.end('{"success" : "Enumeration group updated successfully", "status" : 200}');
             } else {
                 console.log(err);
-                res.send(err);
+                return next(err);
             }
         });
 
@@ -375,12 +375,12 @@ module.exports = function(app, qs, async, _) {
 
 
     // delete an enum group
-    app.delete('/api/enumgroups/:enumgroup_id', isAdminLoggedIn, function(req, res) {
+    app.delete('/api/enumgroups/:enumgroup_id', isAdminLoggedIn, function(req, res,next) {
         EnumGroup.remove({
             _id: req.params.enumgroup_id
         }, function(err, enumVal) {
             if (err) {
-                res.send(err);
+                return next(err)
             } else {
                 res.end('{"success" : "Enumeration group deleted successfully", "status" : 200}');
             }
@@ -698,9 +698,34 @@ module.exports = function(app, qs, async, _) {
     // route middleware to make sure a user is logged in and an admin
     function isAdminLoggedIn(req, res, next) {
         // if user is authenticated in the session and has an admin role, carry on 
-        // if (req.isAuthenticated() && req.user.role === 'admin') {
-        if (true) {
-            return next();
+        if (req.isAuthenticated() && req.user.userTypes.id === 4) {
+            if (true) {
+                return next();
+            }
+        }
+        // if they aren't redirect them to the home page
+        res.status(401).send("insufficient privileges");
+    }
+
+    function isCOLoggedIn(req, res, next) {
+        // if user is authenticated in the session and has an Co role, or a vendor role carry on 
+
+        if (req.isAuthenticated() && (req.user.userTypes.id === 1 || req.user.userTypes.id === 3)) {
+            if (true) {
+                return next();
+            }
+        }
+        // if they aren't redirect them to the home page
+        res.status(401).send("insufficient privileges");
+    }
+
+    function isSDOLoggedIn(req, res, next) {
+        // if user is authenticated in the session and has an SDO role, carry on 
+
+        if (req.isAuthenticated() && req.user.userTypes.id === 3) {
+            if (true) {
+                return next();
+            }
         }
         // if they aren't redirect them to the home page
         res.status(401).send("insufficient privileges");

@@ -2,6 +2,8 @@
     <div class="row button-row ">
         <button ng-show="authService.isSDOLoggedIn()" type="submit" class="btn btn-primary btn-xs" ng-click="showAddUnitModal()"> <i class="fa fa-plus" aria-hidden="true"></i>Add</button>
         <button ng-show="authService.isSDOLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showEditUnitModal(selectedEntity)"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+        <button ng-show="authService.isSDOLoggedIn()" class="btn btn-primary btn-xs" ng-click="clone(selectedEntity)" ng-disabled="!selectedEntity"><i ng-show="authService.isLoggedIn()" class="fa fa-clone" aria-hidden="true"></i> Duplicate</button>
+        <button ng-show="authService.isSDOLoggedIn()" class="btn btn-primary btn-xs" ng-click="deprecate(selectedEntity)" ng-disabled="!selectedEntity"><i class="fa fa-times" aria-hidden="true"></i> Deprecate</button>
         <button ng-show="authService.isCOLoggedIn() || authService.isRevLoggedIn()" ng-disabled="!selectedEntity" type="submit" class="btn btn-rtmms btn-xs" ng-click="showAddCommentModal(selectedEntity)"><i class="fa fa-comments" aria-hidden="true"></i>Comments</button>
         <button ng-show="authService.isSDOLoggedIn()" ng-disabled="selectedEntity.term.refid === undefined || selectedEntity.term.status !== undefined" type="submit" class="btn btn-primary btn-xs" ng-click="propose(selectedEntity)">Propose</button>
         <button ng-show="authService.isSDOLoggedIn()" ng-disabled="selectedEntity.term.status !== 'pMapped'" type="submit" class="btn btn-primary btn-xs" ng-click="proposeMap(selectedEntity)">Propose Mapping</button>
@@ -22,8 +24,8 @@
         </div>
     </div>
     <div class="row">
-        <div ng-show="authService.isCOLoggedIn()|| authService.isRevLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
-        <div ng-show="!authService.isCOLoggedIn() && !authService.isRevLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-pagination class="grid rosetta-grid"></div>
+        <div ng-show="authService.isLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-selection ui-grid-pagination class="grid rosetta-grid"></div>
+        <div ng-show="!authService.isLoggedIn()" ui-grid="gridOptions" ui.grid.resizeColumns ui-grid-pagination class="grid rosetta-grid"></div>
     </div>
 </div>
 <script type="text/ng-template" id="popover">

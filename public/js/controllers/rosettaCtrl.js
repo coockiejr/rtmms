@@ -292,8 +292,6 @@ angular.module('rtmms.rosetta').controller('RosettaController', ['$scope', 'Auth
         });
     };
     $scope.deprecate = function(rosetta) {
-        console.log("========");
-        console.log(rosetta);
         RosettaService.deprecateRosetta(rosetta).then(function() {
             getPage();
         });

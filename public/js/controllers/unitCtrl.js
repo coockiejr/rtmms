@@ -161,6 +161,30 @@ angular.module('rtmms.unit').controller('UnitController', ['$scope', '$http', 'A
     };
     getPage();
 
+    $scope.clone = function(unit) {
+        console.log(unit);
+
+        unitCopy = angular.copy(unit);
+        unitCopy._id = null;
+        unitCopy.comments = [];
+        unitCopy.term.status = undefined;
+        UnitService.createUnit(unitCopy).then(function(u) {
+            getPage();
+        });
+        $scope.gridOptions.data.push(unitCopy);
+
+        $scope.gridOptions.totalItems = $scope.gridOptions.totalItems + 1;
+
+
+    };
+    $scope.deprecate = function(unit) {
+        console.log("========");
+        console.log(unit);
+        UnitService.deprecateUnit(unit).then(function() {
+            getPage();
+        });
+    };
+
 
     $scope.showAddUnitModal = function() {
         UnitService.showAddUnitModal().then(function(unitValue) {
@@ -501,6 +525,22 @@ angular.module('rtmms.unit').controller('UnitCommentModalInstanceController', ['
 
         $modalInstance.dismiss('cancel');
     };
+
+
+
+}]);
+angular.module('rtmms.rosetta').controller('DeleteUnitModalInstanceController', ['$scope', '$modalInstance', '$http', 'unit', 'AuthService', 'UnitService', 'uiGridConstants', function($scope, $modalInstance, $http, unit, AuthService, UnitService, uiGridConstants) {
+
+    $scope.deprecate = function() {
+        UnitService.deleteUnit(unit).then(function(u) {
+
+        });
+        $modalInstance.dismiss('deprecate');
+    };
+    $scope.cancel = function() {
+        $modalInstance.close();
+    };
+
 
 
 

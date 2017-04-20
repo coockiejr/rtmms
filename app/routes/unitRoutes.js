@@ -189,12 +189,12 @@ module.exports = function(app, qs, async, _) {
 
 
     // delete an unit
-    app.delete('/api/units/:unit_id', isAdminLoggedIn, function(req, res) {
+    app.delete('/api/units/:unit_id', isSDOLoggedIn, function(req, res,next) {
         Unit.remove({
             _id: req.params.unit_id
         }, function(err, unitVal) {
             if (err) {
-                res.send(err);
+                return next(err)
             } else {
                 res.end('{"success" : "Unit value deleted successfully", "status" : 200}');
             }
@@ -414,7 +414,7 @@ module.exports = function(app, qs, async, _) {
     });
 
     //update an unit group
-    app.put('/api/unitgroups/:unitgroup_id', isSDOLoggedIn, function(req, res) {
+    app.put('/api/unitgroups/:unitgroup_id', isSDOLoggedIn, function(req, res,next) {
         UnitGroup.update({
             _id: req.params.unitgroup_id
         }, req.body, function(err) {
@@ -422,7 +422,7 @@ module.exports = function(app, qs, async, _) {
                 res.end('{"success" : "Unit group updated successfully", "status" : 200}');
             } else {
                 console.log(err);
-                res.send(err);
+                return next(err)
             }
         });
 
@@ -430,12 +430,12 @@ module.exports = function(app, qs, async, _) {
 
 
     // delete an unit group
-    app.delete('/api/unitgroups/:unitgroup_id', isSDOLoggedIn, function(req, res) {
+    app.delete('/api/unitgroups/:unitgroup_id', isSDOLoggedIn, function(req, res,next) {
         UnitGroup.remove({
             _id: req.params.unitgroup_id
         }, function(err, unitVal) {
             if (err) {
-                res.send(err);
+                return next(err)
             } else {
                 res.end('{"success" : "Unit group deleted successfully", "status" : 200}');
             }

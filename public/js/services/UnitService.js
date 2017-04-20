@@ -38,6 +38,28 @@ angular.module('rtmms.unit').factory('UnitService', ['Restangular', '$modal', fu
                 console.log('Error: ' + res.status);
             });
     };
+    factory.deprecateUnit= function(unit) {
+       
+        var modalInstance = $modal.open({
+            templateUrl: 'views/templates/modals/deleteUnitModal.tpl.html',
+            controller: 'DeleteUnitModalInstanceController',
+            size: 'lg',
+            resolve: {
+                unit: function() {
+                    return unit;
+                }
+            }
+        });
+
+        return modalInstance.result.then(function(u) {
+            // factory.deleteRosetta(rosetta).then(function(rosetta) {
+            //     return rosetta;
+
+            // });
+        }, function() {
+            return null;
+        });
+    };
     //edit a Unit
     factory.editUnit = function(unitValue) {
         console.log(unitValue);

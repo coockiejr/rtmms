@@ -38,6 +38,25 @@ angular.module('rtmms.enum').factory('EnumService', ['Restangular', '$modal', fu
                 console.log('Error: ' + res.status);
             });
     };
+    factory.deprecateEnum= function(enumValue) {
+       
+        var modalInstance = $modal.open({
+            templateUrl: 'views/templates/modals/deleteEnumModal.tpl.html',
+            controller: 'DeleteEnumModalInstanceController',
+            size: 'lg',
+            resolve: {
+                enumValue: function() {
+                    return enumValue;
+                }
+            }
+        });
+
+        return modalInstance.result.then(function(e) {
+           
+        }, function() {
+            return null;
+        });
+    };
 
     //edit a Enum
     factory.editEnum = function(enumValue) {

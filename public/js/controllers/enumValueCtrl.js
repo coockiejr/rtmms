@@ -150,6 +150,27 @@ angular.module('rtmms.enum').controller('EnumValueController', ['$scope', '$http
     };
     getPage();
 
+    $scope.clone = function(enumV) {
+
+        enumCopy = angular.copy(enumV);
+        enumCopy._id = null;
+        enumCopy.comments = [];
+        enumCopy.term.status = undefined;
+        EnumService.createEnum(enumCopy).then(function(u) {
+            getPage();
+        });
+        // $scope.gridOptions.data.push(enumCopy);
+        // $scope.gridOptions.totalItems = $scope.gridOptions.totalItems + 1;
+
+
+    };
+    $scope.deprecate = function(enumV) {
+       
+        EnumService.deprecateEnum(enumV).then(function() {
+            getPage();
+        });
+    };
+
 
 
 
@@ -480,6 +501,22 @@ angular.module('rtmms.enum').controller('EnumCommentModalInstanceController', ['
 
         $modalInstance.dismiss('cancel');
     };
+
+
+
+}]);
+angular.module('rtmms.rosetta').controller('DeleteEnumModalInstanceController', ['$scope', '$modalInstance', '$http', 'enumValue', 'AuthService', 'EnumService', 'uiGridConstants', function($scope, $modalInstance, $http, enumValue, AuthService, EnumService, uiGridConstants) {
+
+    $scope.deprecate = function() {
+        EnumService.deleteEnum(enumValue).then(function(u) {
+
+        });
+        $modalInstance.dismiss('deprecate');
+    };
+    $scope.cancel = function() {
+        $modalInstance.close();
+    };
+
 
 
 

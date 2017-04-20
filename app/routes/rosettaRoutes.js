@@ -770,12 +770,12 @@ module.exports = function(app, qs, passport, async, _) {
 
     });
     // delete a rosetta
-    app.delete('/api/myrosettas/:rosetta_id', isSDOLoggedIn, function(req, res) {
+    app.delete('/api/myrosettas/:rosetta_id', isSDOLoggedIn, function(req, res,next) {
         Rosetta.remove({
             _id: req.params.rosetta_id
         }, function(err, rosetta) {
             if (err) {
-                res.send(err);
+                return next(err)
             } else {
                 res.end('{"success" : "Rosetta deleted successfully", "status" : 200}');
             }
